@@ -22,7 +22,7 @@ interface FormValues {
   password: string;
 }
 
-const SignUp: FC = () => {
+export const SignUp: FC = () => {
   const initialFormValues: FormValues = {
     fname: "",
     lname: "",
@@ -173,5 +173,3 @@ const SignUp: FC = () => {
     </>
   );
 };
-
-export default SignUp;

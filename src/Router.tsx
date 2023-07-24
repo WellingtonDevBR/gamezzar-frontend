@@ -6,8 +6,8 @@ import { Profile } from "./pages/Profile";
 import { Dashboard } from "./pages/Dashboard";
 import { PageNotFound } from "./components/PageNotFound";
 import { Game } from "./pages/Game";
-import SignUp from "./pages/Home/SignUp/SignUp";
-import Login from "./pages/Login";
+import { Login } from "./pages/Login";
+import { SignUp } from "./pages/SignUp/SignUp";
 
 export function Router() {
   return (
