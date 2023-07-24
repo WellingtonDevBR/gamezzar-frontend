@@ -4,6 +4,7 @@ import { Home } from './pages/Home'
 import { Chat } from './pages/Chat'
 import { Profile } from './pages/Profile'
 import { Dashboard } from './pages/Dashboard'
+import { PageNotFound } from './pages/PageNotFound'
 
 export function Router() {
   return (
@@ -13,6 +14,7 @@ export function Router() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/chat" element={<Chat />} />
         <Route path='/dashboard' element={<Dashboard />} />
+        <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>
   )
