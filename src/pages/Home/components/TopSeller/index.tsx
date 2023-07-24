@@ -2,7 +2,6 @@
 
 import { TopSellersCard, Container, TopSellerProfile } from "./styles";
 import { TopTrendingProps } from "../TopTrending";
-import { S3_BASE_URL } from "../../../../helper/constants";
 
 // Top Sellers Section
 export function TopSellers({ products }: TopTrendingProps) {
@@ -19,7 +18,7 @@ export function TopSellers({ products }: TopTrendingProps) {
         {displayedProducts.map((product) => (
           <TopSellerProfile key={product.user.user_id}>
             <img
-              src={`${S3_BASE_URL}/avatar/${product.user.avatar}`}
+              src={`${import.meta.env.VITE_S3_URL}/avatar/${product.user.avatar}`}
               alt="avatar"
             />
             <p>{product.user.user_name}</p>

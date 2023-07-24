@@ -4,8 +4,8 @@ import { Home } from "./pages/Home";
 import { Chat } from "./pages/Chat";
 import { Profile } from "./pages/Profile";
 import { Dashboard } from "./pages/Dashboard";
-import { ProtectedRoute } from "./components/ProtectedRoute";
 import { PageNotFound } from "./components/PageNotFound";
+import { Game } from "./pages/Game";
 
 export function Router() {
   return (
@@ -14,12 +14,10 @@ export function Router() {
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/chat" element={<Chat />} />
-        <Route
-          path="/dashboard"
-          element={<ProtectedRoute element={<Dashboard />} />}
-        />
+        <Route path="/product/:id" element={<Game />} />
+        <Route path='/dashboard' element={<Dashboard />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>
-  );
+  )
 }

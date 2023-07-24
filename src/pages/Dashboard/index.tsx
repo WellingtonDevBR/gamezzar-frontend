@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Container,
   LeftSideMenuContainer,
@@ -16,9 +16,17 @@ import { Preferences } from "./components/Preferences";
 import { Wishlist } from "./components/Wishlist";
 import { TradeHistory } from "./components/TradeHistory";
 import { Following } from "./components/Following";
+import { useAuth } from "../../context/AuthContext";
+import { Navigate } from "react-router-dom";
 
 export function Dashboard() {
   const [activeTab, setActiveTab] = useState("Opportunities");
+  const { setToken, token } = useAuth();
+
+  if (token) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <Container>
       <LeftSideMenuContainer>

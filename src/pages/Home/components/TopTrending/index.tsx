@@ -9,7 +9,6 @@ import {
 import { useState } from "react";
 import { ICardData } from "./utils";
 import { TrendingCard } from "./TopTrendingCard";
-import { S3_BASE_URL } from "../../../../helper/constants";
 
 export interface IUser {
   user_id: string;
@@ -57,10 +56,10 @@ export function TopTrending({ products }: TopTrendingProps) {
 
   const newData = products.map((product) => {
     return {
-      imageUrl: `${S3_BASE_URL}/games/${product.image}`,
+      imageUrl: `${import.meta.env.VITE_S3_URL}/games/${product.image}`,
       title: product.title,
       subtitle: "BSC",
-      footerImg: `${S3_BASE_URL}/avatar/${product.user.avatar}`,
+      footerImg: `${import.meta.env.VITE_S3_URL}/avatar/${product.user.avatar}`,
       creatorLabel: product.user.user_name,
       creatorName: product.user.user_name,
     };

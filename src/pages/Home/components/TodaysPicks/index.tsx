@@ -11,20 +11,18 @@ import {
   ShowMoreButton,
 } from "./styles";
 import { Button } from "../../../../components/Button";
-import avatarTwoImage from "../../../../assets/avatar2.svg";
 import { useState } from "react";
 import { TopTrendingProps } from "../TopTrending";
-import { S3_BASE_URL } from "../../../../helper/constants";
 
 export function TodaysDeals({ products }: TopTrendingProps) {
   const [visibleRows, setVisibleRows] = useState(2);
 
   const listOfGames = products.map((product) => ({
-    src: `${S3_BASE_URL}/games/${product.image}`,
+    src: `${import.meta.env.VITE_S3_URL}/games/${product.image}`,
     alt: `${product.slug}`,
     title: `${product.title}`,
     owner: `${product.user.user_name}`,
-    avatar: `${S3_BASE_URL}/avatar/${product.user.avatar}`,
+    avatar: `${import.meta.env.VITE_S3_URL}/avatar/${product.user.avatar}`,
   }));
 
   const visibleCards = listOfGames.slice(0, visibleRows * 4); // Show 4 cards per row
