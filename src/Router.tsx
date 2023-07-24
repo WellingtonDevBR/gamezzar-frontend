@@ -7,7 +7,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { PageNotFound } from "./components/PageNotFound";
 import { Login } from "./pages/Login";
-import { SignUp } from "./pages/Home/SignUp/SignUp";
+import SignUp from "./pages/Home/SignUp/SignUp";
 
 
 export function Router() {

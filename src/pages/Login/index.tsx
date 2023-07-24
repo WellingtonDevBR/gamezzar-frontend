@@ -78,6 +78,15 @@ export const Login: FC = () => {
     }
   };
   
+  const handleRememberMeClick = () => {
+    // Add your logic for the "Remember me" click here
+    console.log("Remember me clicked!");
+  };
+
+  const handleForgotPasswordClick = () => {
+    // Add your logic for the "Forgot Password" click here
+    console.log("Forgot Password clicked!");
+  };
 
   return (
     <>
@@ -127,11 +136,11 @@ export const Login: FC = () => {
                 checked={rememberMe}
                 onChange={handleRememberMe}
               />
-              <Navlinks href="#">Remember me</Navlinks>
+              <Navlinks onClick={handleRememberMeClick}>Remember me</Navlinks>
               <br />
             </div>
             <div>
-              <Navlinks href="#">Forgot Password?</Navlinks>
+              <Navlinks onClick={handleForgotPasswordClick}>Forgot Password?</Navlinks>
               <br />
             </div>
           </div>
