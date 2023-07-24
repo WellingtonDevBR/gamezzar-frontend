@@ -81,8 +81,10 @@ export const Button = styled.button<ButtonStyled>`
   background-color: transparent;
   gap: 1rem;
   color: white;
+  
 
   &:hover {
+    cursor: pointer;
     background-color: ${(props) => props.secondary};
     transition: 0.5s;
     color: ${(props) => props.primary};

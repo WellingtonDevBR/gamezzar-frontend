@@ -5,7 +5,7 @@ import gowImage from "../../../../assets/gow.svg";
 import callistImage from "../../../../assets/callist.svg";
 
 export interface ICardData {
-  img: string;
+  imageUrl: string;
   title: string;
   subtitle: string;
   footerImg: string;
@@ -15,7 +15,7 @@ export interface ICardData {
 
 export const importImages = (): ICardData[] => [
   {
-    img: zeldaImg,
+    imageUrl: zeldaImg,
     title: "Hamlet Contemplates",
     subtitle: "BSC",
     footerImg: avatarTwoImage,
@@ -23,7 +23,7 @@ export const importImages = (): ICardData[] => [
     creatorName: "Salvador Dali",
   },
   {
-    img: tlofImage,
+    imageUrl: tlofImage,
     title: "Hamlet Contemplates",
     subtitle: "BSC",
     footerImg: avatarTwoImage,
@@ -31,7 +31,7 @@ export const importImages = (): ICardData[] => [
     creatorName: "Salvador Dali",
   },
   {
-    img: gowImage,
+    imageUrl: gowImage,
     title: "Hamlet Contemplates",
     subtitle: "BSC",
     footerImg: avatarTwoImage,
@@ -39,7 +39,7 @@ export const importImages = (): ICardData[] => [
     creatorName: "Salvador Dali",
   },
   {
-    img: callistImage,
+    imageUrl: callistImage,
     title: "Hamlet Contemplates",
     subtitle: "BSC",
     footerImg: avatarTwoImage,
@@ -47,7 +47,7 @@ export const importImages = (): ICardData[] => [
     creatorName: "Salvador Dali",
   },
   {
-    img: gowImage,
+    imageUrl: gowImage,
     title: "Hamlet Contemplates",
     subtitle: "BSC",
     footerImg: avatarTwoImage,
@@ -55,7 +55,7 @@ export const importImages = (): ICardData[] => [
     creatorName: "Salvador Dali",
   },
   {
-    img: callistImage,
+    imageUrl: callistImage,
     title: "Hamlet Contemplates",
     subtitle: "BSC",
     footerImg: avatarTwoImage,
@@ -63,7 +63,7 @@ export const importImages = (): ICardData[] => [
     creatorName: "Salvador Dali",
   },
   {
-    img: zeldaImg,
+    imageUrl: zeldaImg,
     title: "Hamlet Contemplates",
     subtitle: "BSC",
     footerImg: avatarTwoImage,

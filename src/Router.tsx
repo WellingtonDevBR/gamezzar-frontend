@@ -1,20 +1,32 @@
-import { Routes, Route } from 'react-router-dom'
-import { DefaultLayout } from './layout/DefaultLayout'
-import { Home } from './pages/Home'
-import { Explorer } from './pages/Explorer/Explorer'
+import { Routes, Route } from "react-router-dom";
+import { DefaultLayout } from "./layout/DefaultLayout";
+import { Home } from "./pages/Home";
+import { Chat } from "./pages/Chat";
+import { Profile } from "./pages/Profile";
+import { Dashboard } from "./pages/Dashboard";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { PageNotFound } from "./components/PageNotFound";
+import { Login } from "./pages/Login";
+import { SignUp } from "./pages/Home/SignUp/SignUp";
 
-import { Community } from './pages/Community/Community'
-import { Contact } from './pages/Contact/Contact'
 
 export function Router() {
   return (
     <Routes>
       <Route path="/" element={<DefaultLayout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/Explorer" element={<Explorer />} />
-        <Route path= "/Community" element = {<Community />}/>
-        <Route path= "/Contact" element = {<Contact />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/login" element={<Login />} /> 
+        <Route path="/Signup" element={<SignUp />} />
+        
+        <Route
+          path="/dashboard"
+          element={<ProtectedRoute element={<Dashboard />} />}
+        />
+        <Route path="*" element={<PageNotFound />} />
       </Route>
+      
     </Routes>
-  )
+  );
 }

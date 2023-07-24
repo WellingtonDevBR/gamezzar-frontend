@@ -1,3 +1,5 @@
+// styles.ts
+
 import styled from "styled-components";
 
 const PRIMARY_COLOR = "#5142fc";
@@ -6,9 +8,9 @@ const FONT_SIZE = "0.875rem";
 export const CarouselList = styled.div`
   display: flex;
   width: 1000px;
-  gap: 1rem; 
+  gap: 1rem;
   margin: 0 auto;
-`
+`;
 
 // Styles for the individual Trending Card
 export const TopTrendingCard = styled.div`
@@ -20,6 +22,7 @@ export const TopTrendingCard = styled.div`
   overflow: hidden;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
   p {
     display: flex;
     align-items: center;
@@ -42,9 +45,16 @@ export const TopTrendingCard = styled.div`
 
 // Styles for the Trending Card's image
 export const TopTrendingCardImage = styled.div`
+  width: 100%;
+  height: 185px;
+  border-radius: 10px; /* Add border-radius to create rounded corners */
+  overflow: hidden; /* Ensure the border-radius works properly */
+
   img {
     width: 100%;
     height: 100%;
+    object-fit: fill; /* Resize the image to cover the container */
+    object-position: center; /* Center the image within the container */
   }
 `;
 

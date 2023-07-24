@@ -9,13 +9,14 @@ import {
 } from "./styles";
 import HeaderLogo from "../../assets/logo.svg";
 import { MagnifyingGlass } from "phosphor-react";
+import { NavLink } from "react-router-dom";
 
 const NAV_ITEMS = [
-  { title: 'Home', path: '#' },
-  { title: 'Explore', path: '#' },
-  { title: 'Activity', path: '#' },
-  { title: 'Community', path: '#' },
-  { title: 'Contact', path: '#' },
+  { title: "Home", path: "#" },
+  { title: "Explore", path: "#" },
+  { title: "Activity", path: "#" },
+  { title: "Community", path: "#" },
+  { title: "Contact", path: "#" },
 ];
 
 export function Header() {
@@ -23,7 +24,9 @@ export function Header() {
     <>
       <Container>
         <LogoContainer>
-          <img src={HeaderLogo} alt="logo" />
+          <NavLink to="/">
+            <img src={HeaderLogo} alt="logo" />
+          </NavLink>
         </LogoContainer>
         <NavigationContainer>
           <NavList>
@@ -35,7 +38,7 @@ export function Header() {
           </NavList>
         </NavigationContainer>
         <ButtonContainer>
-          <MagnifyingGlass size={32} color={"white"}/>
+          <MagnifyingGlass size={32} color={"white"} />
           <button>Login / Sign Up</button>
         </ButtonContainer>
       </Container>

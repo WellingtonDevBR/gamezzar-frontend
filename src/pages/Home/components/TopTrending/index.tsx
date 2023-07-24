@@ -7,18 +7,71 @@ import {
   CarouselList,
 } from "./styles";
 import { useState } from "react";
-import { ICardData, importImages } from "./utils";
+import { ICardData } from "./utils";
 import { TrendingCard } from "./TopTrendingCard";
+import { S3_BASE_URL } from "../../../../helper/constants";
 
-export function TopTrending() {
-  const data = importImages(); // Move image importing and data into a utility function
+export interface IUser {
+  user_id: string;
+  first_name: string;
+  last_name: string;
+  user_name: string;
+  avatar: string;
+  email: string;
+  password: string;
+  created_at: string;
+  updated_at: string;
+  inventory: {
+    user_id: string;
+    game_id: string;
+    quantity: number;
+    status: boolean;
+    created_at: string;
+    updated_at: string;
+  };
+}
+
+interface IGame {
+  game_id: string;
+  title: string;
+  description: string;
+  region: string;
+  release_date: string;
+  producer: string;
+  genre: string;
+  category: string;
+  official_link: string;
+  image: string;
+  slug: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  user: IUser;
+}
+
+export interface TopTrendingProps {
+  products: IGame[];
+}
+
+export function TopTrending({ products }: TopTrendingProps) {
+
+  const newData = products.map((product) => {
+    return {
+      imageUrl: `${S3_BASE_URL}/games/${product.image}`,
+      title: product.title,
+      subtitle: "BSC",
+      footerImg: `${S3_BASE_URL}/avatar/${product.user.avatar}`,
+      creatorLabel: product.user.user_name,
+      creatorName: product.user.user_name,
+    };
+  });
 
   return (
     <>
       <header>
         <h1>Top Trending</h1>
       </header>
-      <Carousel data={data} />
+      <Carousel data={newData} />
     </>
   );
 }

@@ -11,7 +11,7 @@ export const Container = styled.div`
 export const CardList = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 0fr); // 4 columns
-  grid-gap: 3rem;
+  grid-gap: 1rem;
   margin-top: 2rem;
   overflow: hidden;
   margin-bottom: 2rem;
@@ -24,10 +24,13 @@ export const CardContainer = styled.div`
   padding: 1rem;
   background-color: #343444;
   border-radius: 1rem;
-  width: 210px;
+  width: 235px;
 
   img {
-    width: 180px;
+    width: 100%;
+    height: 220px;
+    object-fit: cover; /* Ensure the image fills the container while maintaining aspect ratio */
+    border-radius: 0.5rem;
   }
 `;
 
@@ -41,7 +44,7 @@ export const CardSection = styled.section`
     h2 {
       font-size: 0.875rem;
       display: inline-block;
-      width: 80%; // Set width
+      width: 100%; // Set width
       overflow: hidden; // Set overflow
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -122,21 +125,21 @@ export const OwnerDetails = styled.div`
   align-items: flex-start !important;
 
   h3 {
-    font-size: 0.875rem;
-    font-weight: 700;
+    font-size: 0.8125rem;
+    color: var(--white-2, #8A8AA0);
   }
 
   h4 {
-    font-size: 0.875rem;
+    font-size: 0.975rem;
     display: inline-block;
-    width: 80%;
+    color: var(--white-1, #EBEBEB);
+    width: 100%;
   }
 `;
 
 export const CardTitle = styled.h2`
   font-size: 0.875rem;
   display: inline-block;
-  width: 80%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
