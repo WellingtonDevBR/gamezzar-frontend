@@ -10,6 +10,7 @@ import {
   Main,
   BtnContainer,
   Navlinks,
+  Loginbtn,
 } from "./styles";
 
 interface FormValues {
@@ -88,6 +89,11 @@ export const Login: FC = () => {
     console.log("Forgot Password clicked!");
   };
 
+  const LoginClick = () => {
+    // Add your logic for the "Submit" click here
+    console.log("Submit clicked!");
+  };
+
   return (
     <>
       <PageNav>
@@ -144,7 +150,7 @@ export const Login: FC = () => {
               <br />
             </div>
           </div>
-          <button type="submit">Login</button>
+          <Loginbtn onClick={LoginClick}>Login</Loginbtn>
         </LoginForm>
       </Container>
     </>

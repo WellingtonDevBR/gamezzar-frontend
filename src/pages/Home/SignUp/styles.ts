@@ -77,21 +77,20 @@ display: flex;
   input:focus{
     outline: none;
   }
-  
- 
-  button[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    font-family: Urbanist;
-    font-size: 14px;
-    font-weight: 700;
-    background: #020220;
-    border: 2px solid #fff;
-    color: #fff;
-    justify-content: space-between;
-    border-radius: 20px;
-    cursor: pointer;
-  }
+`;
+
+export const SignUpbtn = styled.button`
+ width: 100%;
+  padding: 10px;
+  font-family: Urbanist;
+  font-size: 14px;
+  font-weight: 700;
+  background: #020220;
+  border: 2px solid #fff;
+  color: #fff;
+  justify-content: space-between;
+  border-radius: 20px;
+  cursor: pointer;
 `;
 
 export const Navlinks = styled.a`

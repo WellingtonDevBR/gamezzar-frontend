@@ -10,6 +10,7 @@ import {
   Main,
   BtnContainer,
   Navlinks,
+  SignUpbtn,
 } from "./styles";
 import axios from "axios";
 
@@ -89,6 +90,11 @@ const SignUp: FC = () => {
     // Add your logic for the "Forgot Password" click here
     console.log("Forgot Password clicked!");
   };
+
+  const SubmitSignUp = () => {
+    // Add your logic for the "Submit" click here
+    console.log("Submit clicked!");
+  };
   return (
     <>
       <PageNav>
@@ -161,7 +167,7 @@ const SignUp: FC = () => {
               <br />
             </div>
           </div>
-          <button type="submit">Signup</button>
+          <SignUpbtn onClick={SubmitSignUp}>Signup </SignUpbtn>
         </LoginForm>
       </Container>
     </>
