@@ -100,16 +100,11 @@ width: 100%;
 
 export const Navlinks = styled.a`
 
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    gap: 10px; 
-    
-    div {
-      display: flex;
-    justify-content: space-between;
-    }
+color: #fff;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 10px;
 `;
 
 

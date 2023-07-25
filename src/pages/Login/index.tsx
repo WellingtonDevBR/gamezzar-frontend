@@ -89,10 +89,7 @@ export const Login: FC = () => {
     console.log("Forgot Password clicked!");
   };
 
-  const LoginClick = () => {
-    // Add your logic for the "Submit" click here
-    console.log("Submit clicked!");
-  };
+ 
 
   return (
     <>
@@ -132,7 +129,7 @@ export const Login: FC = () => {
             onChange={handleInputChange}
           />
           <br />
-          <div>
+          <span>
             <div className="RememberForgotContainer">
               <input
                 type="checkbox"
@@ -144,13 +141,12 @@ export const Login: FC = () => {
               />
               <Navlinks onClick={handleRememberMeClick}>Remember me</Navlinks>
               <br />
-            </div>
-            <div>
+               
               <Navlinks onClick={handleForgotPasswordClick}>Forgot Password?</Navlinks>
               <br />
             </div>
-          </div>
-          <Loginbtn onClick={LoginClick}>Login</Loginbtn>
+            </span>
+          <Loginbtn type="submit">Login</Loginbtn>
         </LoginForm>
       </Container>
     </>
