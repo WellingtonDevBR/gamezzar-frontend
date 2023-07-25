@@ -8,6 +8,7 @@ import { PageNotFound } from "./components/PageNotFound";
 import { Game } from "./pages/Game";
 import { Login } from "./pages/Login";
 import { SignUp } from "./pages/SignUp/SignUp";
+import { AddGame } from "./pages/AddGame";
 
 export function Router() {
   return (
@@ -20,6 +21,7 @@ export function Router() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/add_game" element={<AddGame />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>
