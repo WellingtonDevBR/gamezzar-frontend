@@ -1,15 +1,27 @@
-import { BoxContainer, Thumbnail, ContentContainer, Name, SubNames, SubTitle, PageNav, Title, 
-    EnterWordArtSectionContainer, 
-    EnterWordArtIcon, 
-    FilterWithTagsSectionContainer,
-     FilterWithTagsIcon, Tag,
-    FlexContainer } from "./styles";
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import ChatIcon from '@mui/icons-material/Chat';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import WalletIcon from '@mui/icons-material/Wallet';
+import {
+  BoxContainer,
+  Thumbnail,
+  ContentContainer,
+  Name,
+  SubNames,
+  SubTitle,
+  PageNav,
+  Title,
+  EnterWordArtSectionContainer,
+  EnterWordArtIcon,
+  FilterWithTagsSectionContainer,
+  FilterWithTagsIcon,
+  Tag,
+  FlexContainer,
+} from "./styles";
 
+import {
+  PeopleAltIcon,
+  ChatIcon,
+  ShoppingCartIcon,
+  FavoriteIcon,
+  WalletIcon,
+} from "@mui/icons-material";
 
 export function Activity() {
   return (
@@ -29,7 +41,7 @@ export function Activity() {
               <span>Sub Name 2</span>
             </SubNames>
           </ContentContainer>
-          
+
           <PeopleAltIcon />
         </BoxContainer>
 
@@ -43,7 +55,7 @@ export function Activity() {
             <SubNames>
               <span>started following Gayle Hicks</span>
             </SubNames>
-          </ContentContainer>  
+          </ContentContainer>
           <ChatIcon />
         </BoxContainer>
 
@@ -58,7 +70,7 @@ export function Activity() {
               <span>Sub Name 1</span>
             </SubNames>
           </ContentContainer>
-          
+
           <ShoppingCartIcon />
         </BoxContainer>
 
@@ -72,11 +84,10 @@ export function Activity() {
             <SubNames>
               <span>Sub Name 1</span>
             </SubNames>
-            
-          </ContentContainer> 
+          </ContentContainer>
           <FavoriteIcon />
         </BoxContainer>
-        
+
         <BoxContainer>
           <Thumbnail src="/path/to/image.png" alt="Thumbnail" />
           <ContentContainer>
@@ -87,7 +98,7 @@ export function Activity() {
               <span>Sub Name 2</span>
             </SubNames>
           </ContentContainer>
-          <WalletIcon/>
+          <WalletIcon />
         </BoxContainer>
 
         <FlexContainer>
@@ -95,7 +106,7 @@ export function Activity() {
             <EnterWordArtIcon />
             <span>Enter Your Word Art</span>
           </EnterWordArtSectionContainer>
-          
+
           <FilterWithTagsSectionContainer>
             <FilterWithTagsIcon />
             <span>Filter with Tags:</span>
@@ -106,9 +117,7 @@ export function Activity() {
             </div>
           </FilterWithTagsSectionContainer>
         </FlexContainer>
-        
       </div>
     </div>
   );
 }
-
