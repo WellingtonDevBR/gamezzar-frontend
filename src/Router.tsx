@@ -21,7 +21,7 @@ export function Router() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/add_game" element={<AddGame />} />
+        <Route path="/game/add/:id" element={<AddGame />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>

@@ -19,7 +19,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 
 const NAV_ITEMS = [
-  { title: "Home", path: "#" },
+  { title: "Home", path: "/" },
   { title: "Explore", path: "#" },
   { title: "Activity", path: "#" },
   { title: "Community", path: "#" },

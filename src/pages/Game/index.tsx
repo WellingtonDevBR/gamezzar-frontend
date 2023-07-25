@@ -1,3 +1,4 @@
+import { Link, NavLink, useParams } from "react-router-dom";
 import {
   Container,
   GameSection,
@@ -16,60 +17,100 @@ import {
   Select,
   Form,
   Label,
+  ProductImage,
 } from "./styles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { StyledChartComponent } from "../../helper/chart";
+import { getAxiosInstance } from "../../services/axios";
+
+interface GameProps {
+  description: string;
+  title: string;
+  region: string;
+  release_date: string;
+  producer: string;
+  genre: string;
+  category: string;
+  official_link: string;
+  image: string;
+  slug: string;
+}
 
 export function Game() {
   const [selectedTab, setSelectedTab] = useState("owners");
+  const [loading, setLoading] = useState(true);
+  const [game, setGame] = useState<GameProps>({
+    description: "",
+    title: "",
+    region: "",
+    release_date: "",
+    producer: "",
+    genre: "",
+    category: "",
+    official_link: "",
+    image: "",
+    slug: "",
+  });
+
+  const dateObject = new Date(game.release_date);
+  const day = dateObject.getDate().toString().padStart(2, "0");
+  const month = (dateObject.getMonth() + 1).toString().padStart(2, "0"); // Month is zero-based, so add 1 to get the correct month.
+  const year = dateObject.getFullYear().toString();
+
+  const formattedDate = `${day}/${month}/${year}`;
+  let { id } = useParams();
+
+  useEffect(() => {
+    async function fetchData() {
+      const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+      const response = await axios.get(`/api/game/${id}`);
+      setGame(response.data);
+    }
+    fetchData();
+    setLoading(false);
+  }, []);
 
   return (
     <Container>
       <GameSection>
         <div>
-          <img src="http://placehold.it/200x200" alt="Product" />
+          <ProductImage
+            src={`${import.meta.env.VITE_S3_URL}/games/${game.image}`}
+            alt="Product"
+          />
         </div>
         <div>
-          <span>Playstation 4</span>
-          <h1>God of War</h1>
-          <DescriptionContainer>
-            <div>
-              <b>God of War: Ragnarok: </b>
-              <span>
-                é um próximo jogo de ação e aventura desenvolvido pela Santa
-                Monica Studio e publicado pela Sony Interactive Entertainment. É
-                a oitava edição da série God of War e uma sequência do jogo God
-                of War de 2018.
-              </span>
-            </div>
-            <div>
-              <b>God of War: Ragnarok: </b>
-              <span>
-                se passa na mitologia nórdica e segue o personagem Kratos e seu
-                filho Atreus em sua jornada pelo mundo nórdico. Os jogadores
-                controlarão Kratos enquanto ele luta contra várias criaturas
-                mitológicas e deuses usando uma variedade de armas e
-                habilidades. O jogo contará com uma combinação de exploração,
-                resolução de quebra-cabeças e combate.
-              </span>
-            </div>
-            <div>
-              <b>God of War: Ragnarok: </b>
-              <span>
-                está programado para ser lançado em 2022 para o console
-                PlayStation 5. Espera-se que seja um jogo épico e cheio de ação
-                que atrairá os fãs da série God of War e dos jogos de ação e
-                aventura em geral.
-              </span>
-            </div>
-          </DescriptionContainer>
+          <span>{game.producer}</span> {/* should add platform type like ps4*/}
+          <h1>{game.title}</h1>
+          <DescriptionContainer
+            dangerouslySetInnerHTML={{ __html: game.description }}
+          />
           <ButtonContainer>
-            <Button>Eu quero</Button>
-            <Button>Eu tenho</Button>
+            <NavLink style={{ textDecoration: "none" }} to="/chat">
+              <Button backgroundColor={"#b90303"}>I want</Button>
+            </NavLink>
+            <NavLink
+              style={{ textDecoration: "none" }}
+              to={{
+                pathname: `/game/add/${id}`,
+              }}
+              state={{ from: game }}
+            >
+              <Button backgroundColor={"#007b00"}>I have</Button>
+            </NavLink>
           </ButtonContainer>
         </div>
         <div>
-          <img src="http://placehold.it/200x200" alt="Product" />
-          <img src="http://placehold.it/200x200" alt="Product" />
+          <StyledChartComponent />
+          <iframe
+            style={{ border: "none" }}
+            width="320"
+            height="240"
+            src="https://www.youtube.com/embed/WxjeV10H1F0"
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
         </div>
       </GameSection>
       <MainContainer>
@@ -232,24 +273,26 @@ export function Game() {
             {selectedTab === "datasheet" && (
               <TabPanel>
                 <div>
-                  <label>Lançamento</label>
-                  <span>9 de nov. de 2022</span>
+                  <b>Release Date:</b>
+                  <span>{formattedDate}</span>
                 </div>
                 <div>
-                  <label>Produtora</label>
-                  <span>SCE Santa Monica</span>
+                  <b>Producer:</b>
+                  <span>{game.producer}</span>
                 </div>
                 <div>
-                  <label>Distribuidora</label>
-                  <span>Sony Interactive EntertainmentPlayStation Studios</span>
+                  <b>Distributor:</b>
+                  <span>{game.producer}</span>
                 </div>
                 <div>
-                  <label>Gênero</label>
-                  <span>Aventura</span>
+                  <b>Genre:</b>
+                  <span>{game.genre}</span>
                 </div>
                 <div>
-                  <label>Site Oficial</label>
-                  <span>Visitar</span>
+                  <b>Official Website:</b>
+                  <Link to={game.official_link} target="_blank">
+                    {game.producer}
+                  </Link>
                 </div>
               </TabPanel>
             )}

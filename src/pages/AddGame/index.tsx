@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import {
   Container,
   Image,
@@ -85,6 +86,8 @@ const box = [
 
 export function AddGame() {
   const { register, handleSubmit } = useForm();
+  const { state } = useLocation();
+  const game = state.from;
 
   const onSubmit = (data: any) => {
     console.log(data);
@@ -97,7 +100,7 @@ export function AddGame() {
       <Header>
         <GameDetails>
           <Image
-            src="https://gamezzar-images.s3.us-east-2.amazonaws.com/games/ac-valhalla.jpg"
+            src={`${import.meta.env.VITE_S3_URL}/games/${game.image}`}
             alt="ac-valhalla"
           />
           <h2>The Callisto Protocol</h2>

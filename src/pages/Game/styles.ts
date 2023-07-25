@@ -19,24 +19,29 @@ export const GameSection = styled.section`
 export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: start;
+  margin-top: 10px;
   gap: 12px;
 `;
 
-export const Button = styled.button`
-  background-color: #fff;
-  border: 1px solid #ddd;
+interface ButtonProps {
+  backgroundColor: string;
+}
+
+export const Button = styled.button<ButtonProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  width: 100px;
+  text-decoration: none;
   border-radius: 4px;
-  color: #333;
-  font-size: 16px;
+  background-color: ${(props) => props.backgroundColor};
+  color: white;
+  font-size: large;
   font-weight: bold;
-  height: 54px;
-  padding: 0 20px;
-  transition: all 0.2s;
-  width: 100%;
-  max-width: 300px;
-  margin: 0 auto;
-  margin-top: 20px;
+  border: none;
+  cursor: pointer;
 `;
 
 export const DescriptionContainer = styled.div`
@@ -49,7 +54,7 @@ export const DescriptionContainer = styled.div`
 export const Card = styled.div`
   border-radius: 4px;
   margin-top: 20px;
-  border: 1px solid #c6c6c6;
+  border: 1px solid #5142FC;
 `;
 
 export const Tabs = styled.div`
@@ -60,7 +65,7 @@ export const Tabs = styled.div`
 export const TabList = styled.div`
   display: flex;
   border-bottom: 1px solid #ccc;
-  background-color: #c6c6c6;
+  background-color: #5142FC;
 `;
 
 interface TabProps {
@@ -89,10 +94,34 @@ export const Tab = styled.button<TabProps>`
 
 export const TabPanel = styled.div`
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 
   form {
     display: flex;
     flex-direction: column;
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    b {
+      width: 120px;
+    }
+    span {
+      font-size: 14px;
+    }
+    a {
+      text-decoration: none;
+      color: #c6c6c6;
+      font-size: 14px;
+
+      &:hover {
+        color: #fff;
+      }
+    }
   }
 `;
 
@@ -113,9 +142,9 @@ export const TableHead = styled.thead`
     grid-template-columns: repeat(6, 1fr); /* 6 columns with equal width */
     align-items: center;
     column-gap: 10px; /* Add space between columns */
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    color: #c6c6c6;
+    border-top: 1px solid #5142FC;
+    border-bottom: 1px solid #5142FC;
+    color: white;
 
     th {
       display: flex;
@@ -176,8 +205,13 @@ export const Label = styled.label`
 
 export const Select = styled.select`
   width: 70%;
-  height: calc(1em + 0.5rem + 2px);
+  height: calc(1em + 1rem + 2px);
   white-space: nowrap;
   color: #495057;
   margin-top: 0.5rem;
+`;
+
+export const ProductImage = styled.img`
+  width: 100px;
+  height: 140px;
 `;
