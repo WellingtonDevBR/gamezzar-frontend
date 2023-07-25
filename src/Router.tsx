@@ -4,12 +4,10 @@ import { Home } from "./pages/Home";
 import { Chat } from "./pages/Chat";
 import { Profile } from "./pages/Profile";
 import { Dashboard } from "./pages/Dashboard";
-import { ProtectedRoute } from "./components/ProtectedRoute";
 import { PageNotFound } from "./components/PageNotFound";
-
-import SignUp from "./pages/Home/SignUp/SignUp";
-import Login from "./pages/Login";
-
+import { Game } from "./pages/Game";
+import { Login } from "./pages/Login";
+import { SignUp } from "./pages/SignUp/SignUp";
 
 export function Router() {
   return (
@@ -18,16 +16,12 @@ export function Router() {
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/chat" element={<Chat />} />
-        <Route path="/login" element={<Login />} /> 
-        <Route path="/Signup" element={<SignUp />} />
-        
-        <Route
-          path="/dashboard"
-          element={<ProtectedRoute element={<Dashboard />} />}
-        />
+        <Route path="/game/:id" element={<Game />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
-      
     </Routes>
   );
 }
