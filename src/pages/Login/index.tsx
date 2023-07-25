@@ -7,10 +7,10 @@ import {
   SubTitle,
   Container,
   LoginForm,
-  Main,
-  BtnContainer,
-  Navlinks,
+  SocialMediaContainer,
   Loginbtn,
+  LoginFormOptions,
+  Input,
 } from "./styles";
 import { getAxiosInstance } from "../../services/axios";
 import { useAuth } from "../../context/AuthContext";
@@ -110,10 +110,9 @@ export const Login: FC = () => {
       <Container>
         <h1>Login to Gamezzar</h1>
 
-        <Main>
-          <div>Login with Email</div>
-
-          <BtnContainer>
+        <SocialMediaContainer>
+          <span>Login with Social Media </span>
+          <section>
             <button>
               <FontAwesomeIcon icon={faGoogle} /> Google
             </button>
@@ -121,13 +120,14 @@ export const Login: FC = () => {
             <button>
               <FontAwesomeIcon icon={faFacebook} /> Facebook
             </button>
-          </BtnContainer>
-        </Main>
+          </section>
+        </SocialMediaContainer>
 
-        <div>Or Login with Email</div>
+        
 
         <LoginForm onSubmit={handleSubmit}>
-          <input
+        <span>Or Login with Email</span>
+          <Input
             type="email"
             name="email"
             placeholder="Your email Address"
@@ -135,9 +135,9 @@ export const Login: FC = () => {
             onChange={handleInputChange}
           />
 
-          <br />
+        
 
-          <input
+          <Input
             type="password"
             name="password"
             placeholder="Your Password"
@@ -145,32 +145,25 @@ export const Login: FC = () => {
             onChange={handleInputChange}
           />
 
-          <br />
+          
 
-          <div>
-            <div className="RememberForgotContainer">
+          <LoginFormOptions>
+            <div>
               <input
                 type="checkbox"
-                id="remember"
                 name="remember"
                 ref={rememberRef}
                 checked={rememberMe}
                 onChange={handleRememberMe}
               />
 
-              <Navlinks onClick={handleRememberMeClick}>Remember me</Navlinks>
-
-              <br />
+              <span onClick={handleRememberMeClick}>Remember me</span>
             </div>
 
             <div>
-              <Navlinks onClick={handleForgotPasswordClick}>
-                Forgot Password?
-              </Navlinks>
-
-              <br />
+              <span onClick={handleForgotPasswordClick}>Forgot Password?</span>
             </div>
-          </div>
+          </LoginFormOptions>
 
           <Loginbtn type="submit">
             {loading ? (
