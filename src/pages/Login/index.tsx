@@ -12,6 +12,14 @@ import {
   Navlinks,
   Loginbtn,
 } from "./styles";
+import { getAxiosInstance } from "../../services/axios";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { BeatLoader } from "react-spinners";
+import { ToastContainer } from "react-toastify";
+import Cookies from 'js-cookie';
 
 interface FormValues {
   email: string;
@@ -24,12 +32,13 @@ export const Login: FC = () => {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
   const rememberRef = useRef<HTMLInputElement>(null);
   const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
+  const { setToken } = useAuth();
 
-  const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormValues((prevValues) => ({
       ...prevValues,
@@ -45,40 +54,39 @@ export const Login: FC = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
   
-   
-    const formData = {
-      email: formValues.email,
-      password: formValues.password,
-      rememberMe: rememberMe,
-    };
+    const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
   
     try {
-      const response = await fetch("https://addressr.p.rapidapi.com", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      const response = await axios.post("/api/users/login", {
+        email: formValues.email,
+        password: formValues.password,
       });
   
-      if (response.ok) {
-        
-        const data = await response.json();
-        console.log("Response Data:", data);
-        
+      if (response.status === 200) {
+        // Set the token cookie to expire in one minute
+        const expirationDate = new Date();
+        expirationDate.setTime(expirationDate.getTime() + 60 * 1000); // 60 seconds * 1000 milliseconds = 1 minute
+        Cookies.set('token', response.data.token, { expires: expirationDate });
+  
+        setToken(response.data.token);
+        navigate("/dashboard");
       } else {
-        
-        console.error("Form submission failed:", response.statusText);
-        
+        toast.error("User not found or does not exist");
       }
-    } catch (error) {
-      
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        toast.error("Invalid email or password");
+      } else {
+        toast.error("An error occurred while trying to login");
+      }
       console.error("An error occurred:", error);
-      
+    } finally {
+      setLoading(false);
     }
   };
-  
+
   const handleRememberMeClick = () => {
     // Add your logic for the "Remember me" click here
     console.log("Remember me clicked!");
@@ -89,13 +97,9 @@ export const Login: FC = () => {
     console.log("Forgot Password clicked!");
   };
 
-  const LoginClick = () => {
-    // Add your logic for the "Submit" click here
-    console.log("Submit clicked!");
-  };
-
   return (
     <>
+      <ToastContainer position={toast.POSITION.BOTTOM_RIGHT} />
       <PageNav>
         <Title>Login</Title>
         <SubTitle>Home / Pages / Login</SubTitle>
@@ -146,11 +150,19 @@ export const Login: FC = () => {
               <br />
             </div>
             <div>
-              <Navlinks onClick={handleForgotPasswordClick}>Forgot Password?</Navlinks>
+              <Navlinks onClick={handleForgotPasswordClick}>
+                Forgot Password?
+              </Navlinks>
               <br />
             </div>
           </div>
-          <Loginbtn onClick={LoginClick}>Login</Loginbtn>
+          <Loginbtn type="submit">
+            {loading ? (
+              <BeatLoader color={"#123abc"} loading={loading} size={15} />
+            ) : (
+              "Login"
+            )}
+          </Loginbtn>
         </LoginForm>
       </Container>
     </>

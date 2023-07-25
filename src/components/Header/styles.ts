@@ -110,6 +110,7 @@ export const ButtonContainer = styled.div`
     color: white;
     font-weight: bold;
     font-size: 1rem;
+    cursor: pointer;
 
     @media (min-width: ${Breakpoints.mobile}) {
       font-size: 1.1rem;

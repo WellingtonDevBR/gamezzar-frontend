@@ -15,7 +15,6 @@ export function Home() {
     const fetchData = async () => {
       try {
         const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-        console.log(import.meta.env.BASE_URL);
         const result = await axios.get("/api/games/get-all");
         setProducts(result.data);
       } catch (error) {
@@ -28,13 +27,11 @@ export function Home() {
   return (
     <Container>
       <PromoContent />
-      <section>
         <TopTrending products={products} />
         <TopSellers products={products} />
         <TodaysDeals products={products} />
         <PopularCollection />
         <CardOptionList />
-      </section>
     </Container>
   );
 }

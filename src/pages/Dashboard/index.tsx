@@ -21,9 +21,11 @@ import { Navigate } from "react-router-dom";
 
 export function Dashboard() {
   const [activeTab, setActiveTab] = useState("Opportunities");
-  const { setToken, token } = useAuth();
+  const { token } = useAuth();
 
-  if (token) {
+  console.log(token);
+
+  if (!token) {
     return <Navigate to="/login" replace />;
   }
 
