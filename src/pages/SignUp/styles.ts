@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+
 export const PageNav = styled.div`  
   display: flex; 
   flex-direction: column;
@@ -38,22 +39,20 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 730px;;
+  width: 400;
+  height: 100%;
   flex-shrink: 0;
+  margin: 3rem auto;
+
+  h1 {
+    font-family: "Urbanist";
+    font-weight: 400;
+    margin-bottom: 2px;
+  }
   
 `;
 
-export const Main = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 2rem;
-  
-  
-  
-`;
+
 
 export const LoginForm = styled.form`
 display: flex;
@@ -64,19 +63,19 @@ display: flex;
   margin-top: 2rem;
   margin-bottom: 2rem;
   padding: 1rem;
+  gap: .5rem;
+  font-size: 14px;
+`;
 
-  input{
-    border: .5px solid rgba(122, 121, 138, 1);
-    border-radius: 8px;
-    height: 2rem;
-    min-width: 24rem;
-    background-color: transparent;
-    color: rgba(122, 121, 138, 1);
-   
-  }
-  input:focus{
-    outline: none;
-  }
+export const Input = styled.input`
+  width: 100%;
+  
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding:10px;
+  background: transparent;
+  color: #343434;
+  border: 1px solid #343434;
 `;
 
 export const SignUpbtn = styled.button`
@@ -86,42 +85,60 @@ export const SignUpbtn = styled.button`
   font-size: 14px;
   font-weight: 700;
   background: #020220;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
   color: #fff;
   justify-content: space-between;
   border-radius: 20px;
   cursor: pointer;
 `;
 
-export const Navlinks = styled.a`
-
-    color: #fff;
+export const LoginFormOptions = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  font-size: 14px;
+  
+  div {
     display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    gap: 10px; 
- 
+    gap: 0.5rem;
+  }
+  
 `;
 
 
- export const BtnContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  
-  margin-top: 1rem;
-  gap:10px;
-  width: 200px; 
 
-  button{
-    border: 1px solid rgba(81,66, 252, 1);
-    align-items: center;
-    border-radius: 1rem;
-    height: 2rem;
-    min-width: 12.375rem;
-    background-color: transparent;
-    color: white;
-    font-weight: bold;
-    font-size:14px;
-  }
+
+ export const SocialMediaContainer = styled.div`
+ display: flex;
+ width: 100%;
+ justify-content: center;
+ flex-direction: column;
+ margin-top: 1rem;
+ gap: 10px;
+ 
+ span {
+  display: inline-block;
+  text-align: center;
+ }
+
+ section {
+  display: flex;
+  gap: 10px;
+ }
+
+ button {
+  width: 100%;
+  height: 2rem;
+  border: 1px solid rgba(81, 66, 252, 1);
+  align-items: center;
+  border-radius: 1rem;
+  background-color:transparent;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+ }
+
+  
 `;
 

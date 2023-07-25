@@ -7,12 +7,13 @@ import {
   SubTitle,
   Container,
   LoginForm,
-  Main,
-  BtnContainer,
-  Navlinks,
+  SocialMediaContainer,
+  LoginFormOptions,
   SignUpbtn,
+  Input,
 } from "./styles";
 import axios from "axios";
+
 
 interface FormValues {
   fname: string;
@@ -91,83 +92,86 @@ export const SignUp: FC = () => {
     console.log("Forgot Password clicked!");
   };
 
-  const SubmitSignUp = () => {
-    // Add your logic for the "Submit" click here
-    console.log("Submit clicked!");
-  };
+  
   return (
     <>
+   
       <PageNav>
         <Title>Sign Up</Title>
         <SubTitle>Home / Pages / Signup</SubTitle>
       </PageNav>
       <Container>
         <h1>Signup to Gamezzar</h1>
-        <Main>
-          <div>Login with Email</div>
-          <BtnContainer>
+       
+          
+          <SocialMediaContainer>
+          <span>Signup with Social Media</span>
+          <section>
             <button>
               <FontAwesomeIcon icon={faGoogle} /> Google
             </button>
+            
             <button>
               <FontAwesomeIcon icon={faFacebook} /> Facebook
             </button>
-          </BtnContainer>
-        </Main>
-        <div>Or Login with Email</div>
+            </section>
+          </SocialMediaContainer>
+        
+        
         <LoginForm onSubmit={handleSubmit}>
-          <input
+        <span>Or Signup with Email</span>
+          <Input 
             type="text"
             name="fname"
             placeholder="Your First Name"
             value={formValues.fname}
             onChange={handleInputChange}
           />
-          <br />
-          <input
+         
+          <Input 
             type="text"
             name="lname"
             placeholder="Your Last Name"
             value={formValues.lname}
             onChange={handleInputChange}
           />
-          <br />
-          <input
+         
+          <Input 
             type="text"
             name="Uname"
             placeholder="Your Username"
             value={formValues.Uname}
             onChange={handleInputChange}
           />
-          <br />
-          <input
+          
+          <Input 
             type="email"
             name="email"
             placeholder="Your Email Address"
             value={formValues.email}
             onChange={handleInputChange}
           />
-          <br />
-          <input
+          
+          <Input 
             type="password"
             name="password"
             placeholder="Your Password"
             value={formValues.password}
             onChange={handleInputChange}
           />
-          <br />
-          <div>
-            <div className="RememberForgotContainer">
-              <input type="checkbox" id="remember" />
-              <Navlinks onClick={handleRememberMeClick}>Remember me</Navlinks>
-              <br />
-            </div>
+          <LoginFormOptions>
             <div>
-              <Navlinks onClick={handleForgotPasswordClick}>Forgot Password?</Navlinks>
-              <br />
+              <input type="checkbox" name="remember" />
+              <span onClick={handleRememberMeClick}>Remember me</span>
+              </div>
+        
+            <div>
+              <span onClick={handleForgotPasswordClick}>Forgot Password?</span>
+              
             </div>
-          </div>
-          <SignUpbtn onClick={SubmitSignUp}>Signup </SignUpbtn>
+            </LoginFormOptions>
+          
+          <SignUpbtn type ="submit">Signup </SignUpbtn>
         </LoginForm>
       </Container>
     </>
