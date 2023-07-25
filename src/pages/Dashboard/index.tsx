@@ -25,7 +25,6 @@ export function Dashboard() {
   const { token } = useAuth();
 
   const cookiedToken = Cookies.get("token");
-  console.log(cookiedToken)
 
   if (!token && !cookiedToken) {
     return <Navigate to="/login" replace />;

@@ -55,6 +55,7 @@ export interface TopTrendingProps {
 export function TopTrending({ products }: TopTrendingProps) {
 
   const newData = products.map((product) => {
+    console.log(product)
     return {
       imageUrl: `${import.meta.env.VITE_S3_URL}/games/${product.image}`,
       title: product.title,
