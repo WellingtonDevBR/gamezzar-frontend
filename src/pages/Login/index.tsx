@@ -67,7 +67,7 @@ export const Login: FC = () => {
       if (response.status === 200) {
         // Set the token cookie to expire in one minute
         const expirationDate = new Date();
-        expirationDate.setTime(expirationDate.getTime() + 60 * 1000); // 60 seconds * 1000 milliseconds = 1 minute
+        expirationDate.setTime(expirationDate.getTime() + 60 * 1000 * 60); // 600 seconds * 1000 milliseconds = 1 minute
         Cookies.set("token", response.data.token, { expires: expirationDate });
 
         setToken(response.data.token);
@@ -123,10 +123,8 @@ export const Login: FC = () => {
           </section>
         </SocialMediaContainer>
 
-        
-
         <LoginForm onSubmit={handleSubmit}>
-        <span>Or Login with Email</span>
+          <span>Or Login with Email</span>
           <Input
             type="email"
             name="email"
@@ -135,8 +133,6 @@ export const Login: FC = () => {
             onChange={handleInputChange}
           />
 
-        
-
           <Input
             type="password"
             name="password"
@@ -144,8 +140,6 @@ export const Login: FC = () => {
             value={formValues.password}
             onChange={handleInputChange}
           />
-
-          
 
           <LoginFormOptions>
             <div>

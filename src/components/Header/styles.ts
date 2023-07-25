@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { NavLink } from "react-router-dom";
 
 const Breakpoints = {
   mobile: "576px",
@@ -100,23 +101,52 @@ export const ButtonContainer = styled.div`
   justify-content: center;
   padding: 0 1rem;
   gap: 0.5rem;
+`;
 
-  button {
-    border: 1px solid ${(props) => props.theme["--primary"]};
-    border-radius: 1rem;
-    height: 3rem;
-    min-width: 12.375rem;
-    background-color: transparent;
+export const LinkContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid ${(props) => props.theme["--primary"]};
+  height: 3rem;
+  min-width: 12.375rem;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: transparent;
+  border-radius: 1rem;
+  
+`;
+
+export const StyledNavLink = styled(NavLink)`
+  text-decoration: none;
+  color: black;
+  margin-right: 3px; /* Add desired space (e.g., 10 pixels) before the link */
+  color: white;
+
+  &:hover {
+    text-decoration: none;
+    color: ${(props) => props.theme["--primary"]};
+    filter: brightness(0.7);
+  }
+
+  &::after {
+    content: "/";
     color: white;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
+    margin-left: 5px; /* Add space between the link text and the forward slash */
+  }
 
-    @media (min-width: ${Breakpoints.mobile}) {
-      font-size: 1.1rem;
-    }
+  /* Remove the forward slash from the last link */
+  &:last-child::after {
+    content: none;
+  }
+`;
 
-    ${(props) => props.theme["--surface"]}
+export const SignUpLink = styled(StyledNavLink)`
+  margin-right: 0; /* Reset the margin to 0 for the "Sign Up" link */
+
+  &:hover {
+    text-decoration: none;
+    filter: brightness(0.7);
   }
 `;
 
