@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BeatLoader } from "react-spinners";
 import { ToastContainer } from "react-toastify";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 interface FormValues {
   email: string;
@@ -55,21 +55,21 @@ export const Login: FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
-  
+
     const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-  
+
     try {
       const response = await axios.post("/api/users/login", {
         email: formValues.email,
         password: formValues.password,
       });
-  
+
       if (response.status === 200) {
         // Set the token cookie to expire in one minute
         const expirationDate = new Date();
         expirationDate.setTime(expirationDate.getTime() + 60 * 1000); // 60 seconds * 1000 milliseconds = 1 minute
-        Cookies.set('token', response.data.token, { expires: expirationDate });
-  
+        Cookies.set("token", response.data.token, { expires: expirationDate });
+
         setToken(response.data.token);
         navigate("/dashboard");
       } else {
@@ -100,24 +100,32 @@ export const Login: FC = () => {
   return (
     <>
       <ToastContainer position={toast.POSITION.BOTTOM_RIGHT} />
+
       <PageNav>
         <Title>Login</Title>
+
         <SubTitle>Home / Pages / Login</SubTitle>
       </PageNav>
+
       <Container>
         <h1>Login to Gamezzar</h1>
+
         <Main>
           <div>Login with Email</div>
+
           <BtnContainer>
             <button>
               <FontAwesomeIcon icon={faGoogle} /> Google
             </button>
+
             <button>
               <FontAwesomeIcon icon={faFacebook} /> Facebook
             </button>
           </BtnContainer>
         </Main>
+
         <div>Or Login with Email</div>
+
         <LoginForm onSubmit={handleSubmit}>
           <input
             type="email"
@@ -126,6 +134,7 @@ export const Login: FC = () => {
             value={formValues.email}
             onChange={handleInputChange}
           />
+
           <br />
 
           <input
@@ -135,7 +144,9 @@ export const Login: FC = () => {
             value={formValues.password}
             onChange={handleInputChange}
           />
+
           <br />
+
           <div>
             <div className="RememberForgotContainer">
               <input
@@ -146,16 +157,21 @@ export const Login: FC = () => {
                 checked={rememberMe}
                 onChange={handleRememberMe}
               />
+
               <Navlinks onClick={handleRememberMeClick}>Remember me</Navlinks>
+
               <br />
             </div>
+
             <div>
               <Navlinks onClick={handleForgotPasswordClick}>
                 Forgot Password?
               </Navlinks>
+
               <br />
             </div>
           </div>
+
           <Loginbtn type="submit">
             {loading ? (
               <BeatLoader color={"#123abc"} loading={loading} size={15} />
