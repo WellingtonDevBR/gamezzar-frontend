@@ -1,4 +1,4 @@
-import { Link, NavLink, useParams } from "react-router-dom";
+import { Link, NavLink, useParams, useLocation } from "react-router-dom";
 import {
   Container,
   GameSection,
@@ -33,12 +33,14 @@ interface GameProps {
   category: string;
   official_link: string;
   image: string;
+  official_video_link: string;
   slug: string;
 }
 
 export function Game() {
   const [selectedTab, setSelectedTab] = useState("owners");
   const [loading, setLoading] = useState(true);
+  const { pathname } = useLocation();
   const [game, setGame] = useState<GameProps>({
     description: "",
     title: "",
@@ -49,6 +51,7 @@ export function Game() {
     category: "",
     official_link: "",
     image: "",
+    official_video_link: "",
     slug: "",
   });
 
@@ -67,6 +70,7 @@ export function Game() {
       setGame(response.data);
     }
     fetchData();
+    window.scrollTo(0, 0);
     setLoading(false);
   }, []);
 
@@ -87,7 +91,7 @@ export function Game() {
           />
           <ButtonContainer>
             <NavLink style={{ textDecoration: "none" }} to="/chat">
-              <Button backgroundColor={"#b90303"}>I want</Button>
+              <Button backgroundColor={"#9b4545"}>I want</Button>
             </NavLink>
             <NavLink
               style={{ textDecoration: "none" }}
@@ -96,7 +100,7 @@ export function Game() {
               }}
               state={{ from: game }}
             >
-              <Button backgroundColor={"#007b00"}>I have</Button>
+              <Button backgroundColor={"#2d5f2d"}>I have</Button>
             </NavLink>
           </ButtonContainer>
         </div>
@@ -106,7 +110,7 @@ export function Game() {
             style={{ border: "none" }}
             width="320"
             height="240"
-            src="https://www.youtube.com/embed/WxjeV10H1F0"
+            src={game.official_video_link}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
