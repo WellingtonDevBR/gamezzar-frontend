@@ -15,13 +15,12 @@ import {
   FlexContainer,
 } from "./styles";
 
-import {
-  PeopleAltIcon,
-  ChatIcon,
-  ShoppingCartIcon,
-  FavoriteIcon,
-  WalletIcon,
-} from "@mui/icons-material";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import ChatIcon from "@mui/icons-material/Chat";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import WalletIcon from "@mui/icons-material/Wallet";
+
 
 export function Activity() {
   return (

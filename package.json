@@ -18,13 +18,20 @@
     "@mui/icons-material": "^5.14.1",
     "@mui/material": "^5.14.0",
     "@mui/styled-engine": "^5.13.2",
+    "apexcharts": "^3.41.0",
     "axios": "^1.4.0",
+<<<<<<< HEAD
     "google-map-react": "^2.2.1",
+=======
+    "chart.js": "3.0.0",
+>>>>>>> 2428342da5a078d25f9163e0d1010e8a8c0bf826
     "immer": "^9.0.16",
     "js-cookie": "^3.0.5",
     "phosphor-react": "^1.4.1",
     "react": "^18.2.0",
+    "react-apexcharts": "^1.4.1",
     "react-autosuggest": "^10.1.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.1",
     "react-router-dom": "^6.4.3",

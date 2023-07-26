@@ -15,7 +15,7 @@ export function Home() {
     const fetchData = async () => {
       try {
         const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-        const result = await axios.get("/api/games/get-all");
+        const result = await axios.get("/api/game/get-all");
         setProducts(result.data);
       } catch (error) {
         console.error("Failed to fetch data:", error);

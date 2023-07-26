@@ -2,6 +2,7 @@
 
 import { TopSellersCard, Container, TopSellerProfile } from "./styles";
 import { TopTrendingProps } from "../TopTrending";
+import { NavLink } from "react-router-dom";
 
 // Top Sellers Section
 export function TopSellers({ products }: TopTrendingProps) {
@@ -16,13 +17,20 @@ export function TopSellers({ products }: TopTrendingProps) {
       <h1>Top Sellers</h1>
       <TopSellersCard>
         {displayedProducts.map((product) => (
-          <TopSellerProfile key={product.user.user_id}>
-            <img
-              src={`${import.meta.env.VITE_S3_URL}/avatar/${product.user.avatar}`}
-              alt="avatar"
-            />
-            <p>{product.user.user_name}</p>
-          </TopSellerProfile>
+          <NavLink
+            style={{ all: "unset" }}
+            to={`/profile/${product.user.user_name}`}
+          >
+            <TopSellerProfile key={product.user.user_id}>
+              <img
+                src={`${import.meta.env.VITE_S3_URL}/avatar/${
+                  product.user.avatar
+                }`}
+                alt="avatar"
+              />
+              <p>{product.user.user_name}</p>
+            </TopSellerProfile>
+          </NavLink>
         ))}
       </TopSellersCard>
     </Container>

@@ -67,14 +67,22 @@ export const LoginForm = styled.form`
 `;
 export const Input = styled.input`
   width: 100%;
-  
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 10px ;
   background: transparent;
-  color: #343434;
+  color: white;
   border-radius: 4px;
   border: 1px solid #343434;
+
+  &::placeholder {
+    color: #343434;
+  }
+
+  &:focus {
+    outline: none;
+    border: 1.5px solid white;
+  }
 
 `;
 
@@ -91,6 +99,12 @@ export const Loginbtn = styled.button`
   border-radius: 20px;
   margin-top: 1rem;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background: #fff;
+    color: #020220;
+  }
 `;
 
 export const LoginFormOptions = styled.div`

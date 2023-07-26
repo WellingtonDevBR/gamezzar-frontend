@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import { CardTitle } from "../TodaysPicks/styles";
 import {
   TopTrendingCardContent,
@@ -13,13 +14,15 @@ export interface TrendingCardProps {
 
 export const TrendingCard: React.FC<TrendingCardProps> = ({ item }) => (
   <TopTrendingCard>
-    <TopTrendingCardContent>
-      <TopTrendingCardImage>
-        <img src={item.imageUrl} alt="avatar" />
-      </TopTrendingCardImage>
-      <TopTrendingCardPhoto>
-        <CardTitle>{item.title}</CardTitle>
-      </TopTrendingCardPhoto>
-    </TopTrendingCardContent>
+    <NavLink style={{ all: "unset" }} to={`/game/${item.gameId}`}>
+      <TopTrendingCardContent>
+        <TopTrendingCardImage>
+          <img src={item.imageUrl} alt="avatar" />
+        </TopTrendingCardImage>
+        <TopTrendingCardPhoto>
+          <CardTitle>{item.title}</CardTitle>
+        </TopTrendingCardPhoto>
+      </TopTrendingCardContent>
+    </NavLink>
   </TopTrendingCard>
 );

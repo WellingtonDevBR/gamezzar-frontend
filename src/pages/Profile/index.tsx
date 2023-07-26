@@ -1,5 +1,5 @@
 import { CellSignalFull, Check, Envelope, Info } from "phosphor-react";
-import React, { useState, ReactNode } from "react";
+import React, { useState, ReactNode, useEffect } from "react";
 
 import {
   Container,
@@ -19,9 +19,41 @@ import {
   MainNavigationContainer,
 } from "./styles";
 import { Feedback } from "./components/Feedbacks";
+import { useParams } from "react-router-dom";
+import { getAxiosInstance } from "../../services/axios";
+import { convertTimeFormat } from "../../helper/convertTimeFormat";
+
+interface UserProps {
+  first_name: string;
+  user_name: string;
+  created_at: string;
+  avatar: string;
+}
 
 export function Profile() {
   const [activeTab, setActiveTab] = useState("Feedbacks");
+  const [user, setUser] = useState<UserProps>({
+    user_name: "",
+    created_at: "",
+    first_name: "",
+    avatar: "",
+  });
+  const { username } = useParams();
+
+  const formattedDate = convertTimeFormat(user.created_at);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+        const result = await axios.get(`/api/user/${username}`);
+        setUser(result.data);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <Container>
@@ -29,23 +61,23 @@ export function Profile() {
         <HeaderTopSection>
           <HeaderTopContent>
             <p>Since</p>
-            <b>01/02/2013</b>
+            <b>{formattedDate}</b>
           </HeaderTopContent>
           <HeaderTopContent>
             <p>Recent Access</p>
-            <b>21/07/2023</b>
+            <b>{formattedDate}</b>
           </HeaderTopContent>
           <HeaderTopContent>
             <p>Trades</p>
-            <b>36</b>
+            <b>0</b>
           </HeaderTopContent>
           <HeaderTopContent>
             <p>Positives</p>
-            <b>37</b>
+            <b>0</b>
           </HeaderTopContent>
           <HeaderTopContent>
             <p>Neutrals</p>
-            <b>2</b>
+            <b>0</b>
           </HeaderTopContent>
           <HeaderTopContent>
             <p>Negatives</p>
@@ -87,12 +119,12 @@ export function Profile() {
         <MainSectionContainer>
           <MainImageContainer>
             <img
-              src="https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
+              src={`${import.meta.env.VITE_S3_URL}/avatar/${user.avatar}`}
               alt="avatar"
             />
           </MainImageContainer>
           <MainContentContainer>
-            <h1>Dante</h1>
+            <h1>{user.first_name}</h1>
             <span>Croydon Park / Sydney</span>
             <p>
               CHANGE - NOW IT'S MANDATORY TO PAY TO ADD GAMES TO THE LIST !!
