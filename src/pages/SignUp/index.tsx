@@ -41,6 +41,15 @@ export const SignUp: FC = () => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    let processedValue = value;
+
+    if (name === "username") {
+      processedValue = value.replace(/\s/g, "-"); // Replace spaces with hyphens
+      if (processedValue.length > 18) {
+        // Limit length to 18 characters
+        processedValue = processedValue.slice(0, 18);
+      }
+    }
     setFormValues((prevValues) => ({
       ...prevValues,
       [name]: value,

@@ -18,11 +18,13 @@ import { TradeHistory } from "./components/TradeHistory";
 import { Following } from "./components/Following";
 import { useAuth } from "../../context/AuthContext";
 import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 export function Dashboard() {
   const [activeTab, setActiveTab] = useState("Opportunities");
   const { token } = useAuth();
+  const navigate = useNavigate();
 
   const cookiedToken = Cookies.get("token");
 
@@ -68,6 +70,12 @@ export function Dashboard() {
           <SpanOptionButton onClick={() => setActiveTab("Profile")}>
             Edit Profile
           </SpanOptionButton>
+          <SpanOptionButton
+            backgroundColor={"#8c0f0f"}
+            onClick={() => setActiveTab("Logout")}
+          >
+            Logout
+          </SpanOptionButton>
         </NavigationContainer>
       </LeftSideMenuContainer>
       <RightSideContainer>
@@ -91,6 +99,10 @@ export function Dashboard() {
               return <Preferences />;
             case "Profile":
               return <Profile />;
+            case "Logout":
+              Cookies.remove("token");
+              navigate("/login");
+              navigate(0);
             default:
               return null;
           }
