@@ -62,4 +62,5 @@ export const SpanOptionButton = styled.span`
 
 export const RightSideContainer = styled.div`
   display: flex;
+  margin: 10px;
 `;
