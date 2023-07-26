@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import {
   Container,
   Image,
@@ -10,6 +10,8 @@ import {
   Button,
 } from "./styles";
 import { useForm } from "react-hook-form";
+import { getAxiosInstance } from "../../services/axios";
+import Cookies from "js-cookie";
 
 type Option = {
   name: string;
@@ -87,11 +89,29 @@ const box = [
 export function AddGame() {
   const { register, handleSubmit } = useForm();
   const { state } = useLocation();
+  const { id } = useParams();
   const game = state.from;
+  const token = Cookies.get("token");
+  const navigate = useNavigate();
 
-  const onSubmit = (data: any) => {
+  if (!token) {
+    navigate("/login");
+    navigate(0);
+  }
+
+  const onSubmit = async (data: any) => {
     console.log(data);
-    // Here you can handle the submission of your form
+    const axios = getAxiosInstance(`${import.meta.env.VITE_BASE_URL}`);
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    const response = await axios.post("/api/user-collection", {
+      ...data,
+      game_id: id,
+    });
+
+    if (response.status === 201) {
+      navigate("/dashboard", { state: { tab: "Collection" } });
+      navigate(0);
+    }
   };
 
   return (
@@ -107,11 +127,11 @@ export function AddGame() {
         </GameDetails>
         <GameInfo>
           <div>
-            {SelectItems({ name: "Region", arrayOptions: regions, register })}
+            {SelectItems({ name: "region", arrayOptions: regions, register })}
           </div>
           <div>
             {SelectItems({
-              name: "Platform",
+              name: "platform",
               arrayOptions: platforms,
               register,
             })}
@@ -122,26 +142,25 @@ export function AddGame() {
         <div>
           <p>Preferences</p>
           {SelectItems({
-            name: "Preference",
+            name: "preferences",
             arrayOptions: preferences,
             register,
           })}
           {SelectItems({
-            name: "Opinion",
+            name: "enjoyment",
             arrayOptions: optionAboutTheGame,
             register,
           })}
         </div>
         <div>
           <p>Condition</p>
-          {SelectItems({ name: "Media", arrayOptions: media, register })}
-          {SelectItems({ name: "Manual", arrayOptions: manual, register })}
-          {SelectItems({ name: "Box", arrayOptions: box, register })}
+          {SelectItems({ name: "media", arrayOptions: media, register })}
+          {SelectItems({ name: "manual", arrayOptions: manual, register })}
+          {SelectItems({ name: "box", arrayOptions: box, register })}
           <label>Describe your game state</label>
           <textarea
-            id="Observations"
             placeholder="Observations"
-            {...register("Observations")}
+            {...register("description")}
           />
 
           <Button type="submit">Conclude Editing</Button>

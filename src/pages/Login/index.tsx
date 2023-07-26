@@ -67,7 +67,7 @@ export const Login: FC = () => {
       if (response.status === 200) {
         // Set the token cookie to expire in one minute
         const expirationDate = new Date();
-        expirationDate.setTime(expirationDate.getTime() + 10 * 1000 * 10); // 600 seconds * 1000 milliseconds = 1 minute
+        expirationDate.setTime(expirationDate.getTime() + 1000 * 10 * 10 * 10); // 600 seconds * 1000 milliseconds = 1 minute
         Cookies.set("token", response.data.token, { expires: expirationDate });
 
         setToken(response.data.token);
