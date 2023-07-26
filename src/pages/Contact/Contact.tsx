@@ -13,6 +13,7 @@ import { ContactPage,
     Button,
 } from "./styles"
 
+
 export function Contact () {
     return (
         <>
@@ -21,7 +22,9 @@ export function Contact () {
         <SubTitle>Home/Contact/Contact1</SubTitle>
       </PageNav>
       <ContactPage>
-        <MapBox></MapBox>
+        <MapBox>
+        
+        </MapBox>
         <ContactForm>
           <h1>Drop us a Message</h1>
           <br />

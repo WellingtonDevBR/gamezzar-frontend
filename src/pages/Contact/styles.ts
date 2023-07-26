@@ -57,24 +57,31 @@ export const FormField = styled.div`
 export const Label = styled.label`
   margin-bottom: 0.5rem;
   font-weight: bold;
+  
 `;
 
 export const Input = styled.input`
   padding: 0.5rem;
-  border: 1px solid ;
+  border: .5px solid #ccc;
   border-radius: 4px;
+  background: transparent;
+  color:#fff;
+
 `;
 
 export const Select = styled.select`
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  background: transparent;
 `;
 
 export const TextArea = styled.textarea`
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  background: transparent;
+  color:#fff;
 `;
 
 export const Button = styled.button`

@@ -8,6 +8,8 @@ import { PageNotFound } from "./components/PageNotFound";
 import { Game } from "./pages/Game";
 import { Login } from "./pages/Login";
 import { SignUp } from "./pages/SignUp/SignUp";
+import { Contact } from "./pages/Contact/Contact";
+
 
 export function Router() {
   return (
@@ -21,6 +23,8 @@ export function Router() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="*" element={<PageNotFound />} />
+        <Route path="/Contact" element={<Contact />} />
+       
       </Route>
     </Routes>
   );
