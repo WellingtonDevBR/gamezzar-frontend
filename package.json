@@ -20,11 +20,8 @@
     "@mui/styled-engine": "^5.13.2",
     "apexcharts": "^3.41.0",
     "axios": "^1.4.0",
-<<<<<<< HEAD
     "google-map-react": "^2.2.1",
-=======
     "chart.js": "3.0.0",
->>>>>>> 2428342da5a078d25f9163e0d1010e8a8c0bf826
     "immer": "^9.0.16",
     "js-cookie": "^3.0.5",
     "phosphor-react": "^1.4.1",
