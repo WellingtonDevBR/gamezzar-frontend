@@ -15,8 +15,10 @@ import Cookies from "js-cookie";
 
 type Option = {
   name: string;
+  apiName?: string;
   arrayOptions: string[];
   register: ReturnType<typeof useForm>["register"];
+  owner?: any;
 };
 
 const regions = ["America", "Europe", "Asia", "Oceania"];
@@ -91,6 +93,7 @@ export function AddGame() {
   const { state } = useLocation();
   const { id } = useParams();
   const game = state.from;
+  const owner = state.owners;
   const token = Cookies.get("token");
   const navigate = useNavigate();
 
@@ -114,6 +117,8 @@ export function AddGame() {
     }
   };
 
+  console.log(`test`, game)
+
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
       <h1>I have this master piece!</h1>
@@ -127,13 +132,19 @@ export function AddGame() {
         </GameDetails>
         <GameInfo>
           <div>
-            {SelectItems({ name: "region", arrayOptions: regions, register })}
+            {SelectItems({
+              name: "region",
+              arrayOptions: regions,
+              register,
+              owner,
+            })}
           </div>
           <div>
             {SelectItems({
               name: "platform",
               arrayOptions: platforms,
               register,
+              owner,
             })}
           </div>
         </GameInfo>
@@ -145,23 +156,40 @@ export function AddGame() {
             name: "preferences",
             arrayOptions: preferences,
             register,
+            owner,
           })}
           {SelectItems({
             name: "enjoyment",
             arrayOptions: optionAboutTheGame,
             register,
+            owner,
           })}
         </div>
         <div>
           <p>Condition</p>
-          {SelectItems({ name: "media", arrayOptions: media, register })}
-          {SelectItems({ name: "manual", arrayOptions: manual, register })}
-          {SelectItems({ name: "box", arrayOptions: box, register })}
-          <label>Describe your game state</label>
-          <textarea
-            placeholder="Observations"
-            {...register("description")}
-          />
+          {SelectItems({
+            name: "media condition",
+            apiName: "media_condition",
+            arrayOptions: media,
+            register,
+            owner,
+          })}
+          {SelectItems({
+            name: "booklet condition",
+            apiName: "booklet_condition",
+            arrayOptions: manual,
+            register,
+            owner,
+          })}
+          {SelectItems({
+            name: "box condition",
+            apiName: "box_condition",
+            arrayOptions: box,
+            register,
+            owner,
+          })}
+          <label>Describe your game`s condition</label>
+          <textarea placeholder="Observations" {...register("description")} />
 
           <Button type="submit">Conclude Editing</Button>
         </div>
@@ -170,10 +198,21 @@ export function AddGame() {
   );
 }
 
-const SelectItems = ({ name, arrayOptions, register }: Option) => (
+const SelectItems = ({
+  name,
+  apiName,
+  arrayOptions,
+  register,
+  owner,
+}: Option) => (
   <>
     <label>{name}</label>
-    <SelectForm id={name} {...register(name)}>
+    <SelectForm
+      id={name}
+      {...register(apiName || name, {
+        defaultValue: owner ? owner[apiName || name] : "",
+      })}
+    >
       <option value="" disabled selected>
         Select an option
       </option>

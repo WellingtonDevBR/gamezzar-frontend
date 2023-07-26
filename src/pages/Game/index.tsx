@@ -18,11 +18,13 @@ import {
   Form,
   Label,
   ProductImage,
+  IsOwnerOrWishButton,
 } from "./styles";
 import { useState, useEffect } from "react";
 import { StyledChartComponent } from "../../helper/chart";
 import { getAxiosInstance } from "../../services/axios";
 import { convertTimeFormat } from "../../helper/convertTimeFormat";
+import Cookies from "js-cookie";
 
 interface GameProps {
   description: string;
@@ -42,6 +44,9 @@ export function Game() {
   const [selectedTab, setSelectedTab] = useState("owners");
   const [loading, setLoading] = useState(true);
   const { pathname } = useLocation();
+  const [owners, setOwners] = useState<any[]>();
+  const token = Cookies.get("token");
+  const [isOwner, setIsOwner] = useState(false);
   const [game, setGame] = useState<GameProps>({
     description: "",
     title: "",
@@ -62,8 +67,19 @@ export function Game() {
   useEffect(() => {
     async function fetchData() {
       const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-      const response = await axios.get(`/api/game/${id}`);
-      setGame(response.data);
+      const gameResponse = await axios.get(`/api/game/${id}`);
+      setGame(gameResponse.data.game);
+      setOwners(gameResponse.data.owners);
+
+      if (token) {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        const collectionResponse = await axios.get(
+          `/api/user-collection/has-collection/${id}`
+        );
+        if (collectionResponse.status === 200) {
+          setIsOwner(true);
+        }
+      }
     }
     fetchData();
     window.scrollTo(0, 0);
@@ -85,19 +101,35 @@ export function Game() {
           <DescriptionContainer
             dangerouslySetInnerHTML={{ __html: game.description }}
           />
-          <ButtonContainer>
-            <NavLink style={{ textDecoration: "none" }} to="/chat">
-              <Button backgroundColor={"#9b4545"}>I want</Button>
-            </NavLink>
-            <NavLink
-              style={{ textDecoration: "none" }}
-              to={{
-                pathname: `/game/add/${id}`,
-              }}
-              state={{ from: game }}
-            >
-              <Button backgroundColor={"#2d5f2d"}>I have</Button>
-            </NavLink>
+          <ButtonContainer isOwner={isOwner}>
+            {!isOwner ? (
+              <>
+                <NavLink style={{ textDecoration: "none" }} to="/chat">
+                  <Button backgroundColor={"#9b4545"}>I want</Button>
+                </NavLink>
+                <NavLink
+                  style={{ textDecoration: "none" }}
+                  to={{
+                    pathname: `/game/add/${id}`,
+                  }}
+                  state={{ from: game }}
+                >
+                  <Button backgroundColor={"#2d5f2d"}>I have</Button>
+                </NavLink>
+              </>
+            ) : (
+              <>
+                <NavLink
+                  style={{ textDecoration: "none" }}
+                  to={{
+                    pathname: `/game/add/${id}`,
+                  }}
+                  state={{ from: owners }}
+                >
+                  <IsOwnerOrWishButton>Edit This Game</IsOwnerOrWishButton>
+                </NavLink>
+              </>
+            )}
           </ButtonContainer>
         </div>
         <div>
@@ -190,32 +222,39 @@ export function Game() {
                     </tr>
                   </TableHead>
                   <TableBody>
-                    {
-                      <tr>
-                        <th>
-                          <img src="http://placehold.it/200x200" alt="test" />
-                          <div>
-                            <p>Username</p>
-                            <span>São Paulo / SP</span>
-                          </div>
-                        </th>
-                        <th>
-                          <span>10</span>
-                        </th>
-                        <th>
-                          <span>10</span>
-                        </th>
-                        <th>
-                          <span>10</span>
-                        </th>
-                        <th>
-                          <span>10</span>
-                        </th>
-                        <th>
-                          <span>10</span>
-                        </th>
-                      </tr>
-                    }
+                    {owners?.map((owner) => {
+                      return (
+                        <tr>
+                          <th>
+                            <img
+                              src={`${import.meta.env.VITE_S3_URL}/avatar/${
+                                owner.user.avatar
+                              }`}
+                              alt="test"
+                            />
+                            <div>
+                              <p>{owner.user.user_name}</p>
+                              <span>São Paulo / SP</span>
+                            </div>
+                          </th>
+                          <th>
+                            <span>{owner.interest_level}</span>
+                          </th>
+                          <th>
+                            <span>{owner.media_condition}</span>
+                          </th>
+                          <th>
+                            <span>{owner.box_condition}</span>
+                          </th>
+                          <th>
+                            <span>{owner.booklet_condition}</span>
+                          </th>
+                          <th>
+                            <span>12 km</span>
+                          </th>
+                        </tr>
+                      );
+                    })}
                   </TableBody>
                 </Table>
               </TabPanel>
