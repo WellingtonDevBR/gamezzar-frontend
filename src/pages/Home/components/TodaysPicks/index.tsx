@@ -12,17 +12,22 @@ import {
 } from "./styles";
 import { Button } from "../../../../components/Button";
 import { useState } from "react";
-import { TopTrendingProps } from "../TopTrending";
 
-export function TodaysDeals({ products }: TopTrendingProps) {
+interface TodaysDetalsProps {
+  usersCollection: any[];
+}
+
+export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
   const [visibleRows, setVisibleRows] = useState(2);
 
-  const listOfGames = products.map((product) => ({
-    src: `${import.meta.env.VITE_S3_URL}/games/${product.image}`,
-    alt: `${product.slug}`,
-    title: `${product.title}`,
-    owner: `${product.user.user_name}`,
-    avatar: `${import.meta.env.VITE_S3_URL}/avatar/${product.user.avatar}`,
+  const listOfGames = usersCollection.map((userCollection: any) => ({
+    src: `${import.meta.env.VITE_S3_URL}/games/${userCollection.image}`,
+    alt: `${userCollection.slug}`,
+    title: `${userCollection.title}`,
+    owner: `${userCollection.user.user_name}`,
+    avatar: `${import.meta.env.VITE_S3_URL}/avatar/${
+      userCollection.user.avatar
+    }`,
   }));
 
   const visibleCards = listOfGames.slice(0, visibleRows * 4); // Show 4 cards per row
@@ -31,20 +36,16 @@ export function TodaysDeals({ products }: TopTrendingProps) {
     <Container>
       <h1>Today's Picks</h1>
       <CardList>
-        {visibleCards.map(
-          (card, i) => (
-            (
-              <Card
-                key={i}
-                src={card.src}
-                alt={card.alt}
-                title={card.title}
-                owner={card.owner}
-                avatar={card.avatar}
-              />
-            )
-          )
-        )}
+        {visibleCards.map((card: any, i: any) => (
+          <Card
+            key={i}
+            src={card.src}
+            alt={card.alt}
+            title={card.title}
+            owner={card.owner}
+            avatar={card.avatar}
+          />
+        ))}
       </CardList>
       {visibleRows * 4 < listOfGames.length && (
         <ShowMoreButton onClick={() => setVisibleRows(visibleRows + 1)}>

@@ -9,14 +9,26 @@ import { getAxiosInstance } from "../../services/axios";
 import { useState, useEffect } from "react";
 
 export function Home() {
-  const [products, setProducts] = useState([]);
+  const [games, setGames] = useState<any[]>([]);
+  const [topVendors, setTopVendors] = useState<any[]>([]);
+  const [userCollections, setUserCollections] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-        const result = await axios.get("/api/game/get-all");
-        setProducts(result.data);
+        const gamesReponse = await axios.get("/api/game/get-all");
+        setGames(gamesReponse.data);
+
+        const usersCollectionResponse = await axios.get(
+          "/api/user-collection/"
+        );
+        setUserCollections(usersCollectionResponse.data);
+
+        const topVendorsResponse = await axios.get(
+          "/api/user/top-vendors"
+        );
+        setTopVendors(topVendorsResponse.data);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
@@ -27,11 +39,11 @@ export function Home() {
   return (
     <Container>
       <PromoContent />
-        <TopTrending products={products} />
-        <TopSellers products={products} />
-        <TodaysDeals products={products} />
-        <PopularCollection />
-        <CardOptionList />
+      <TopTrending games={games} />
+      <TopSellers users={topVendors} />
+      <TodaysDeals usersCollection={userCollections} />
+      <PopularCollection />
+      <CardOptionList />
     </Container>
   );
 }

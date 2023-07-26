@@ -1,34 +1,33 @@
 // index.tsx
 
 import { TopSellersCard, Container, TopSellerProfile } from "./styles";
-import { TopTrendingProps } from "../TopTrending";
 import { NavLink } from "react-router-dom";
 
 // Top Sellers Section
-export function TopSellers({ products }: TopTrendingProps) {
+export function TopSellers({ users }: any) {
   const productCardWidth = 85 + 1.7 * 2; // Width of the image + 2 * gap
   const containerWidth = 800; // Max width of the container
 
   const productsPerRow = Math.floor(containerWidth / productCardWidth);
-  const displayedProducts = products.slice(0, productsPerRow);
+  const displayedUsers = users.slice(0, productsPerRow);
 
   return (
     <Container>
       <h1>Top Sellers</h1>
       <TopSellersCard>
-        {displayedProducts.map((product) => (
+        {displayedUsers.map((user: any) => (
           <NavLink
             style={{ all: "unset" }}
-            to={`/profile/${product.user.user_name}`}
+            to={`/profile/${user.user_name}`}
           >
-            <TopSellerProfile key={product.user.user_id}>
+            <TopSellerProfile key={user.user_id}>
               <img
                 src={`${import.meta.env.VITE_S3_URL}/avatar/${
-                  product.user.avatar
+                  user.avatar
                 }`}
                 alt="avatar"
               />
-              <p>{product.user.user_name}</p>
+              <p>{user.user_name}</p>
             </TopSellerProfile>
           </NavLink>
         ))}

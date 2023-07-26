@@ -10,58 +10,34 @@ import { useState } from "react";
 import { ICardData } from "./utils";
 import { TrendingCard } from "./TopTrendingCard";
 
-export interface IUser {
-  user_id: string;
-  first_name: string;
-  last_name: string;
-  user_name: string;
-  avatar: string;
-  email: string;
-  password: string;
-  created_at: string;
-  updated_at: string;
-  inventory: {
-    user_id: string;
-    game_id: string;
-    quantity: number;
-    status: boolean;
-    created_at: string;
-    updated_at: string;
-  };
-}
-
-interface IGame {
+interface GameProps {
   game_id: string;
   title: string;
   description: string;
-  region: string;
   release_date: string;
   producer: string;
-  genre: string;
-  category: string;
   official_link: string;
   image: string;
   slug: string;
   status: string;
   created_at: string;
   updated_at: string;
-  user: IUser;
 }
 
-export interface TopTrendingProps {
-  products: IGame[];
+interface TopTrendingProps {
+  games: GameProps[];
 }
 
-export function TopTrending({ products }: TopTrendingProps) {
-  const newData = products.map((product) => {
+interface CarouselProps {
+  data: GameProps[];
+}
+
+export function TopTrending({ games }: TopTrendingProps) {
+  const newData = games.map((game: GameProps) => {
     return {
-      gameId: product.game_id,
-      imageUrl: `${import.meta.env.VITE_S3_URL}/games/${product.image}`,
-      title: product.title,
-      subtitle: "BSC",
-      footerImg: `${import.meta.env.VITE_S3_URL}/avatar/${product.user.avatar}`,
-      creatorLabel: product.user.user_name,
-      creatorName: product.user.user_name,
+      gameId: game.game_id,
+      imageUrl: `${import.meta.env.VITE_S3_URL}/games/${game.image}`,
+      title: game.title,
     };
   });
 
@@ -73,10 +49,6 @@ export function TopTrending({ products }: TopTrendingProps) {
       <Carousel data={newData} />
     </>
   );
-}
-
-interface CarouselProps {
-  data: ICardData[];
 }
 
 const Carousel: React.FC<CarouselProps> = ({ data }) => {
