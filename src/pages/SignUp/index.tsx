@@ -14,20 +14,19 @@ import {
 } from "./styles";
 import axios from "axios";
 
-
 interface FormValues {
-  fname: string;
-  lname: string;
-  Uname: string;
+  firstName: string;
+  lastName: string;
+  userName: string;
   email: string;
   password: string;
 }
 
 export const SignUp: FC = () => {
   const initialFormValues: FormValues = {
-    fname: "",
-    lname: "",
-    Uname: "",
+    firstName: "",
+    lastName: "",
+    userName: "",
     email: "",
     password: "",
   };
@@ -35,9 +34,7 @@ export const SignUp: FC = () => {
   const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
   const [signupStatus, setSignupStatus] = useState<string | null>(null);
 
-  const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormValues((prevValues) => ({
       ...prevValues,
@@ -50,18 +47,18 @@ export const SignUp: FC = () => {
 
     try {
       // Data construscted as request body through whatsapp example
-      const signupData = {
-        firstName: formValues.fname,
-        lastName: formValues.lname,
-        username: formValues.Uname,
+      const formData = {
+        first_name: formValues.firstName,
+        last_name: formValues.lastName,
+        user_name: formValues.userName,
         email: formValues.email,
         password: formValues.password,
       };
 
       //  API request to the backend server for signup
       const response = await axios.post(
-        "https://addressr.p.rapidapi.com/signup",
-        signupData
+        `${import.meta.env.VITE_BASE_URL}/user/signup`,
+        formData
       );
 
       // Handle the server response
@@ -92,67 +89,63 @@ export const SignUp: FC = () => {
     console.log("Forgot Password clicked!");
   };
 
-  
   return (
     <>
-   
       <PageNav>
         <Title>Sign Up</Title>
         <SubTitle>Home / Pages / Signup</SubTitle>
       </PageNav>
       <Container>
         <h1>Signup to Gamezzar</h1>
-       
-          
-          <SocialMediaContainer>
+
+        <SocialMediaContainer>
           <span>Signup with Social Media</span>
           <section>
             <button>
               <FontAwesomeIcon icon={faGoogle} /> Google
             </button>
-            
+
             <button>
               <FontAwesomeIcon icon={faFacebook} /> Facebook
             </button>
-            </section>
-          </SocialMediaContainer>
-        
-        
+          </section>
+        </SocialMediaContainer>
+
         <LoginForm onSubmit={handleSubmit}>
-        <span>Or Signup with Email</span>
-          <Input 
+          <span>Or Signup with Email</span>
+          <Input
             type="text"
             name="fname"
             placeholder="Your First Name"
-            value={formValues.fname}
+            value={formValues.firstName}
             onChange={handleInputChange}
           />
-         
-          <Input 
+
+          <Input
             type="text"
             name="lname"
             placeholder="Your Last Name"
-            value={formValues.lname}
+            value={formValues.lastName}
             onChange={handleInputChange}
           />
-         
-          <Input 
+
+          <Input
             type="text"
             name="Uname"
             placeholder="Your Username"
-            value={formValues.Uname}
+            value={formValues.userName}
             onChange={handleInputChange}
           />
-          
-          <Input 
+
+          <Input
             type="email"
             name="email"
             placeholder="Your Email Address"
             value={formValues.email}
             onChange={handleInputChange}
           />
-          
-          <Input 
+
+          <Input
             type="password"
             name="password"
             placeholder="Your Password"
@@ -163,15 +156,14 @@ export const SignUp: FC = () => {
             <div>
               <input type="checkbox" name="remember" />
               <span onClick={handleRememberMeClick}>Remember me</span>
-              </div>
-        
+            </div>
+
             <div>
               <span onClick={handleForgotPasswordClick}>Forgot Password?</span>
-              
             </div>
-            </LoginFormOptions>
-          
-          <SignUpbtn type ="submit">Signup </SignUpbtn>
+          </LoginFormOptions>
+
+          <SignUpbtn type="submit">Signup </SignUpbtn>
         </LoginForm>
       </Container>
     </>
