@@ -2,7 +2,7 @@ import React from 'react';
 import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
 
 interface MapContainerProps {
-  google: any; // Replace 'any' with a more specific type if possible
+  google: any;
 }
 
 class MapContainer extends React.Component<MapContainerProps> {
@@ -19,7 +19,7 @@ class MapContainer extends React.Component<MapContainerProps> {
   }
 }
 
-// Wrap the MapContainer with the withGoogleMap HOC
+
 const MapComponent = withGoogleMap(MapContainer);
 
 // Usage:
