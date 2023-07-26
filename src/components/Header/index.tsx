@@ -23,7 +23,7 @@ const NAV_ITEMS = [
   { title: "Explore", path: "#" },
   { title: "Activity", path: "#" },
   { title: "Community", path: "#" },
-  { title: "Contact", path: "#" },
+  { title: "Contact", path: "/contact" },
 ];
 
 interface UserResponseProps {
