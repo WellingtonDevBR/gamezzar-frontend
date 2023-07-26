@@ -53,7 +53,7 @@ export function Profile() {
       }
     };
     fetchData();
-  });
+  }, []);
 
   return (
     <Container>
