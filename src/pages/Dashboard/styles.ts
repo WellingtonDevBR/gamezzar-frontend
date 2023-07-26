@@ -5,7 +5,7 @@ export const Container = styled.div`
   flex-direction: row;
   height: 100%;
   width: 1000px;
-  margin: 0 auto;
+  margin: 50px auto;
   margin-top: 50px;
 `;
 
@@ -43,23 +43,30 @@ export const NavigationContainer = styled.div`
   justify-content: center;
 `;
 
-export const SpanOptionButton = styled.span`
+interface SpanOptionButton {
+  backgroundColor?: string;
+}
+
+export const SpanOptionButton = styled.span<SpanOptionButton>`
   display: flex;
   flex-direction: row;
   width: 100%;
   height: 50px;
-  background-color: ${(props) => props.theme["--primary"]};
+  background-color: ${(props) =>
+    props.backgroundColor ? props.backgroundColor : props.theme["--primary"]};
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: 0.3s;
-  border: 1px solid rgba(0,0,0,.125);
+  border: 1px solid rgba(0, 0, 0, 0.125);
 
   &:hover {
-    background-color: #5122fc;
+    background-color: ${(props) =>
+      props.backgroundColor ? "#9b4545" : "#5122fc"};
   }
 `;
 
 export const RightSideContainer = styled.div`
   display: flex;
+  margin: 10px;
 `;

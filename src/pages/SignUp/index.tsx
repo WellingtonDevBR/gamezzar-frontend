@@ -13,29 +13,43 @@ import {
   Input,
 } from "./styles";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 interface FormValues {
-  firstName: string;
-  lastName: string;
-  userName: string;
+  firstname: string;
+  lastname: string;
+  username: string;
   email: string;
   password: string;
 }
 
 export const SignUp: FC = () => {
   const initialFormValues: FormValues = {
-    firstName: "",
-    lastName: "",
-    userName: "",
+    firstname: "",
+    lastname: "",
+    username: "",
     email: "",
     password: "",
   };
 
   const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
   const [signupStatus, setSignupStatus] = useState<string | null>(null);
+  const { setToken } = useAuth();
+  const navigate = useNavigate();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    let processedValue = value;
+
+    if (name === "username") {
+      processedValue = value.replace(/\s/g, "-"); // Replace spaces with hyphens
+      if (processedValue.length > 18) {
+        // Limit length to 18 characters
+        processedValue = processedValue.slice(0, 18);
+      }
+    }
     setFormValues((prevValues) => ({
       ...prevValues,
       [name]: value,
@@ -48,44 +62,40 @@ export const SignUp: FC = () => {
     try {
       // Data construscted as request body through whatsapp example
       const formData = {
-        first_name: formValues.firstName,
-        last_name: formValues.lastName,
-        user_name: formValues.userName,
+        first_name: formValues.firstname,
+        last_name: formValues.lastname,
+        user_name: formValues.username,
         email: formValues.email,
         password: formValues.password,
       };
 
-      //  API request to the backend server for signup
       const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/user/signup`,
+        `${import.meta.env.VITE_BASE_URL}/api/user/register`,
         formData
       );
 
-      // Handle the server response
-      if (response.status === 200) {
-        // Signup successful, handle success
-        setSignupStatus("success");
-        console.log("Signup successful!");
-        // make chnages to login
+      if (response.status === 201) {
+        const expirationDate = new Date();
+        expirationDate.setTime(expirationDate.getTime() + 60 * 60 * 1000); // 3600 seconds * 1000 milliseconds = 1 hour
+        Cookies.set("token", response.data.token, { expires: expirationDate });
+
+        setToken(response.data.token);
+        navigate("/");
+        navigate(0);
       } else {
-        // Signup failed, handle error
         setSignupStatus("error");
         console.log("Signup failed!");
-        // set error message
       }
     } catch (error) {
       console.error("Error occurred during signup:", error);
-      // add code to handle error
     }
   };
 
   const handleRememberMeClick = () => {
-    // Add your logic for the "Remember me" click here
     console.log("Remember me clicked!");
   };
 
   const handleForgotPasswordClick = () => {
-    // Add your logic for the "Forgot Password" click here
     console.log("Forgot Password clicked!");
   };
 
@@ -115,25 +125,22 @@ export const SignUp: FC = () => {
           <span>Or Signup with Email</span>
           <Input
             type="text"
-            name="fname"
+            name="firstname"
             placeholder="Your First Name"
-            value={formValues.firstName}
             onChange={handleInputChange}
           />
 
           <Input
             type="text"
-            name="lname"
+            name="lastname"
             placeholder="Your Last Name"
-            value={formValues.lastName}
             onChange={handleInputChange}
           />
 
           <Input
             type="text"
-            name="Uname"
+            name="username"
             placeholder="Your Username"
-            value={formValues.userName}
             onChange={handleInputChange}
           />
 
@@ -141,7 +148,6 @@ export const SignUp: FC = () => {
             type="email"
             name="email"
             placeholder="Your Email Address"
-            value={formValues.email}
             onChange={handleInputChange}
           />
 
@@ -149,7 +155,6 @@ export const SignUp: FC = () => {
             type="password"
             name="password"
             placeholder="Your Password"
-            value={formValues.password}
             onChange={handleInputChange}
           />
           <LoginFormOptions>
