@@ -15,7 +15,7 @@ export function Router() {
     <Routes>
       <Route path="/" element={<DefaultLayout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:username" element={<Profile />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/game/:id" element={<Game />} />
         <Route path="/dashboard" element={<Dashboard />} />

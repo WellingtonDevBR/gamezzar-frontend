@@ -22,6 +22,7 @@ import {
 import { useState, useEffect } from "react";
 import { StyledChartComponent } from "../../helper/chart";
 import { getAxiosInstance } from "../../services/axios";
+import { convertTimeFormat } from "../../helper/convertTimeFormat";
 
 interface GameProps {
   description: string;
@@ -55,12 +56,7 @@ export function Game() {
     slug: "",
   });
 
-  const dateObject = new Date(game.release_date);
-  const day = dateObject.getDate().toString().padStart(2, "0");
-  const month = (dateObject.getMonth() + 1).toString().padStart(2, "0"); // Month is zero-based, so add 1 to get the correct month.
-  const year = dateObject.getFullYear().toString();
-
-  const formattedDate = `${day}/${month}/${year}`;
+  const formattedDate = convertTimeFormat(game.release_date);
   let { id } = useParams();
 
   useEffect(() => {
