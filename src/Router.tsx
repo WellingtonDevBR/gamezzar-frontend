@@ -11,6 +11,7 @@ import { Home } from "./pages/Home";
 import { Chat } from "./pages/Chat";
 import { Profile } from "./pages/Profile";
 import { Dashboard } from "./pages/Dashboard";
+import { Explorer } from "./pages/Explorer";
 
 
 export function Router() {
@@ -27,6 +28,7 @@ export function Router() {
         <Route path="/game/add/:id" element={<AddGame />} />
         <Route path="*" element={<PageNotFound />} />
         <Route path="/Contact" element={<Contact />} />
+        <Route path="/explorer" element={<Explorer />} />
         
       </Route>
     </Routes>
