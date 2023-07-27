@@ -21,7 +21,7 @@ export function Wishlist({ wishlist }: any) {
           </tr>
         </TableHeaderContainer>
         <TableBodyContainer>
-          {wishlist.map((game: any, index: number) => (
+          {wishlist?.map((game: any, index: number) => (
             <tr key={index}>
               <TableDataCellGame>
                 <img

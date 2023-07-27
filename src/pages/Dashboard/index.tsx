@@ -16,7 +16,7 @@ import { Preferences } from "./components/Preferences";
 import { TradeHistory } from "./components/TradeHistory";
 import { Following } from "./components/Following";
 import { useAuth } from "../../context/AuthContext";
-import { Navigate } from "react-router-dom";
+import { NavLinkProps, Navigate } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import { getAxiosInstance } from "../../services/axios";
@@ -29,6 +29,7 @@ export function Dashboard() {
   const [activeTab, setActiveTab] = useState(
     location.state?.tab || "Opportunities"
   );
+  console.log(activeTab);
   const cookiedToken = Cookies.get("token");
 
   if (!token && !cookiedToken) {

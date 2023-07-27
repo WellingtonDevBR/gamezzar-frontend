@@ -25,7 +25,8 @@ export function EditWishlist() {
     const response = await axios.put(`/api/wishlist/${id}/`, data);
 
     if (response.status === 200) {
-      navigate("/dashboard");
+      navigate("/dashboard", { state: { tab: "Wishlist" } });
+      navigate(0);
     }
   };
 

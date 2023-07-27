@@ -102,6 +102,9 @@ export function AddGame() {
   }
 
   const onSubmit = async (data: any) => {
+    data.region = regions[data.region];
+    data.platform = platforms[data.platform];
+    console.log(data)
     const axios = getAxiosInstance(`${import.meta.env.VITE_BASE_URL}`);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     const response = await axios.post("/api/user-collection", {
@@ -121,19 +124,25 @@ export function AddGame() {
       <Header>
         <GameDetails>
           <Image
-            src={`${import.meta.env.VITE_S3_URL}/games/${game.image}`}
+            src={`${import.meta.env.VITE_S3_URL}/games/${game.details.image}`}
             alt="ac-valhalla"
           />
           <h2>The Callisto Protocol</h2>
         </GameDetails>
         <GameInfo>
           <div>
-            {SelectItems({ name: "region", arrayOptions: regions, register })}
+            {SelectItems({
+              name: "region",
+              arrayOptions: regions,
+              defaultValue: game.details.region.name,
+              register,
+            })}
           </div>
           <div>
             {SelectItems({
               name: "platform",
               arrayOptions: platforms,
+              defaultValue: game.details.platform.name,
               register,
             })}
           </div>
@@ -145,11 +154,13 @@ export function AddGame() {
           {SelectItems({
             name: "preferences",
             arrayOptions: preferences,
+            defaultValue: game.score,
             register,
           })}
           {SelectItems({
             name: "enjoyment",
             arrayOptions: optionAboutTheGame,
+            defaultValue: game.interest_level,
             register,
           })}
         </div>
@@ -159,22 +170,29 @@ export function AddGame() {
             name: "media condition",
             apiName: "media_condition",
             arrayOptions: media,
+            defaultValue: game.media_condition,
             register,
           })}
           {SelectItems({
             name: "booklet condition",
             apiName: "booklet_condition",
             arrayOptions: manual,
+            defaultValue: game.booklet_condition,
             register,
           })}
           {SelectItems({
             name: "box condition",
             apiName: "box_condition",
             arrayOptions: box,
+            defaultValue: game.box_condition,
             register,
           })}
           <label>Describe your game`s condition</label>
-          <textarea placeholder="Observations" {...register("description")} />
+          <textarea
+            defaultValue={game.description}
+            placeholder="Observations"
+            {...register("description")}
+          />
 
           <Button type="submit">Conclude Editing</Button>
         </div>
@@ -183,15 +201,25 @@ export function AddGame() {
   );
 }
 
-const SelectItems = ({ name, apiName, arrayOptions, register }: Option) => (
+const SelectItems = ({
+  name,
+  apiName,
+  arrayOptions,
+  register,
+  defaultValue,
+}: Option & { defaultValue?: number }) => (
   <>
     <label>{name}</label>
-    <SelectForm id={name} {...register(apiName || name)}>
-      <option value="" disabled selected>
+    <SelectForm
+      id={name}
+      {...register(apiName || name)}
+      defaultValue={defaultValue}
+    >
+      <option value="" disabled>
         Select an option
       </option>
-      {arrayOptions.map((item: string) => (
-        <option key={item} value={item}>
+      {arrayOptions.map((item: string, index: number) => (
+        <option key={item} value={index}>
           {item}
         </option>
       ))}
