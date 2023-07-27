@@ -92,19 +92,21 @@ export function AddGame() {
   const { state } = useLocation();
   const { id } = useParams();
   const game = state.from;
-  const owner = state.owner;
   const token = Cookies.get("token");
   const navigate = useNavigate();
+  console.log(game);
 
   if (!token) {
     navigate("/login");
     navigate(0);
   }
 
+  console.log("test", game);
+
   const onSubmit = async (data: any) => {
     data.region = regions[data.region];
     data.platform = platforms[data.platform];
-    console.log(data)
+    console.log(data);
     const axios = getAxiosInstance(`${import.meta.env.VITE_BASE_URL}`);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     const response = await axios.post("/api/user-collection", {
@@ -124,17 +126,19 @@ export function AddGame() {
       <Header>
         <GameDetails>
           <Image
-            src={`${import.meta.env.VITE_S3_URL}/games/${game.details.image}`}
+            src={`${import.meta.env.VITE_S3_URL}/games/${
+              game?.details?.image || game?.image
+            }`}
             alt="ac-valhalla"
           />
-          <h2>The Callisto Protocol</h2>
+          <h2>{game?.title}</h2>
         </GameDetails>
         <GameInfo>
           <div>
             {SelectItems({
               name: "region",
               arrayOptions: regions,
-              defaultValue: game.details.region.name,
+              defaultValue: game?.details?.region?.name || game?.region?.name,
               register,
             })}
           </div>
@@ -142,7 +146,8 @@ export function AddGame() {
             {SelectItems({
               name: "platform",
               arrayOptions: platforms,
-              defaultValue: game.details.platform.name,
+              defaultValue:
+                game?.details?.platform?.name || game?.platform?.name,
               register,
             })}
           </div>
@@ -154,13 +159,14 @@ export function AddGame() {
           {SelectItems({
             name: "preferences",
             arrayOptions: preferences,
-            defaultValue: game.score,
+            defaultValue: game?.score || game?.inventory?.score,
             register,
           })}
           {SelectItems({
             name: "enjoyment",
             arrayOptions: optionAboutTheGame,
-            defaultValue: game.interest_level,
+            defaultValue:
+              game?.interest_level || game?.inventory?.interest_level,
             register,
           })}
         </div>
@@ -170,26 +176,27 @@ export function AddGame() {
             name: "media condition",
             apiName: "media_condition",
             arrayOptions: media,
-            defaultValue: game.media_condition,
+            defaultValue: game?.media_condition || game?.inventory?.condition,
             register,
           })}
           {SelectItems({
             name: "booklet condition",
             apiName: "booklet_condition",
             arrayOptions: manual,
-            defaultValue: game.booklet_condition,
+            defaultValue:
+              game?.booklet_condition || game?.inventory?.booklet_condition,
             register,
           })}
           {SelectItems({
             name: "box condition",
             apiName: "box_condition",
             arrayOptions: box,
-            defaultValue: game.box_condition,
+            defaultValue: game?.box_condition || game?.inventory?.box_condition,
             register,
           })}
           <label>Describe your game`s condition</label>
           <textarea
-            defaultValue={game.description}
+            defaultValue={game?.inventory?.description || game?.description}
             placeholder="Observations"
             {...register("description")}
           />

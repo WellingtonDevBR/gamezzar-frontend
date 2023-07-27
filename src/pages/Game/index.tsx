@@ -41,12 +41,13 @@ interface GameProps {
 }
 
 export function Game() {
-  const [selectedTab, setSelectedTab] = useState("owners");
   const [loading, setLoading] = useState(true);
   const { pathname } = useLocation();
-  const [owners, setOwners] = useState<any[]>();
+  const [selectedTab, setSelectedTab] = useState("owners");
   const token = Cookies.get("token");
-  const [isOwner, setIsOwner] = useState(false);
+  const [isWishGame, setIsWishGame] = useState(false);
+  const [gameOwners, setGameOwners] = useState<any[]>();
+  const [hasProduct, setHasProduct] = useState(false);
   const [game, setGame] = useState<GameProps>({
     description: "",
     title: "",
@@ -69,7 +70,7 @@ export function Game() {
       const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
       const gameResponse = await axios.get(`/api/game/${id}`);
       setGame(gameResponse.data.game);
-      setOwners(gameResponse.data.owners);
+      setGameOwners(gameResponse.data.inventory);
 
       if (token) {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -77,7 +78,7 @@ export function Game() {
           `/api/user-collection/has-collection/${id}`
         );
         if (collectionResponse.status === 200) {
-          setIsOwner(true);
+          setHasProduct(true);
         }
       }
     }
@@ -101,8 +102,41 @@ export function Game() {
           <DescriptionContainer
             dangerouslySetInnerHTML={{ __html: game.description }}
           />
-          <ButtonContainer isOwner={isOwner}>
-            {!isOwner ? (
+          <ButtonContainer isOwner={hasProduct}>
+            {hasProduct ? (
+              <>
+                <NavLink
+                  style={{ textDecoration: "none" }}
+                  to={{
+                    pathname: `/game/add/${id}`,
+                  }}
+                  state={{ from: game }}
+                >
+                  <IsOwnerOrWishButton>Edit This Game</IsOwnerOrWishButton>
+                </NavLink>
+              </>
+            ) : isWishGame ? (
+              <>
+                <NavLink
+                  style={{ textDecoration: "none" }}
+                  to={{
+                    pathname: `/game/add/${id}`,
+                  }}
+                  state={{ from: gameOwners }}
+                >
+                  <IsOwnerOrWishButton>Edit Wish</IsOwnerOrWishButton>
+                </NavLink>
+              </>
+            ) : !token ? (
+              <>
+                <NavLink style={{ textDecoration: "none" }} to="/login">
+                  <Button backgroundColor={"#9b4545"}>I want</Button>
+                </NavLink>
+                <NavLink style={{ textDecoration: "none" }} to="/login">
+                  <Button backgroundColor={"#2d5f2d"}>I have</Button>
+                </NavLink>
+              </>
+            ) : (
               <>
                 <NavLink style={{ textDecoration: "none" }} to="/chat">
                   <Button backgroundColor={"#9b4545"}>I want</Button>
@@ -115,18 +149,6 @@ export function Game() {
                   state={{ from: game }}
                 >
                   <Button backgroundColor={"#2d5f2d"}>I have</Button>
-                </NavLink>
-              </>
-            ) : (
-              <>
-                <NavLink
-                  style={{ textDecoration: "none" }}
-                  to={{
-                    pathname: `/game/add/${id}`,
-                  }}
-                  state={{ from: owners }}
-                >
-                  <IsOwnerOrWishButton>Edit This Game</IsOwnerOrWishButton>
                 </NavLink>
               </>
             )}
@@ -222,7 +244,7 @@ export function Game() {
                     </tr>
                   </TableHead>
                   <TableBody>
-                    {owners?.map((owner) => {
+                    {gameOwners?.map((owner) => {
                       return (
                         <tr>
                           <th>

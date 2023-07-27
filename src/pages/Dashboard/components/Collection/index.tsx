@@ -52,10 +52,10 @@ export function Collection() {
                 </div>
               </TableDataCellGame>
               <TableDataCellScore>
-                <span>{game.score}</span>
+                <span>{game.score + 1}</span>
               </TableDataCellScore>
               <TableDataCellLevel>
-                <img src="https://cdn.trocajogo.net/static/gauge3.svg" />
+                <img src={`https://cdn.trocajogo.net/static/gauge${game.interest_level - 1}.svg`} />
               </TableDataCellLevel>
               <TableDataCellEdit>
                 <NavLink
