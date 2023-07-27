@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import {
   Container,
   TableContainer,
@@ -36,12 +37,14 @@ export function Wishlist({ wishlist }: any) {
               </TableDataCellGame>
               <TableDataCellScore>
                 <img
-                  src="https://cdn.trocajogo.net/static/gauge3.svg"
+                  src={`https://cdn.trocajogo.net/static/${game.interest_level}`}
                   alt="gauge"
                 />
               </TableDataCellScore>
               <TableDataCellEdit>
-                <span>Edit</span>
+                <NavLink to={`/user/wishlist/edit/${game.wishlist_id}`}>
+                  <span>Edit</span>
+                </NavLink>
               </TableDataCellEdit>
             </tr>
           ))}

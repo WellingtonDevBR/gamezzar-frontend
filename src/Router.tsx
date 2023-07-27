@@ -12,6 +12,7 @@ import { Chat } from "./pages/Chat";
 import { Profile } from "./pages/Profile";
 import { Dashboard } from "./pages/Dashboard";
 import { Explorer } from "./pages/Explorer";
+import { EditWishlist } from "./pages/Dashboard/components/EditWishlist";
 
 
 export function Router() {
@@ -29,7 +30,7 @@ export function Router() {
         <Route path="*" element={<PageNotFound />} />
         <Route path="/Contact" element={<Contact />} />
         <Route path="/explorer" element={<Explorer />} />
-        
+        <Route path="/user/wishlist/edit/:id" element={<EditWishlist />} />
       </Route>
     </Routes>
   );

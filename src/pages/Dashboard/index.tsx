@@ -49,8 +49,6 @@ export function Dashboard() {
     getWishList();
   }, []);
 
-  console.log(wishlist);
-
   return (
     <Container>
       <LeftSideMenuContainer>
