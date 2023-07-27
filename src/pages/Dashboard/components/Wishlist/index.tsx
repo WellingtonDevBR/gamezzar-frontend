@@ -8,7 +8,7 @@ import {
   TableDataCellEdit,
 } from "./styles";
 
-export function Wishlist() {
+export function Wishlist({ wishlist }: any) {
   return (
     <Container>
       <h1>Wishlist</h1>
@@ -16,28 +16,35 @@ export function Wishlist() {
         <TableHeaderContainer>
           <tr>
             <th style={{ textAlign: "left" }}>Game</th>
-            <th style={{ textAlign: "left" }}>Level</th>
+            <th style={{ textAlign: "left" }}>Interest</th>
           </tr>
         </TableHeaderContainer>
         <TableBodyContainer>
-          <tr>
-            <TableDataCellGame>
-              <img
-                src="https://gamezzar-images.s3.us-east-2.amazonaws.com/games/ac-valhalla.jpg"
-                alt="Game"
-              />
-              <div>
-                <span>Assassin`s Creed</span>
-                <span>Playstation 4</span>
-              </div>
-            </TableDataCellGame>
-            <TableDataCellScore>
-              <img src="https://cdn.trocajogo.net/static/gauge3.svg" alt="gauge" />
-            </TableDataCellScore>
-            <TableDataCellEdit>
-              <span>Edit</span>
-            </TableDataCellEdit>
-          </tr>
+          {wishlist.map((game: any, index: number) => (
+            <tr key={index}>
+              <TableDataCellGame>
+                <img
+                  src={`${import.meta.env.VITE_S3_URL}/games/${
+                    game.details.image
+                  }`}
+                  alt="Game"
+                />
+                <div>
+                  <span>{game.details.title}</span>
+                  <span>{game.details.platform.name}</span>
+                </div>
+              </TableDataCellGame>
+              <TableDataCellScore>
+                <img
+                  src="https://cdn.trocajogo.net/static/gauge3.svg"
+                  alt="gauge"
+                />
+              </TableDataCellScore>
+              <TableDataCellEdit>
+                <span>Edit</span>
+              </TableDataCellEdit>
+            </tr>
+          ))}
         </TableBodyContainer>
       </TableContainer>
     </Container>

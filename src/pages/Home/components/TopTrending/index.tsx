@@ -51,7 +51,7 @@ export function TopTrending({ games }: TopTrendingProps) {
   );
 }
 
-const Carousel: React.FC<CarouselProps> = ({ data }) => {
+const Carousel: React.FC<any> = ({ data }: any) => {
   const [current, setCurrent] = useState(0);
   const pages = Math.ceil(data.length / 5);
 

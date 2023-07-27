@@ -18,7 +18,6 @@ type Option = {
   apiName?: string;
   arrayOptions: string[];
   register: ReturnType<typeof useForm>["register"];
-  owner?: any;
 };
 
 const regions = ["America", "Europe", "Asia", "Oceania"];
@@ -93,7 +92,7 @@ export function AddGame() {
   const { state } = useLocation();
   const { id } = useParams();
   const game = state.from;
-  const owner = state.owners;
+  const owner = state.owner;
   const token = Cookies.get("token");
   const navigate = useNavigate();
 
@@ -103,7 +102,6 @@ export function AddGame() {
   }
 
   const onSubmit = async (data: any) => {
-    console.log(data);
     const axios = getAxiosInstance(`${import.meta.env.VITE_BASE_URL}`);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     const response = await axios.post("/api/user-collection", {
@@ -116,8 +114,6 @@ export function AddGame() {
       navigate(0);
     }
   };
-
-  console.log(`test`, game)
 
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
@@ -132,19 +128,13 @@ export function AddGame() {
         </GameDetails>
         <GameInfo>
           <div>
-            {SelectItems({
-              name: "region",
-              arrayOptions: regions,
-              register,
-              owner,
-            })}
+            {SelectItems({ name: "region", arrayOptions: regions, register })}
           </div>
           <div>
             {SelectItems({
               name: "platform",
               arrayOptions: platforms,
               register,
-              owner,
             })}
           </div>
         </GameInfo>
@@ -156,13 +146,11 @@ export function AddGame() {
             name: "preferences",
             arrayOptions: preferences,
             register,
-            owner,
           })}
           {SelectItems({
             name: "enjoyment",
             arrayOptions: optionAboutTheGame,
             register,
-            owner,
           })}
         </div>
         <div>
@@ -172,21 +160,18 @@ export function AddGame() {
             apiName: "media_condition",
             arrayOptions: media,
             register,
-            owner,
           })}
           {SelectItems({
             name: "booklet condition",
             apiName: "booklet_condition",
             arrayOptions: manual,
             register,
-            owner,
           })}
           {SelectItems({
             name: "box condition",
             apiName: "box_condition",
             arrayOptions: box,
             register,
-            owner,
           })}
           <label>Describe your game`s condition</label>
           <textarea placeholder="Observations" {...register("description")} />
@@ -198,21 +183,10 @@ export function AddGame() {
   );
 }
 
-const SelectItems = ({
-  name,
-  apiName,
-  arrayOptions,
-  register,
-  owner,
-}: Option) => (
+const SelectItems = ({ name, apiName, arrayOptions, register }: Option) => (
   <>
     <label>{name}</label>
-    <SelectForm
-      id={name}
-      {...register(apiName || name, {
-        defaultValue: owner ? owner[apiName || name] : "",
-      })}
-    >
+    <SelectForm id={name} {...register(apiName || name)}>
       <option value="" disabled selected>
         Select an option
       </option>

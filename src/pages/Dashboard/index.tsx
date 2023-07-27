@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Container,
   LeftSideMenuContainer,
@@ -13,13 +13,14 @@ import { Collection } from "./components/Collection";
 import { Trades } from "./components/Trades";
 import { Profile } from "./components/Profile";
 import { Preferences } from "./components/Preferences";
-import { Wishlist } from "./components/Wishlist";
 import { TradeHistory } from "./components/TradeHistory";
 import { Following } from "./components/Following";
 import { useAuth } from "../../context/AuthContext";
 import { Navigate } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
+import { getAxiosInstance } from "../../services/axios";
+import { Wishlist } from "./components/Wishlist";
 
 export function Dashboard() {
   const { token } = useAuth();
@@ -28,12 +29,27 @@ export function Dashboard() {
   const [activeTab, setActiveTab] = useState(
     location.state?.tab || "Opportunities"
   );
-
   const cookiedToken = Cookies.get("token");
 
   if (!token && !cookiedToken) {
     return <Navigate to="/login" replace />;
   }
+
+  const [wishlist, setWishlist] = useState();
+
+  useEffect(() => {
+    async function getWishList() {
+      const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${
+        token || cookiedToken
+      }`;
+      const response = await axios.get("/api/wishlist/");
+      setWishlist(response.data);
+    }
+    getWishList();
+  }, []);
+
+  console.log(wishlist);
 
   return (
     <Container>
@@ -91,7 +107,7 @@ export function Dashboard() {
             case "Trades":
               return <Trades />;
             case "Wishlist":
-              return <Wishlist />;
+              return <Wishlist wishlist={wishlist} />;
             case "Collection":
               return <Collection />;
             case "History":
