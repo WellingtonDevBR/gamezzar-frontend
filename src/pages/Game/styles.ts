@@ -16,10 +16,14 @@ export const GameSection = styled.section`
   gap: 12px;
 `;
 
-export const ButtonContainer = styled.div`
+interface ButtonContainerProps {
+  isOwner: boolean;
+}
+
+export const ButtonContainer = styled.div<ButtonContainerProps>`
   display: flex;
   flex-direction: row;
-  justify-content: start;
+  justify-content: ${(props) => (props.isOwner ? "center" : "flex-start")};
   margin-top: 10px;
   gap: 12px;
 `;
@@ -44,6 +48,29 @@ export const Button = styled.button<ButtonProps>`
   cursor: pointer;
 `;
 
+export const IsOwnerOrWishButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  width: 100%;
+  background-color: #0374ad;
+  cursor: pointer;
+  color: white;
+  border-radius: 3px;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: 0.2s;
+
+  &:hover {
+    background-color: #035e8b;
+  }
+`;
+
 export const DescriptionContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -54,7 +81,7 @@ export const DescriptionContainer = styled.div`
 export const Card = styled.div`
   border-radius: 4px;
   margin-top: 20px;
-  border: 1px solid #5142FC;
+  border: 1px solid #5142fc;
 `;
 
 export const Tabs = styled.div`
@@ -65,7 +92,7 @@ export const Tabs = styled.div`
 export const TabList = styled.div`
   display: flex;
   border-bottom: 1px solid #ccc;
-  background-color: #5142FC;
+  background-color: #5142fc;
 `;
 
 interface TabProps {
@@ -142,8 +169,8 @@ export const TableHead = styled.thead`
     grid-template-columns: repeat(6, 1fr); /* 6 columns with equal width */
     align-items: center;
     column-gap: 10px; /* Add space between columns */
-    border-top: 1px solid #5142FC;
-    border-bottom: 1px solid #5142FC;
+    border-top: 1px solid #5142fc;
+    border-bottom: 1px solid #5142fc;
     color: white;
 
     th {
