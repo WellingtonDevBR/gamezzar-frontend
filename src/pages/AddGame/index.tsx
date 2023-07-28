@@ -33,7 +33,7 @@ const platforms = [
   "Nintendo 3DS",
 ];
 
-const preferences = [
+const disposition = [
   "My version is digital",
   "Game available only for exhibition",
   "I don't trade, I prefer to see it collecting dust on the shelf",
@@ -43,7 +43,7 @@ const preferences = [
   "I will consider offers with affection",
 ];
 
-const optionAboutTheGame = [
+const satisfaction = [
   "Unbearable",
   "Sufferable",
   "Horrible",
@@ -56,7 +56,7 @@ const optionAboutTheGame = [
   "Work of Art",
 ];
 
-const media = [
+const discCondition = [
   "Chipped or cracked media",
   "Significant scratches",
   "Many small scratches",
@@ -65,7 +65,7 @@ const media = [
   "No scratches or fingerprints",
 ];
 
-const manual = [
+const manualCondition = [
   "No manual",
   "Tears, scratches or missing pages",
   "Significant damage",
@@ -76,7 +76,7 @@ const manual = [
   "Sealed game",
 ];
 
-const box = [
+const coverCondition = [
   "No box and no cover",
   "Only cover (with damage)",
   "Only cover (no damage)",
@@ -87,11 +87,14 @@ const box = [
   "Sealed game",
 ];
 
+// These are the mapping functions for each selection:
+
 export function AddGame() {
   const { register, handleSubmit } = useForm();
   const { state } = useLocation();
   const { id } = useParams();
-  const game = state.from;
+  const game = state?.from;
+  const newUser = state?.from;
   const token = Cookies.get("token");
   const navigate = useNavigate();
 
@@ -123,7 +126,7 @@ export function AddGame() {
         <GameDetails>
           <Image
             src={`${import.meta.env.VITE_S3_URL}/games/${
-              game?.details?.image || game?.image
+              newUser.image || game?.details?.image || game?.image
             }`}
             alt="ac-valhalla"
           />
@@ -153,41 +156,41 @@ export function AddGame() {
         <div>
           <p>Preferences</p>
           {SelectItems({
-            name: "preferences",
-            arrayOptions: preferences,
-            defaultValue: game?.score || game?.inventory?.score,
+            name: "disposition",
+            arrayOptions: disposition,
+            defaultValue: game?.disposition || game?.inventory?.disposition,
             register,
           })}
           {SelectItems({
-            name: "enjoyment",
-            arrayOptions: optionAboutTheGame,
-            defaultValue:
-              game?.interest_level || game?.inventory?.interest_level,
+            name: "satisfaction",
+            arrayOptions: satisfaction,
+            defaultValue: game?.disposition || game?.inventory?.disposition,
             register,
           })}
         </div>
         <div>
           <p>Condition</p>
           {SelectItems({
-            name: "media condition",
-            apiName: "media_condition",
-            arrayOptions: media,
-            defaultValue: game?.media_condition || game?.inventory?.condition,
+            name: "disc condition",
+            apiName: "disc_condition",
+            arrayOptions: discCondition,
+            defaultValue: game?.disc_condition || game?.inventory?.condition,
             register,
           })}
           {SelectItems({
-            name: "booklet condition",
-            apiName: "booklet_condition",
-            arrayOptions: manual,
+            name: "manual condition",
+            apiName: "manual_condition",
+            arrayOptions: manualCondition,
             defaultValue:
-              game?.booklet_condition || game?.inventory?.booklet_condition,
+              game?.manual_condition || game?.inventory?.manual_condition,
             register,
           })}
           {SelectItems({
-            name: "box condition",
-            apiName: "box_condition",
-            arrayOptions: box,
-            defaultValue: game?.box_condition || game?.inventory?.box_condition,
+            name: "cover condition",
+            apiName: "cover_condition",
+            arrayOptions: coverCondition,
+            defaultValue:
+              game?.cover_condition || game?.inventory?.cover_condition,
             register,
           })}
           <label>Describe your game`s condition</label>
@@ -216,7 +219,7 @@ const SelectItems = ({
     <SelectForm
       id={name}
       {...register(apiName || name)}
-      defaultValue={defaultValue}
+      defaultValue={defaultValue != null ? defaultValue : ""}
     >
       <option value="" disabled>
         Select an option

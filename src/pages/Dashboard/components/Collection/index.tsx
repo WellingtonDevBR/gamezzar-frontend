@@ -8,10 +8,12 @@ import {
   TableBodyContainer,
   TableHeaderContainer,
   TableContainer,
+  SignalImage,
 } from "./styles";
 import { NavLink } from "react-router-dom";
 import Cookies from "js-cookie";
 import { getAxiosInstance } from "../../../../services/axios";
+import { satisfactionMapping, dispositionMapping } from "../../../../helper/constants";
 
 export function Collection() {
   const token = Cookies.get("token");
@@ -32,8 +34,8 @@ export function Collection() {
         <TableHeaderContainer>
           <tr>
             <th style={{ textAlign: "left" }}>Game</th>
-            <th style={{ textAlign: "left" }}>Score</th>
-            <th style={{ textAlign: "left" }}>Level</th>
+            <th style={{ textAlign: "left" }}>Satisfaction</th>
+            <th style={{ textAlign: "left" }}>Disposition</th>
           </tr>
         </TableHeaderContainer>
         <TableBodyContainer>
@@ -52,13 +54,28 @@ export function Collection() {
                 </div>
               </TableDataCellGame>
               <TableDataCellScore>
-                <span>{game.score + 1}</span>
+                <span>
+                  <SignalImage
+                    code={satisfactionMapping(game.satisfaction) - 1}
+                    src={`${import.meta.env.VITE_S3_URL}/gauge/signal${
+                      satisfactionMapping(game.satisfaction) - 1
+                    }.svg`}
+                    alt="test"
+                  />
+                </span>
               </TableDataCellScore>
               <TableDataCellLevel>
-                <img src={`https://cdn.trocajogo.net/static/gauge${game.interest_level - 1}.svg`} />
+                <SignalImage
+                  code={dispositionMapping(game.disposition) - 1}
+                  src={`${import.meta.env.VITE_S3_URL}/gauge/signal${
+                    dispositionMapping(game.disposition) - 1
+                  }.svg`}
+                  alt="test"
+                />
               </TableDataCellLevel>
               <TableDataCellEdit>
                 <NavLink
+                  style={{ all: "unset" }}
                   to={`/game/add/${game.game_id}`}
                   state={{ from: game }}
                 >

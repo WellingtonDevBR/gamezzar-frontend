@@ -29,7 +29,6 @@ export function Dashboard() {
   const [activeTab, setActiveTab] = useState(
     location.state?.tab || "Opportunities"
   );
-  console.log(activeTab);
   const cookiedToken = Cookies.get("token");
 
   if (!token && !cookiedToken) {
