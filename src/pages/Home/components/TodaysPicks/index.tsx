@@ -12,9 +12,10 @@ import {
 } from "./styles";
 import { Button } from "../../../../components/Button";
 import { useEffect, useState } from "react";
-import { ProposeModal } from "../../../Game/components/modal";
+import { ProposeModal } from "./components/ProposeModal";
 import Cookie from "js-cookie";
 import { NavLink } from "react-router-dom";
+import { getAxiosInstance } from "../../../../services/axios";
 
 interface TodaysDetalsProps {
   usersCollection: any[];
@@ -25,6 +26,7 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
   const [visibleRows, setVisibleRows] = useState(2);
   const [isModalOpen, setModalOpen] = useState(false);
   const [userGame, setUserGame] = useState(null);
+  const [loggedUserCollection, setLoggedUserCollection] = useState(null);
 
   const listOfGames = usersCollection.map((userCollection: any) => ({
     src: `${import.meta.env.VITE_S3_URL}/games/${userCollection.image}`,
@@ -42,6 +44,16 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
     setModalOpen(true);
     setUserGame(usersCollection[1]);
   };
+
+  useEffect(() => {
+    async function fetchCollection() {
+      const axios = getAxiosInstance(`${import.meta.env.VITE_BASE_URL}`);
+      axios.defaults.headers.Authorization = `Bearer ${token}`;
+      const response = await axios.get("/api/user-collection/all");
+      setLoggedUserCollection(response.data);
+    }
+    fetchCollection();
+  }, []);
 
   return (
     <Container>
@@ -65,7 +77,7 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
           Show more
         </ShowMoreButton>
       )}
-      {isModalOpen && <ProposeModal game={userGame} />}
+      {isModalOpen && <ProposeModal game={userGame} loggedUserCollection={loggedUserCollection} />}
     </Container>
   );
 }

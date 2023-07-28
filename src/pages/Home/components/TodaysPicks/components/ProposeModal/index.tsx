@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { groupBy } from "lodash";
 import {
   CloseButton,
   Container,
@@ -13,20 +14,24 @@ import {
   Header,
 } from "./styles";
 
-import bookletImg from "../../../../assets/booklet.svg";
-import discImg from "../../../../assets/disc.svg";
-import coverImg from "../../../../assets/cover.svg";
+import bookletImg from "../../../../../../assets/booklet.svg";
+import discImg from "../../../../../../assets/disc.svg";
+import coverImg from "../../../../../../assets/cover.svg";
 import { Star } from "phosphor-react";
 import {
   COVER_CONDITION,
   DISC_CONDITION,
   DISPOSITION,
   MANUAL_CONDITION,
-} from "../../../../helper/constants";
+} from "../../../../../../helper/constants";
 
-export function ProposeModal({ game }: any) {
-  console.log("proposeModal", game);
+export function ProposeModal({ game, loggedUserCollection }: any) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const gamesByPlatform = groupBy(
+    loggedUserCollection,
+    (game) => game.details.platform.name
+  );
 
   const closeModal = () => {
     setIsOpen(false);
@@ -84,8 +89,19 @@ export function ProposeModal({ game }: any) {
         <ProposeContainer>
           <p>Proposta direta</p>
           <select>
-            <option value="">Escolha um jogo</option>
-            <option value="">Escolha um jogo</option>
+            <option value="">Select a Game</option>
+            {Object.entries(gamesByPlatform).map(([platform, games]) => (
+              <optgroup key={platform} label={platform}>
+                {games.map((game) => (
+                  <option
+                    key={game.details.game_id}
+                    value={game.details.game_id}
+                  >
+                    {game.details.title}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
           </select>
           <button type="button">Enviar Proposta</button>
         </ProposeContainer>
