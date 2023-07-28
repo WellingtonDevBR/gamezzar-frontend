@@ -94,19 +94,15 @@ export function AddGame() {
   const game = state.from;
   const token = Cookies.get("token");
   const navigate = useNavigate();
-  console.log(game);
 
   if (!token) {
     navigate("/login");
     navigate(0);
   }
 
-  console.log("test", game);
-
   const onSubmit = async (data: any) => {
     data.region = regions[data.region];
     data.platform = platforms[data.platform];
-    console.log(data);
     const axios = getAxiosInstance(`${import.meta.env.VITE_BASE_URL}`);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     const response = await axios.post("/api/user-collection", {

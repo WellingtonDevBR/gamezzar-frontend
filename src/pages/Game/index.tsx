@@ -19,6 +19,7 @@ import {
   Label,
   ProductImage,
   IsOwnerOrWishButton,
+  SignalImage,
 } from "./styles";
 import { useState, useEffect } from "react";
 import { StyledChartComponent } from "../../helper/chart";
@@ -62,6 +63,8 @@ export function Game() {
     slug: "",
   });
 
+  console.log(gameOwners);
+
   const formattedDate = convertTimeFormat(game.release_date);
   let { id } = useParams();
 
@@ -70,7 +73,7 @@ export function Game() {
       const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
       const gameResponse = await axios.get(`/api/game/${id}`);
       setGame(gameResponse.data.game);
-      setGameOwners(gameResponse.data.inventory);
+      setGameOwners(gameResponse.data.owners);
 
       if (token) {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -83,7 +86,7 @@ export function Game() {
       }
     }
     fetchData();
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     setLoading(false);
   }, []);
 
@@ -236,10 +239,10 @@ export function Game() {
                   <TableHead>
                     <tr>
                       <th>User</th>
-                      <th>Interest</th>
-                      <th>Media</th>
-                      <th>Box</th>
-                      <th>Pullout</th>
+                      <th>Enjoy</th>
+                      <th>Disc</th>
+                      <th>Case</th>
+                      <th>Booklet</th>
                       <th>Distance</th>
                     </tr>
                   </TableHead>
@@ -260,16 +263,48 @@ export function Game() {
                             </div>
                           </th>
                           <th>
-                            <span>{owner.interest_level}</span>
+                            <span>
+                              <SignalImage
+                                code={owner.interest_level}
+                                src={`${
+                                  import.meta.env.VITE_S3_URL
+                                }/gauge/signal${owner.interest_level}.svg`}
+                                alt="test"
+                              />
+                            </span>
                           </th>
                           <th>
-                            <span>{owner.media_condition}</span>
+                            <span>
+                              <SignalImage
+                                code={owner.media_condition}
+                                src={`${
+                                  import.meta.env.VITE_S3_URL
+                                }/gauge/signal${owner.media_condition}.svg`}
+                                alt="test"
+                              />
+                            </span>
                           </th>
                           <th>
-                            <span>{owner.box_condition}</span>
+                            <span>
+                              <SignalImage
+                                code={owner.box_condition}
+                                src={`${
+                                  import.meta.env.VITE_S3_URL
+                                }/gauge/signal${owner.box_condition}.svg`}
+                                alt="test"
+                              />
+                            </span>
                           </th>
                           <th>
-                            <span>{owner.booklet_condition}</span>
+                            <span>
+                              <SignalImage
+                                code={owner.booklet_condition}
+                                src={`${
+                                  import.meta.env.VITE_S3_URL
+                                }/gauge/signal${owner.booklet_condition}.svg`}
+                                alt="test"
+                              />
+                            </span>
                           </th>
                           <th>
                             <span>12 km</span>
