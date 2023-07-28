@@ -11,14 +11,20 @@ import {
   ShowMoreButton,
 } from "./styles";
 import { Button } from "../../../../components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ProposeModal } from "../../../Game/components/modal";
+import Cookie from "js-cookie";
+import { NavLink } from "react-router-dom";
 
 interface TodaysDetalsProps {
   usersCollection: any[];
 }
 
 export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
+  const token = Cookie.get("token");
   const [visibleRows, setVisibleRows] = useState(2);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [userGame, setUserGame] = useState(null);
 
   const listOfGames = usersCollection.map((userCollection: any) => ({
     src: `${import.meta.env.VITE_S3_URL}/games/${userCollection.image}`,
@@ -30,20 +36,27 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
     }`,
   }));
 
-  const visibleCards = listOfGames.slice(0, visibleRows * 4); // Show 4 cards per row
+  const visibleCards = listOfGames.slice(0, visibleRows * 4);
+
+  const handleUserGameClick = (index: any) => {
+    setModalOpen(true);
+    setUserGame(usersCollection[1]);
+  };
 
   return (
     <Container>
       <h1>Today's Picks</h1>
       <CardList>
-        {visibleCards.map((card: any, i: any) => (
+        {visibleCards.map((card: any, index: any) => (
           <Card
-            key={i}
+            key={index}
             src={card.src}
             alt={card.alt}
             title={card.title}
             owner={card.owner}
             avatar={card.avatar}
+            token={token}
+            onTradeClick={() => handleUserGameClick(index)}
           />
         ))}
       </CardList>
@@ -52,6 +65,7 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
           Show more
         </ShowMoreButton>
       )}
+      {isModalOpen && <ProposeModal game={userGame} />}
     </Container>
   );
 }
@@ -64,7 +78,15 @@ interface CardProps {
   avatar: string;
 }
 
-const Card = ({ src, alt, title, owner, avatar }: CardProps) => (
+const Card = ({
+  src,
+  alt,
+  title,
+  owner,
+  avatar,
+  onTradeClick,
+  token,
+}: CardProps & { onTradeClick: () => void; token: string }) => (
   <CardContainer>
     <img src={src} alt={alt} />
     <CardSection>
@@ -80,8 +102,23 @@ const Card = ({ src, alt, title, owner, avatar }: CardProps) => (
           </OwnerDetails>
         </CardOwner>
         <div>
-          <Button primary>Trade</Button>
-          <button>View History</button>
+          {!token ? (
+            <>
+              <NavLink style={{ all: "revert" }} to="/login">
+                <Button style={{ width: "100px", height: "40px" }}>
+                  Trade
+                </Button>
+              </NavLink>
+              <button>View History</button>
+            </>
+          ) : (
+            <>
+              <Button primary onClick={onTradeClick}>
+                Trade
+              </Button>
+              <button>View History</button>
+            </>
+          )}
         </div>
       </CardFooterContent>
     </CardSection>

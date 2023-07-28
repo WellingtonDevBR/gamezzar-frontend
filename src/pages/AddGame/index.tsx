@@ -12,6 +12,12 @@ import {
 import { useForm } from "react-hook-form";
 import { getAxiosInstance } from "../../services/axios";
 import Cookies from "js-cookie";
+import {
+  COVER_CONDITION,
+  DISC_CONDITION,
+  DISPOSITION,
+  MANUAL_CONDITION,
+} from "../../helper/constants";
 
 type Option = {
   name: string;
@@ -33,16 +39,6 @@ const platforms = [
   "Nintendo 3DS",
 ];
 
-const disposition = [
-  "My version is digital",
-  "Game available only for exhibition",
-  "I don't trade, I prefer to see it collecting dust on the shelf",
-  "You'll need to sweat to convince me to trade it",
-  "If a good proposal comes up, I trade",
-  "I want to trade anyway",
-  "I will consider offers with affection",
-];
-
 const satisfaction = [
   "Unbearable",
   "Sufferable",
@@ -54,37 +50,6 @@ const satisfaction = [
   "Great",
   "Incredible",
   "Work of Art",
-];
-
-const discCondition = [
-  "Chipped or cracked media",
-  "Significant scratches",
-  "Many small scratches",
-  "Few small scratches",
-  "Only fingerprints",
-  "No scratches or fingerprints",
-];
-
-const manualCondition = [
-  "No manual",
-  "Tears, scratches or missing pages",
-  "Significant damage",
-  "Small dents",
-  "Colors faded by light",
-  "Only fingerprints",
-  "No scratches or fingerprints",
-  "Sealed game",
-];
-
-const coverCondition = [
-  "No box and no cover",
-  "Only cover (with damage)",
-  "Only cover (no damage)",
-  "Significant damage",
-  "Small scratches",
-  "Only fingerprints",
-  "No scratches or cracks",
-  "Sealed game",
 ];
 
 // These are the mapping functions for each selection:
@@ -157,7 +122,7 @@ export function AddGame() {
           <p>Preferences</p>
           {SelectItems({
             name: "disposition",
-            arrayOptions: disposition,
+            arrayOptions: DISPOSITION,
             defaultValue: game?.disposition || game?.inventory?.disposition,
             register,
           })}
@@ -173,14 +138,14 @@ export function AddGame() {
           {SelectItems({
             name: "disc condition",
             apiName: "disc_condition",
-            arrayOptions: discCondition,
+            arrayOptions: DISC_CONDITION,
             defaultValue: game?.disc_condition || game?.inventory?.condition,
             register,
           })}
           {SelectItems({
             name: "manual condition",
             apiName: "manual_condition",
-            arrayOptions: manualCondition,
+            arrayOptions: MANUAL_CONDITION,
             defaultValue:
               game?.manual_condition || game?.inventory?.manual_condition,
             register,
@@ -188,7 +153,7 @@ export function AddGame() {
           {SelectItems({
             name: "cover condition",
             apiName: "cover_condition",
-            arrayOptions: coverCondition,
+            arrayOptions: COVER_CONDITION,
             defaultValue:
               game?.cover_condition || game?.inventory?.cover_condition,
             register,

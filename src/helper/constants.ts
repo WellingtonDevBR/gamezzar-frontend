@@ -43,3 +43,44 @@ export const coverConditionMapping = (index) => {
 };
 
 export const discConditionMapping = (index) => parseInt(index);
+
+export const DISC_CONDITION = [
+  "Chipped or cracked media",
+  "Significant scratches",
+  "Many small scratches",
+  "Few small scratches",
+  "Only fingerprints",
+  "No scratches or fingerprints",
+];
+
+export const MANUAL_CONDITION = [
+  "No manual",
+  "Tears, scratches or missing pages",
+  "Significant damage",
+  "Small dents",
+  "Colors faded by light",
+  "Only fingerprints",
+  "No scratches or fingerprints",
+  "Sealed game",
+];
+
+export const COVER_CONDITION = [
+  "No box and no cover",
+  "Only cover (with damage)",
+  "Only cover (no damage)",
+  "Significant damage",
+  "Small scratches",
+  "Only fingerprints",
+  "No scratches or cracks",
+  "Sealed game",
+];
+
+export const DISPOSITION = [
+  "My version is digital",
+  "Game available only for exhibition",
+  "I don't trade, I prefer to see it collecting dust on the shelf",
+  "You'll need to sweat to convince me to trade it",
+  "If a good proposal comes up, I trade",
+  "I want to trade anyway",
+  "I will consider offers with affection",
+];
