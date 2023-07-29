@@ -42,7 +42,7 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
 
   const handleUserGameClick = (index: any) => {
     setModalOpen(true);
-    setUserGame(usersCollection[1]);
+    setUserGame(usersCollection[index]);
   };
 
   useEffect(() => {
@@ -77,7 +77,14 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
           Show more
         </ShowMoreButton>
       )}
-      {isModalOpen && <ProposeModal game={userGame} loggedUserCollection={loggedUserCollection} />}
+      {isModalOpen && (
+        <ProposeModal
+          setModalOpen={setModalOpen}
+          isModalOpen={isModalOpen}
+          game={userGame}
+          loggedUserCollection={loggedUserCollection}
+        />
+      )}
     </Container>
   );
 }

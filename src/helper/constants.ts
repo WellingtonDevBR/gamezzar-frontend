@@ -45,12 +45,14 @@ export const coverConditionMapping = (index) => {
 export const discConditionMapping = (index) => parseInt(index);
 
 export const DISC_CONDITION = [
+  "No disc",
   "Chipped or cracked media",
   "Significant scratches",
   "Many small scratches",
   "Few small scratches",
   "Only fingerprints",
   "No scratches or fingerprints",
+  "Sealed game"
 ];
 
 export const MANUAL_CONDITION = [

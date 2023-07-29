@@ -10,7 +10,7 @@ export const Container = styled.div`
   transform: translate(-50%, -50%);
   width: 90vw;
   max-width: 1000px;
-  height: 55vh;
+  height: 61vh;
   background: linear-gradient(
     24deg,
     rgba(12, 7, 27, 1) 0%,
@@ -127,12 +127,14 @@ export const ProposeContainer = styled.section`
   padding: 0 20px;
   margin-top: 20px;
   border: 1px solid #5142fc;
+  gap: 10px;
 
   p {
     display: inline-block;
     font-size: 1.2em;
     color: white;
     font-weight: bold;
+    width: 120px;
   }
 
   select {

@@ -47,6 +47,13 @@ export const GameDetails = styled.section`
 export const GameInfo = styled.section`
   display: flex;
   gap: 20px;
+  div {
+    width: 160px;
+
+    select {
+      width: 100%;
+    }
+  }
 `;
 
 export const SelectForm = styled.select`

@@ -52,6 +52,16 @@ const satisfaction = [
   "Work of Art",
 ];
 
+const editions = [
+  "Normal",
+  "Greatest Hits",
+  "Platinum",
+  "Game of the Year",
+  "Ultimate",
+  "Collector's Edition",
+  "Other Special Editions",
+];
+
 // These are the mapping functions for each selection:
 
 export function AddGame() {
@@ -71,6 +81,8 @@ export function AddGame() {
   const onSubmit = async (data: any) => {
     data.region = regions[data.region];
     data.platform = platforms[data.platform];
+    data.edition = editions[data.edition];
+    console.log(data);
     const axios = getAxiosInstance(`${import.meta.env.VITE_BASE_URL}`);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     const response = await axios.post("/api/user-collection", {
@@ -100,7 +112,8 @@ export function AddGame() {
         <GameInfo>
           <div>
             {SelectItems({
-              name: "region",
+              name: "Region",
+              apiName: "region",
               arrayOptions: regions,
               defaultValue: game?.details?.region?.name || game?.region?.name,
               register,
@@ -108,10 +121,20 @@ export function AddGame() {
           </div>
           <div>
             {SelectItems({
-              name: "platform",
+              name: "Platform",
+              apiName: "platform",
               arrayOptions: platforms,
               defaultValue:
                 game?.details?.platform?.name || game?.platform?.name,
+              register,
+            })}
+          </div>
+          <div>
+            {SelectItems({
+              name: "Game Edition",
+              apiName: "edition",
+              arrayOptions: editions,
+              defaultValue: game?.details?.edition?.name || game?.edition?.name,
               register,
             })}
           </div>
@@ -121,13 +144,15 @@ export function AddGame() {
         <div>
           <p>Preferences</p>
           {SelectItems({
-            name: "disposition",
+            name: "Disposition",
+            apiName: "disposition",
             arrayOptions: DISPOSITION,
             defaultValue: game?.disposition || game?.inventory?.disposition,
             register,
           })}
           {SelectItems({
-            name: "satisfaction",
+            name: "Satisfaction",
+            apiName: "satisfaction",
             arrayOptions: satisfaction,
             defaultValue: game?.disposition || game?.inventory?.disposition,
             register,
@@ -136,14 +161,14 @@ export function AddGame() {
         <div>
           <p>Condition</p>
           {SelectItems({
-            name: "disc condition",
+            name: "Disc Condition",
             apiName: "disc_condition",
             arrayOptions: DISC_CONDITION,
             defaultValue: game?.disc_condition || game?.inventory?.condition,
             register,
           })}
           {SelectItems({
-            name: "manual condition",
+            name: "Manual Condition",
             apiName: "manual_condition",
             arrayOptions: MANUAL_CONDITION,
             defaultValue:
@@ -151,7 +176,7 @@ export function AddGame() {
             register,
           })}
           {SelectItems({
-            name: "cover condition",
+            name: "Cover Condition",
             apiName: "cover_condition",
             arrayOptions: COVER_CONDITION,
             defaultValue:
