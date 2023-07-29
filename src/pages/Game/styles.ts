@@ -224,11 +224,13 @@ interface SignalImageProps {
 }
 
 export const SignalImage = styled.img<SignalImageProps>`
-  width: 50px;
-  height: 50px;
+  width: ${(props) => (props.code >= 0 ? "50px" : "30px")};
+  height: ${(props) => (props.code >= 0 ? "50px" : "30px")};
+
   filter: ${(props) => {
-    console.log("props: ", props.code);
     switch (props.code) {
+      case -1:
+        return "invert(24%) sepia(99%) saturate(7489%) hue-rotate(6deg) brightness(102%) contrast(104%)";
       case 0:
         return "invert(24%) sepia(99%) saturate(7489%) hue-rotate(6deg) brightness(102%) contrast(104%)";
       case 1:

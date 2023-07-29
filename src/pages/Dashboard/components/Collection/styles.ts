@@ -57,3 +57,29 @@ export const TableDataCellEdit = styled.td`
     color: #3f51b5;
   }
 `;
+
+interface SignalImageProps {
+  code: number;
+}
+
+export const SignalImage = styled.img<SignalImageProps>`
+  width: 50px;
+  height: 50px;
+  filter: ${(props) => {
+    console.log("props: ", props.code);
+    switch (props.code) {
+      case -1:
+      case 0:
+        return "invert(24%) sepia(99%) saturate(7489%) hue-rotate(6deg) brightness(102%) contrast(104%)";
+      case 1:
+        return "invert(97%) sepia(92%) saturate(6242%) hue-rotate(1deg) brightness(102%) contrast(101%)";
+      case 2:
+      case 3:
+        return "invert(48%) sepia(99%) saturate(4263%) hue-rotate(201deg) brightness(91%) contrast(97%)";
+      case 4:
+        return "invert(85%) sepia(82%) saturate(1352%) hue-rotate(80deg) brightness(91%) contrast(83%)";
+      default:
+        return "";
+    }
+  }};
+`;

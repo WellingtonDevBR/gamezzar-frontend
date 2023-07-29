@@ -26,6 +26,13 @@ import { StyledChartComponent } from "../../helper/chart";
 import { getAxiosInstance } from "../../services/axios";
 import { convertTimeFormat } from "../../helper/convertTimeFormat";
 import Cookies from "js-cookie";
+import {
+  satisfactionMapping,
+  dispositionMapping,
+  coverConditionMapping,
+  discConditionMapping,
+  manualConditionMapping,
+} from "../../helper/constants";
 
 interface GameProps {
   description: string;
@@ -62,8 +69,6 @@ export function Game() {
     official_video_link: "",
     slug: "",
   });
-
-  console.log(gameOwners);
 
   const formattedDate = convertTimeFormat(game.release_date);
   let { id } = useParams();
@@ -130,16 +135,7 @@ export function Game() {
                   <IsOwnerOrWishButton>Edit Wish</IsOwnerOrWishButton>
                 </NavLink>
               </>
-            ) : !token ? (
-              <>
-                <NavLink style={{ textDecoration: "none" }} to="/login">
-                  <Button backgroundColor={"#9b4545"}>I want</Button>
-                </NavLink>
-                <NavLink style={{ textDecoration: "none" }} to="/login">
-                  <Button backgroundColor={"#2d5f2d"}>I have</Button>
-                </NavLink>
-              </>
-            ) : (
+            ) : token ? (
               <>
                 <NavLink style={{ textDecoration: "none" }} to="/chat">
                   <Button backgroundColor={"#9b4545"}>I want</Button>
@@ -149,8 +145,22 @@ export function Game() {
                   to={{
                     pathname: `/game/add/${id}`,
                   }}
-                  state={{ from: game }}
+                  state={{
+                    from: {
+                      title: game.title,
+                      image: game.image,
+                    },
+                  }}
                 >
+                  <Button backgroundColor={"#2d5f2d"}>I have</Button>
+                </NavLink>
+              </>
+            ) : (
+              <>
+                <NavLink style={{ textDecoration: "none" }} to="/login">
+                  <Button backgroundColor={"#9b4545"}>I want</Button>
+                </NavLink>
+                <NavLink style={{ textDecoration: "none" }} to="/login">
                   <Button backgroundColor={"#2d5f2d"}>I have</Button>
                 </NavLink>
               </>
@@ -239,17 +249,17 @@ export function Game() {
                   <TableHead>
                     <tr>
                       <th>User</th>
-                      <th>Enjoy</th>
-                      <th>Disc</th>
-                      <th>Case</th>
-                      <th>Booklet</th>
+                      <th>Satisfaction</th>
+                      <th>Disc Condition</th>
+                      <th>Cover Condition</th>
+                      <th>Manual Condition</th>
                       <th>Distance</th>
                     </tr>
                   </TableHead>
                   <TableBody>
-                    {gameOwners?.map((owner) => {
+                    {gameOwners?.map((owner, index) => {
                       return (
-                        <tr>
+                        <tr key={index}>
                           <th>
                             <img
                               src={`${import.meta.env.VITE_S3_URL}/avatar/${
@@ -265,10 +275,14 @@ export function Game() {
                           <th>
                             <span>
                               <SignalImage
-                                code={owner.interest_level}
+                                code={
+                                  satisfactionMapping(owner.satisfaction) - 1
+                                }
                                 src={`${
                                   import.meta.env.VITE_S3_URL
-                                }/gauge/signal${owner.interest_level}.svg`}
+                                }/gauge/signal${
+                                  satisfactionMapping(owner.satisfaction) - 1
+                                }.svg`}
                                 alt="test"
                               />
                             </span>
@@ -276,10 +290,14 @@ export function Game() {
                           <th>
                             <span>
                               <SignalImage
-                                code={owner.media_condition}
+                                code={
+                                  discConditionMapping(owner.disc_condition) - 1
+                                }
                                 src={`${
                                   import.meta.env.VITE_S3_URL
-                                }/gauge/signal${owner.media_condition}.svg`}
+                                }/gauge/signal${
+                                  discConditionMapping(owner.disc_condition) - 1
+                                }.svg`}
                                 alt="test"
                               />
                             </span>
@@ -287,10 +305,16 @@ export function Game() {
                           <th>
                             <span>
                               <SignalImage
-                                code={owner.box_condition}
+                                code={
+                                  coverConditionMapping(owner.cover_condition) -
+                                  1
+                                }
                                 src={`${
                                   import.meta.env.VITE_S3_URL
-                                }/gauge/signal${owner.box_condition}.svg`}
+                                }/gauge/signal${
+                                  coverConditionMapping(owner.cover_condition) -
+                                  1
+                                }.svg`}
                                 alt="test"
                               />
                             </span>
@@ -298,10 +322,18 @@ export function Game() {
                           <th>
                             <span>
                               <SignalImage
-                                code={owner.booklet_condition}
+                                code={
+                                  manualConditionMapping(
+                                    owner.manual_condition
+                                  ) - 1
+                                }
                                 src={`${
                                   import.meta.env.VITE_S3_URL
-                                }/gauge/signal${owner.booklet_condition}.svg`}
+                                }/gauge/signal${
+                                  manualConditionMapping(
+                                    owner.manual_condition
+                                  ) - 1
+                                }.svg`}
                                 alt="test"
                               />
                             </span>

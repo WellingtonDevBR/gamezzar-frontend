@@ -25,9 +25,7 @@ export function Home() {
         );
         setUserCollections(usersCollectionResponse.data);
 
-        const topVendorsResponse = await axios.get(
-          "/api/user/top-vendors"
-        );
+        const topVendorsResponse = await axios.get("/api/user/top-vendors");
         setTopVendors(topVendorsResponse.data);
       } catch (error) {
         console.error("Failed to fetch data:", error);
