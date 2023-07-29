@@ -32,7 +32,7 @@ export function Router() {
         <Route path="/Contact" element={<Contact />} />
         <Route path="/explorer" element={<Explorer />} />
         <Route path="/activity" element={<Activity />} />
-        <Route path="/blog-details" element={<BlogDetails />} />
+        <Route path="/blogdetails" element={<BlogDetails />} />
 
 
 
