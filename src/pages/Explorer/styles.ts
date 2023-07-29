@@ -28,10 +28,10 @@ font-weight: 400;
   `;
 
 export const Container = styled.div`
- width: 100%;
-  max-width: 1200px; /* Set the maximum width as per your requirement */
-  height: auto;
+width: 100%;
+  max-width: 800px; /* Set the maximum width you desire */
   margin: 0 auto;
+  padding: 0 20px;
 
 `;
 
@@ -65,11 +65,13 @@ export const CardHolder = styled.div`
 `;
 
 export const CardContainer = styled.div`
-  width: 300px;
-  height: 400px;
+  width: 250px;
+  height: 380px;
   background-color: rgb(53, 53, 71);
   border-radius: 10px;
   padding: 10px;
+  margin: 0 auto;
+  margin-bottom: 20px;
 `;
 
 export const CardImage = styled.div`
@@ -190,5 +192,32 @@ export const HistoryBtn = styled.button`
 
   &:hover {
     border: solid 2px #b6b6b6;
+  }
+`;
+
+ export const LoadMoreButton = styled.button`
+ width: 154px;
+height: 54px;
+flex-shrink: 0;
+ font-family: Urbanist;
+font-size: 15px;
+font-style: normal;
+font-weight: 700;
+line-height: 22px;
+ width: 30%;
+  align-items: center;
+  justify-content: center;
+   background:  var(--background, #14141F, transparent );
+  border:  1px solid  #343434;
+  color: #b6b6b6;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-bottom: 10px;
+
+  &:hover {
+    background-color: #b6b6b6;
+    color: white;
   }
 `;

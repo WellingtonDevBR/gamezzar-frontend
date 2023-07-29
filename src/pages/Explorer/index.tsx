@@ -1,5 +1,5 @@
 
-import { PageNav, Title, SubTitle, SelectHolder, SelectBtn, CardHolder ,Container} from "./styles";
+import { PageNav, Title, SubTitle, SelectHolder, SelectBtn, CardHolder ,Container, LoadMoreButton} from "./styles";
 import Card from "./Card";
 
 export function Explorer() {
@@ -51,6 +51,7 @@ export function Explorer() {
         <Card like={59} title="The Reminance of the owner of the world" owner="hero" isComingSoon={false} />
         <Card like={25} title="The Reminance of the owner of the world" owner="hero" isComingSoon={true} />
       </CardHolder>
+      <LoadMoreButton>Load More</LoadMoreButton>
       </Container>
     </>
   );
