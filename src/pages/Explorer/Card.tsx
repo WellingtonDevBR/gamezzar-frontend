@@ -23,7 +23,7 @@ interface CardProps {
   owner: string;
 }
 
-const Card: React.FC<CardProps> = (props) => {
+export const Card: React.FC<CardProps> = (props) => {
   return (
     <CardContainer className="card">
       <CardImage className="card-image">

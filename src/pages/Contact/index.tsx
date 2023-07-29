@@ -14,6 +14,8 @@ import { ContactPage,
 } from "./styles"
 
 
+
+
 export function Contact () {
     return (
         <>
@@ -23,7 +25,7 @@ export function Contact () {
       </PageNav>
       <ContactPage>
         <MapBox>
-        
+        {/* <Map /> */}
         </MapBox>
         <ContactForm>
           <h1>Drop us a Message</h1>
