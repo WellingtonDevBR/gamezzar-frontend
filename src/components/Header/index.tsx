@@ -9,6 +9,8 @@ import {
   LinkContainer,
   StyledNavLink,
   SignUpLink,
+  Dropdown,
+  DropdownMenu,
 } from "./styles";
 import HeaderLogo from "../../assets/logo.svg";
 import { MagnifyingGlass } from "phosphor-react";
@@ -73,11 +75,16 @@ export function Header() {
         <ButtonContainer>
           <MagnifyingGlass size={32} color={"white"} />
           {user !== null ? (
-            <LinkContainer>
+            <Dropdown>
               <StyledNavLink to="/dashboard">
                 <span>Hello, {user.user_name}</span>
               </StyledNavLink>
-            </LinkContainer>
+              <DropdownMenu>
+                <NavLink to="/chat">Go to Chat</NavLink>
+                <NavLink to="/profile">Go to Profile</NavLink>
+                <NavLink to="/settings">Settings</NavLink>
+              </DropdownMenu>
+            </Dropdown>
           ) : (
             <LinkContainer>
               <StyledNavLink to="/login">

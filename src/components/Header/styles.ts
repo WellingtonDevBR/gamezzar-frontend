@@ -85,7 +85,7 @@ export const NavItem = styled.li`
   }
 
   &:after {
-    content: " ▼";
+    /* content: " ▼"; */
     font-size: 0.6rem;
     color: white;
   }
@@ -114,15 +114,16 @@ export const LinkContainer = styled.div`
   font-weight: bold;
   background-color: transparent;
   border-radius: 1rem;
-  
 `;
 
 export const StyledNavLink = styled(NavLink)`
   text-decoration: none;
-  color: black;
   margin-right: 3px; /* Add desired space (e.g., 10 pixels) before the link */
   color: white;
-
+  background-color: transparent;
+  border: 1px solid ${(props) => props.theme["--primary"]};
+  border-radius: 1em 1rem 0 0;
+  padding: 0.7em 2rem;
   &:hover {
     text-decoration: none;
     color: ${(props) => props.theme["--primary"]};
@@ -130,7 +131,6 @@ export const StyledNavLink = styled(NavLink)`
   }
 
   &::after {
-    content: "/";
     color: white;
     margin-left: 5px; /* Add space between the link text and the forward slash */
   }
@@ -155,4 +155,37 @@ export const HeaderDivider = styled.hr`
   height: 1px;
   border: none;
   background-color: #7a798a;
+`;
+
+export const DropdownMenu = styled.div`
+  display: none;
+  position: absolute;
+  background-color: transparent;
+  min-width: 157px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  margin-top: 0.7rem;
+  border: 1px solid ${(props) => props.theme["--primary"]};
+
+  a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    padding: 0.5em;
+  }
+
+  a:hover {
+    background-color: #c6c6c6;
+    color: ${(props) => props.theme["--primary"]};
+  }
+`;
+
+export const Dropdown = styled.div`
+  position: relative;
+  display: inline-block;
+
+  &:hover ${DropdownMenu} {
+    display: block;
+  }
 `;

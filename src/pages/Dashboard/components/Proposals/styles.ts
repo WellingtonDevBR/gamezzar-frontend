@@ -108,7 +108,7 @@ export const CancelButton = styled.button`
   justify-content: center;
   align-items: center;
   width: 75px;
-  background-color: #FF4433;
+  background-color: #ff4433;
   border-radius: 4px;
   transition: all 0.2s ease-in-out;
 
@@ -116,5 +116,4 @@ export const CancelButton = styled.button`
     cursor: pointer;
     filter: brightness(0.9);
   }
-
 `;
