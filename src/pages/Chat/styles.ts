@@ -84,7 +84,7 @@ export const UserInfoContainer = styled.div`
 `;
 
 interface MessageContextComponent {
-  isUser: boolean;
+  isuser: boolean;
 }
 
 export const MessageContextComponent = styled.div`
@@ -94,16 +94,17 @@ export const MessageContextComponent = styled.div`
   height: 500px;
   gap: 20px;
   align-items: flex-start;
-  overflow-y: auto; // Add this line
+  overflow-y: auto; // this line enables scrolling
 `;
+
 
 export const MessageContentBox = styled.div<MessageContextComponent>`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: ${(props) => (props.isUser ? "#4290fc" : "#968dfd")};
-  text-align: ${(props) => (props.isUser ? "right" : "left")};
-  align-self: ${(props) => (props.isUser ? "flex-end" : "flex-start")};
+  background: ${(props) => (props.isuser ? "#4290fc" : "#968dfd")};
+  text-align: ${(props) => (props.isuser ? "right" : "left")};
+  align-self: ${(props) => (props.isuser ? "flex-end" : "flex-start")};
   max-width: 550px;
   height: auto;
   border-radius: 15px;
