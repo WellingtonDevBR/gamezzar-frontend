@@ -39,7 +39,6 @@ export function Proposal() {
       const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       const response = await axios.get("/api/propose/all");
-      console.log("test", response.data);
       setUserId(response.data.user_id);
       setProposals(response.data.proposals);
     }
@@ -75,7 +74,7 @@ export function Proposal() {
                         src={`${import.meta.env.VITE_S3_URL}/games/${
                           propose.receiver_game.image
                         }`}
-                        alt="Project Image"
+                        alt={propose.receiver_game.title}
                       />
                       <img
                         src={`${import.meta.env.VITE_S3_URL}/games/${

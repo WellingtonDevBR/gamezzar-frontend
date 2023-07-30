@@ -43,6 +43,7 @@ export const ChattingSection = styled.section`
   display: flex;
   flex-direction: column;
   width: 70%;
+  min-height: 600px;
   border: 1px solid #5142fc;
   padding: 1.5em;
 `;

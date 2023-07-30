@@ -29,6 +29,7 @@ export function Dashboard() {
   const [activeTab, setActiveTab] = useState(
     location.state?.tab || "Opportunities"
   );
+  const [user, setUser] = useState<any>();
   const cookiedToken = Cookies.get("token");
 
   if (!token && !cookiedToken) {
@@ -46,7 +47,15 @@ export function Dashboard() {
       const response = await axios.get("/api/wishlist/");
       setWishlist(response.data);
     }
+
+    async function getLoginDetails() {
+      const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${cookiedToken}`;
+      const response = await axios.get("/api/user/details");
+      setUser(response.data);
+    }
     getWishList();
+    getLoginDetails();
   }, []);
 
   return (
@@ -57,7 +66,9 @@ export function Dashboard() {
             src="https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
             alt=""
           />
-          <p>Wellington Santos</p>
+          <p>
+            {user.first_name} {user.last_name}
+          </p>
         </ImageContainer>
         <NavigationContainer>
           <SpanOptionButton onClick={() => setActiveTab("Opportunities")}>

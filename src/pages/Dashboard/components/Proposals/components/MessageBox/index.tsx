@@ -35,6 +35,7 @@ export function MessageBox({ onClose, proposal, isReceiver }: MessageBoxProps) {
     const response = await axios.post("/api/message/", {
       ...proposal,
       message,
+      is_receiver: isReceiver
     });
     onClose();
   };
