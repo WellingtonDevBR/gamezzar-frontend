@@ -97,7 +97,6 @@ export const MessageContextComponent = styled.div`
   overflow-y: auto; // this line enables scrolling
 `;
 
-
 export const MessageContentBox = styled.div<MessageContextComponent>`
   display: flex;
   flex-direction: column;
@@ -157,6 +156,10 @@ export const SendMessageContainer = styled.div`
     outline: none;
     color: #fff;
     background: transparent;
+
+    &.empty {
+      border-color: red;
+    }
   }
 
   button {

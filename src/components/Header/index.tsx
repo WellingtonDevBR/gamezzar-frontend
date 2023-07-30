@@ -39,15 +39,13 @@ interface UserResponseProps {
 }
 
 export function Header() {
-  let cookiedToken = Cookies.get("token");
+  let token = Cookies.get("token");
   const [user, setUser] = useState<UserResponseProps | null>(null);
   useEffect(() => {
     async function fetchData() {
-      if (cookiedToken) {
+      if (token) {
         const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${cookiedToken}`;
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         const response = await axios.get("/api/user/details");
         setUser(response.data);
       }
@@ -76,19 +74,20 @@ export function Header() {
           <MagnifyingGlass size={32} color={"white"} />
           {user !== null ? (
             <Dropdown>
-              <StyledNavLink to="/dashboard">
+              <StyledNavLink to="/dashboard" is_logged_in={token}>
                 <span>Hello, {user.user_name}</span>
               </StyledNavLink>
               <DropdownMenu>
                 <NavLink to="/chat">Go to Chat</NavLink>
                 <NavLink to="/profile">Go to Profile</NavLink>
                 <NavLink to="/settings">Settings</NavLink>
+                <NavLink to="/logout">Logout</NavLink>
               </DropdownMenu>
             </Dropdown>
           ) : (
             <LinkContainer>
               <StyledNavLink to="/login">
-                <span>Login</span>
+                <span>Login / </span>
               </StyledNavLink>
               <SignUpLink to="/signup">
                 <span>Sign Up</span>

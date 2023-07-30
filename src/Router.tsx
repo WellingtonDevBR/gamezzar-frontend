@@ -14,6 +14,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Explorer } from "./pages/Explorer";
 import { EditWishlist } from "./pages/Dashboard/components/EditWishlist";
 import { CreateItem } from "./pages/CreateItem/Index";
+import { Logout } from "./pages/Logout";
 
 
 export function Router() {
@@ -33,6 +34,7 @@ export function Router() {
         <Route path="/explorer" element={<Explorer />} />
         <Route path="/user/wishlist/edit/:id" element={<EditWishlist />} />
         <Route path="/createitem" element={<CreateItem />} />
+        <Route path="/logout" element={<Logout />} />
       </Route>
     </Routes>
   );

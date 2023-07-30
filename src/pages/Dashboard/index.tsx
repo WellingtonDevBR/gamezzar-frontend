@@ -110,7 +110,7 @@ export function Dashboard() {
             Edit Profile
           </SpanOptionButton>
           <SpanOptionButton
-            backgroundColor={"#8c0f0f"}
+            backgroundColor={"#DF4949"}
             onClick={() => setActiveTab("Logout")}
           >
             Logout

@@ -27,12 +27,14 @@ export function Chat() {
   const [activeChat, setActiveChat] = useState<boolean>(false);
   const token = Cookies.get("token");
   const [notificationEnabled, setNotificationEnabled] = useState(false);
-  const [currentChatId, setCurrentChatId] = useState<string>("");
+  const [currentChat, setCurrentChat] = useState<any>();
+  const [emptySubmit, setEmptySubmit] = useState<boolean>(false);
 
   // References
   const messageContainerRef = useRef<null | HTMLDivElement>(null);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
   const socketRef = useRef<Socket | null>(null);
+  const sendButtonEnabled = textarea.trim() !== "";
 
   // Navigation and axios setup
   const navigate = useNavigate();
@@ -41,11 +43,11 @@ export function Chat() {
   // Managing Socket.io connection
   useEffect(() => {
     // Establishing WebSocket Connection and handling Notifications
-    if (currentChatId) {
+    if (currentChat) {
       // Establishing WebSocket Connection and handling Notifications
       socketRef.current = io(import.meta.env.VITE_SOCKET_IO_SERVER, {
         query: {
-          chat_id: currentChatId,
+          chat_id: currentChat.chat_id,
         },
       });
 
@@ -77,7 +79,7 @@ export function Chat() {
         socketRef.current.disconnect();
       };
     }
-  }, [currentChatId, notificationEnabled]);
+  }, [currentChat, notificationEnabled]);
 
   // Making requests to the backend
   useEffect(() => {
@@ -89,7 +91,11 @@ export function Chat() {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     async function fetchData() {
       const chatResponse = await axios.get("/api/chat");
-      setChat(chatResponse.data);
+      if (chatResponse.data.length === 0) {
+        navigate("/"); // Assuming that "/" is your home page
+      } else {
+        setChat(chatResponse.data);
+      }
 
       const response = await axios.get("/api/user/details");
       setUser(response.data);
@@ -97,19 +103,30 @@ export function Chat() {
     fetchData();
   }, []);
 
-  const getChatMessage = async (chatId: string) => {
+  const getChatMessage = async (conversation: any) => {
+    console.log(conversation);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    const messageResponse = await axios.get(`/api/message/${chatId}`);
+    const messageResponse = await axios.get(
+      `/api/message/${conversation.chat_id}`
+    );
     const sortedMessages = messageResponse.data.items.sort(
       (a: any, b: any) =>
         new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
     );
-    setCurrentChatId(chatId);
+    setCurrentChat(conversation);
     setMessages(sortedMessages);
     setActiveChat(true);
   };
 
   const sendMessage = async (conversation: any) => {
+    if (!sendButtonEnabled) {
+      return;
+    }
+    if (!textarea.trim()) {
+      setEmptySubmit(true);
+      return;
+    }
+    setEmptySubmit(false);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     axios.post("/api/message", {
       interested_user_id: conversation.user.user_id,
@@ -167,20 +184,19 @@ export function Chat() {
         <UsersChattingSection>
           {chat.map((conversation) => {
             return (
-              <UserInfoContainer
-                onClick={() => getChatMessage(conversation.chat_id)}
-              >
+              <UserInfoContainer onClick={() => getChatMessage(conversation)}>
                 <img
                   src={`${import.meta.env.VITE_S3_URL}/avatar/${
-                    conversation.user.avatar
+                    conversation?.user?.avatar
                   }`}
                   alt=""
                 />
                 <div>
                   <h2>
-                    {conversation.user.first_name} {conversation.user.last_name}
+                    {conversation.user?.first_name}{" "}
+                    {conversation.user?.last_name}
                   </h2>
-                  <p>{conversation.user.last_name}</p>
+                  <p>{conversation.user?.last_name}</p>
                 </div>
               </UserInfoContainer>
             );
@@ -190,25 +206,18 @@ export function Chat() {
           {activeChat && (
             <>
               <UserInfoContainer>
-                {chat.map((conversation, index) => {
-                  return (
-                    <>
-                      <img
-                        src={`${import.meta.env.VITE_S3_URL}/avatar/${
-                          conversation.user.avatar
-                        }`}
-                        alt=""
-                      />
-                      <div>
-                        <h2>
-                          {conversation.user.first_name}{" "}
-                          {conversation.user.last_name}
-                        </h2>
-                        <p>{conversation.user.last_name}</p>
-                      </div>
-                    </>
-                  );
-                })}
+                <img
+                  src={`${import.meta.env.VITE_S3_URL}/avatar/${
+                    currentChat?.user?.avatar
+                  }`}
+                  alt=""
+                />
+                <div>
+                  <h2>
+                    {currentChat.user?.first_name} {currentChat.user?.last_name}
+                  </h2>
+                  <p>{currentChat.user?.last_name}</p>
+                </div>
               </UserInfoContainer>
               <MessageContextComponent
                 id="messageContainer"
@@ -217,7 +226,7 @@ export function Chat() {
                 {messages.map((message: any) => {
                   return (
                     <MessageContentBox
-                      isuser={message.sender_id === user.user_id}
+                      isuser={message?.sender_id === user.user_id}
                     >
                       <p>{message.content}</p>
                       <span>
@@ -228,21 +237,30 @@ export function Chat() {
                 })}
               </MessageContextComponent>
               <SendMessageContainer>
-                {chat.map((conversation, index) => (
+                {
                   <>
                     <textarea
+                      className={emptySubmit ? "empty" : ""}
                       placeholder="Type your message"
                       value={textarea}
-                      onChange={(e: any) => setTextarea(e.target.value)}
+                      onChange={(e: any) => {
+                        setTextarea(e.target.value);
+                        setEmptySubmit(false);
+                      }}
                     />
                     <button
                       type="button"
-                      onClick={() => sendMessage(conversation)}
+                      onClick={() => sendMessage(currentChat)}
+                      style={{
+                        backgroundColor: sendButtonEnabled ? "" : "#c6c6c6",
+                        cursor: sendButtonEnabled ? "" : "not-allowed",
+                      }}
+                      disabled={!sendButtonEnabled}
                     >
                       Send
                     </button>
                   </>
-                ))}
+                }
               </SendMessageContainer>
             </>
           )}

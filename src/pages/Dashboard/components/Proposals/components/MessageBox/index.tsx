@@ -15,10 +15,10 @@ import { getAxiosInstance } from "../../../../../../services/axios";
 interface MessageBoxProps {
   onClose: () => void;
   proposal: any;
-  isReceiver: boolean;
+  isSender: boolean;
 }
 
-export function MessageBox({ onClose, proposal, isReceiver }: MessageBoxProps) {
+export function MessageBox({ onClose, proposal, isSender }: MessageBoxProps) {
   const token = Cookies.get("token");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ export function MessageBox({ onClose, proposal, isReceiver }: MessageBoxProps) {
     const response = await axios.post("/api/message/", {
       ...proposal,
       message,
-      is_receiver: isReceiver
+      is_sender: isSender,
     });
     onClose();
   };
@@ -67,7 +67,7 @@ export function MessageBox({ onClose, proposal, isReceiver }: MessageBoxProps) {
               alt=""
             />{" "}
             <p>
-              {isReceiver
+              {isSender
                 ? `${proposal.sender.first_name} ${proposal.sender.last_name}`
                 : `${proposal.receiver.first_name} ${proposal.receiver.last_name}`}
             </p>

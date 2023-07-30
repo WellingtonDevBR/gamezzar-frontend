@@ -109,21 +109,26 @@ export const LinkContainer = styled.div`
   justify-content: center;
   border: 1px solid ${(props) => props.theme["--primary"]};
   height: 3rem;
-  min-width: 12.375rem;
-  font-size: 1rem;
+  width: 10rem;
+  font-size: 0.875rem;
   font-weight: bold;
   background-color: transparent;
   border-radius: 1rem;
 `;
 
-export const StyledNavLink = styled(NavLink)`
+interface StyledNavLinkProps {
+  is_logged_in?: any;
+}
+
+export const StyledNavLink = styled(NavLink)<StyledNavLinkProps>`
   text-decoration: none;
   margin-right: 3px; /* Add desired space (e.g., 10 pixels) before the link */
   color: white;
   background-color: transparent;
-  border: 1px solid ${(props) => props.theme["--primary"]};
-  border-radius: 1em 1rem 0 0;
-  padding: 0.7em 2rem;
+  padding: ${(props) => (props.is_logged_in ? "0.6rem 1.45rem" : "0")};
+  border: 1px solid
+    ${(props) =>
+      props.is_logged_in ? props.theme["--primary"] : "transparent"};
   &:hover {
     text-decoration: none;
     color: ${(props) => props.theme["--primary"]};

@@ -109,7 +109,7 @@ export function Proposal() {
                             <MessageBox
                               onClose={() => setIsMessageBoxOpen(false)}
                               proposal={propose}
-                              isReceiver={true}
+                              isSender={true}
                             />
                           )}
                           <CancelButton type="button">Cancelar</CancelButton>
@@ -173,7 +173,7 @@ export function Proposal() {
                             <MessageBox
                               onClose={() => setIsMessageBoxOpen(false)}
                               proposal={propose}
-                              isReceiver={false}
+                              isSender={false}
                             />
                           )}
                           <CancelButton type="button">Cancelar</CancelButton>

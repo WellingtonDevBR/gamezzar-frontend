@@ -54,6 +54,7 @@ export const TabListSection = styled.section<TabListSectionProps>`
 export const ProposalCardContainer = styled.div`
   display: flex;
   gap: 20px;
+  margin-top: 25px;
 
   img {
     width: 100px;
@@ -93,7 +94,7 @@ export const SendMessageButton = styled.button`
   align-items: center;
   width: 150px;
   height: 30px;
-  background-color: #c6c6c6;
+  background-color: ${(props) => props.theme['--done']};
   border-radius: 4px;
   transition: all 0.2s ease-in-out;
 
@@ -108,7 +109,7 @@ export const CancelButton = styled.button`
   justify-content: center;
   align-items: center;
   width: 75px;
-  background-color: #ff4433;
+  background-color: ${(props) => props.theme['--critical']};
   border-radius: 4px;
   transition: all 0.2s ease-in-out;
 
