@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const PageNav = styled.div`
+  width: 1350px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -10,6 +11,7 @@ export const PageNav = styled.div`
   padding: 2.5rem;
   box-sizing: border-box;
 `;
+
 export const Title = styled.h1`
   font-family: "Urbanist", Sans-serif;
   font-weight: 600;
@@ -17,6 +19,7 @@ export const Title = styled.h1`
   margin: 0;
   text-align: center;
 `;
+
 export const SubTitle = styled.h3`
   font-size: 1rem;
   font-family: "Urbanist", Sans-serif;
@@ -26,14 +29,13 @@ export const SubTitle = styled.h3`
 `;
 
 export const Container = styled.div`
-  display: grid;
-  flex-direction: column;
-  align-items: left;
-  justify-content: left;
-  width: 400;
-  height: 100%;
-  flex-shrink: 0;
-  margin: 3rem auto;
+  width: 1200px;
+  height: auto;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  overflow: hidden;
 `;
 
 export const BoxContainer = styled.div`
@@ -41,14 +43,14 @@ export const BoxContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 330px;
-  height: 480px;
+  width: 300px;
+  height: 440px;
   border-radius: 20px;
   margin: 50px;
-
   background-color: #343444;
 `;
-export const HeaderContainer = styled.header`
+
+export const HeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,14 +63,13 @@ export const HeaderContainer = styled.header`
 export const ImageContainer = styled.div`
   width: 100%;
   height: 100%;
- 
+  margin: 2px 0;
   
-
   img {
-    width: 100%;
+    width: 260px;
     height: 100%;
     border-radius: 20px;
-    
+    margin: 3rem 1rem;
   }
 `;
 
@@ -77,7 +78,6 @@ interface HeaderSpanProps {
   height?: string;
   backgroundColor?: string;
   color?: string;
-  
 }
 
 export const HeaderSpanContent = styled.div`
@@ -86,18 +86,17 @@ export const HeaderSpanContent = styled.div`
   justify-content: space-between;
   width: 100%;
   position: relative;
-  top: 40px;
+  top: 60px;
 `;
 
 export const SpanOptionsContainer = styled.div<HeaderSpanProps>`
   width: ${(props) => props.width || "50px"};
   height: ${(props) => props.height || "50px"};
   background-color: ${(props) => props.backgroundColor || "#3a31c8"};
- 
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 13px;
+  border-radius: 10px;
   color: ${(props) => props.color || "#fff"};
   font-size: 14px;
   margin: 0 1px;
@@ -106,95 +105,164 @@ export const SpanOptionsContainer = styled.div<HeaderSpanProps>`
 `;
 
 export const Button = styled.button`
-
-  width:110px;
-  height: 40px;
-  padding: 10px 20px;
+  width: 100px;
+  height: 30px;
   background-color: transparent;
   color: #fff;
   font-weight: 600;
-  border:1px solid #3a31c8;
+  border: 1px solid #3a31c8;
+  font-size: 14px;
   border-radius: 20px;
-  cursor: pointer;
-  margin-right:20px ;
-  `;
+`;
 
-export const MainContainer = styled.main`
+export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  padding: 30px;
-
-  gap: 20px;
+  padding: 50px;
+  gap: 10px;
 
   section {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    gap:10px;
+    gap: 20px;
 
     h1 {
-        font-size: 14px;
-        font-weight: 600;
+      padding: 10px 0;
+      font-size: 14px;
+      font-weight: 600;
     }
   }
-
-
 
   footer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    gap:10px;
-   
+    gap: 10px;
+    padding: 5px 0;
 
     img {
       width: 33px;
       height: 33px;
     }
-    p{
-        font-size: 12px;
-        color: var (-- white-2, #8A8AA0)
+    p {
+      font-size: 12px;
+      color: #8a8aa0;
     }
-    span{
-        font-size: 12px;
-        font-weight: bold;
-        
+    span {
+      font-size: 12px;
+      font-weight: bold;
+      padding: 2px;
     }
   }
 `;
-export const ItemDetails = styled.div`
-width: 1000px;
-height: 102px;
-border-radius: 8px;
-border: 1px solid var(--background-second, #343444);
-flex-shrink: 0;
-display:flex;
-justify-content: space-between;
 
-p{
-    color: var(--white-2, #8A8AA0);
+export const ItemDetails = styled.div`
+  width: 800px;
+  min-height: 300px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+
+  h3 {
+    margin: 1rem 0;
+    font-size: 18px;
+  }
+
+  button {
+    width: 152px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 30px;
+    border: 1px solid #fff;
+    background: transparent;
+    color: #fff;
+    margin-top: 1px;
+  }
+  input {
+    width: 800px;
+    height: 50px;
+    border: 1px solid #343444;
+    border-radius: 8px;
+    padding: 9px;
+    background-color: transparent;
+    color: #fff;
+    margin-bottom: 30px;
+  }
+  input[name="Description"] {
+    height: 100px;
+    line-height: 1.5;
+    padding: 2rem;
+  }
+`;
+
+export const MethodBoxes = styled.div`
+  width: 100%;
+  max-width: 900px;
+  height: 100px;
+  border-radius: 8px;
+  margin: 3rem auto;
+  border: 1px solid #343444;
+  display: flex;
+  flex-direction: row;
+
+  p {
+    color: #8a8aa0;
     font-family: Urbanist;
     font-size: 14px;
-    font-style:normal;
-    font-weight:400;
+    font-style: normal;
+    font-weight: 400;
     line-height: 22px;
-    margin: 25px 0;
-    margin-right: 3rem;
-    margin-left: 2rem;
-}
+    margin: 1rem 1rem;
+  }
 
-button {
-    
-    width:152px;
-    height: 48px;
-    flex-shrink:0;
-    border-radius: 30px;
-    border: 1px solid var(--onsurface, #FFF);
-    background: transparent;
-    color: #FFF;
-    margin: 25px 0;
-    margin-right: 3rem;
-}
+  h1 {
+    margin: 1rem 0;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  button {
+    width: 150px;
+    height: 40px;
+    display: flex;
+    margin: 2rem 9rem;
+    justify-content: space-around;
+    padding: 10px;
+  }
+`;
+
+export const BtnBox = styled.div`
+  width: 100%;
+  max-width: 900px;
+  padding: 10px;
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+  justify-content: space-around;
+
+  button {
+    width: 260px;
+    height: 40px;
+    display: flex;
+    background: #fff;
+    justify-content: center;
+    padding: 10px;
+    border: 1px solid #343444;
+    border-radius: 10px;
+    color: #5142fc;
+    text-transform: capitalize;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+  }
+`;
+
+export const BtnBox2 = styled.div`
+display: flex;
+flex-direction: row;
 `;
