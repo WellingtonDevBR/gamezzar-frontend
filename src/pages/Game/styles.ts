@@ -272,7 +272,7 @@ export const Select = styled.select`
 `;
 
 export const ProductImage = styled.img`
-  width: 100px;
+  width: 700px;
   height: 140px;
 `;
 

@@ -14,10 +14,14 @@ import {
   PasswordBox,
   MainPasswordBox,
   FormImageLabel,
+  FormSubmitButton,
 } from "./styles";
 import { useAddressSearch } from "../../../../hooks/useAddressSearch";
 import { getAxiosInstance } from "../../../../services/axios";
 import Cookies from "js-cookie";
+import LoadingOverlay from "react-loading-overlay";
+import { ClipLoader } from "react-spinners";
+import { useToast } from "@chakra-ui/react";
 
 type FormData = {
   firstName: string;
@@ -51,6 +55,10 @@ export function Profile({ user }: any) {
     useForm<FormData>();
   const { addressOptions, fetchAddressOptions } = useAddressSearch();
   const [dob, setDob] = useState(formatDate(user?.dob) || "");
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
+
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const token = Cookies.get("token");
 
@@ -77,15 +85,12 @@ export function Profile({ user }: any) {
   };
 
   const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
     const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    // If you're using date, convert it to the appropriate format
-    // because JavaScript's Date will include the time by default
     data.dob = convertDate(data.dob);
-
-    console.log(profileImage);
-
     if (profileImage) {
+      setIsLoading(true);
       const formData = new FormData();
       formData.append("file", profileImage);
 
@@ -100,11 +105,10 @@ export function Profile({ user }: any) {
             },
           }
         );
-        // Handle your response here
-        console.log(response.data);
       } catch (error) {
         // Handle your errors here
         console.log(error);
+        setIsLoading(false);
       }
     }
 
@@ -112,9 +116,12 @@ export function Profile({ user }: any) {
       const response = await axios.put("/api/user/details/update", data);
       // Handle your response here
       console.log(response.data);
+      setIsLoading(false);
+      setIsSuccess(true);
     } catch (error) {
       // Handle your errors here
       console.log(error);
+      setIsLoading(false);
     }
   };
 
@@ -126,191 +133,216 @@ export function Profile({ user }: any) {
     setValue("dob", dob);
   }, [dob, setValue]);
 
+  useEffect(() => {
+    if (isSuccess) {
+      toast({
+        title: "Success.",
+        description: "User Profile Updated.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+
+      // The setTimeout gives the toast message a bit of time to display before the page reloads
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
+    }
+  }, [isSuccess, toast]);
+
   return (
-    <Container>
-      <section>
-        <h1>Edit Profile</h1>
-        <FormImageLabel backgroundColor={"#ff0021"}>
-          Delete Account
-        </FormImageLabel>
-      </section>
-      <FormContainer>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <FormLabel>
-              <p>Username</p>
-              {user?.user_name ? (
-                <InputDisabled
-                  {...register("username")}
-                  defaultValue={user?.user_name}
-                  disabled
-                />
-              ) : (
-                <Input {...register("username")} />
-              )}
-            </FormLabel>
-            <FormLabel>
-              <p>Email</p>
-              <Input {...register("email")} value={user?.email} />
-            </FormLabel>
-            <SplitInputContainer>
+    <LoadingOverlay active={isLoading} spinner text="Loading...">
+      <Container>
+        <section>
+          <h1>Edit Profile</h1>
+          <FormImageLabel backgroundColor={"#ff0021"}>
+            Delete Account
+          </FormImageLabel>
+        </section>
+        <FormContainer>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <div>
               <FormLabel>
-                <p>FirstName</p>
-                {user?.first_name ? (
+                <p>Username</p>
+                {user?.user_name ? (
                   <InputDisabled
-                    {...register("firstName")}
-                    defaultValue={user?.first_name}
+                    {...register("username")}
+                    defaultValue={user?.user_name}
                     disabled
                   />
                 ) : (
-                  <Input {...register("firstName")} />
+                  <Input {...register("username")} />
                 )}
               </FormLabel>
               <FormLabel>
-                <p>Lastname</p>
-                {user?.last_name ? (
-                  <InputDisabled
-                    {...register("lastName")}
-                    defaultValue={user?.last_name}
-                    disabled
-                  />
-                ) : (
-                  <Input {...register("lastName")} />
-                )}
+                <p>Email</p>
+                <Input {...register("email")} value={user?.email} />
               </FormLabel>
-            </SplitInputContainer>
-            <SplitInputContainer>
-              <FormLabel>
-                <p>Date Of Birth</p>
-                <Controller
-                  name="dob"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      style={{ width: "180px" }}
-                      onChange={(event) => {
-                        const value = event.target.value;
-                        const formattedValue = formatDate(
-                          value.replace(/[^0-9]/g, "").substring(0, 8)
-                        );
-                        field.onChange(formattedValue);
-                      }}
-                    />
-                  )}
-                />
-              </FormLabel>
-              <div>
+              <SplitInputContainer>
                 <FormLabel>
-                  <p>Mobile Number</p>
-                  <Input
-                    {...register("phone")}
-                    defaultValue={user?.mobile_number}
+                  <p>FirstName</p>
+                  {user?.first_name ? (
+                    <InputDisabled
+                      {...register("firstName")}
+                      defaultValue={user?.first_name}
+                      disabled
+                    />
+                  ) : (
+                    <Input {...register("firstName")} />
+                  )}
+                </FormLabel>
+                <FormLabel>
+                  <p>Lastname</p>
+                  {user?.last_name ? (
+                    <InputDisabled
+                      {...register("lastName")}
+                      defaultValue={user?.last_name}
+                      disabled
+                    />
+                  ) : (
+                    <Input {...register("lastName")} />
+                  )}
+                </FormLabel>
+              </SplitInputContainer>
+              <SplitInputContainer>
+                <FormLabel>
+                  <p>Date Of Birth</p>
+                  <Controller
+                    name="dob"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        style={{ width: "180px" }}
+                        onChange={(event) => {
+                          const value = event.target.value;
+                          const formattedValue = formatDate(
+                            value.replace(/[^0-9]/g, "").substring(0, 8)
+                          );
+                          field.onChange(formattedValue);
+                        }}
+                      />
+                    )}
                   />
                 </FormLabel>
-              </div>
-            </SplitInputContainer>
+                <div>
+                  <FormLabel>
+                    <p>Mobile Number</p>
+                    <Input
+                      {...register("phone")}
+                      defaultValue={user?.mobile_number}
+                    />
+                  </FormLabel>
+                </div>
+              </SplitInputContainer>
 
-            <SplitInputContainer>
+              <SplitInputContainer>
+                <FormLabel>
+                  <p>Gender</p>
+                  <Input
+                    style={{ width: "50px", height: "20px", marginTop: "10px" }}
+                    type="radio"
+                    {...register("gender")}
+                    value="male"
+                    defaultChecked={user?.gender === "male"}
+                  />
+                  Male
+                  <Input
+                    style={{ width: "50px", height: "20px" }}
+                    type="radio"
+                    {...register("gender")}
+                    value="female"
+                    defaultChecked={user?.gender === "female"}
+                  />
+                  Female
+                  <Input
+                    style={{ width: "50px", height: "20px" }}
+                    type="radio"
+                    {...register("gender")}
+                    value="other"
+                    defaultChecked={user?.gender === "other"}
+                  />
+                  Other
+                </FormLabel>
+              </SplitInputContainer>
               <FormLabel>
-                <p>Gender</p>
-                <Input
-                  style={{ width: "50px", height: "20px", marginTop: "10px" }}
-                  type="radio"
-                  {...register("gender")}
-                  value="male"
-                  defaultChecked={user?.gender === "male"}
-                />
-                Male
-                <Input
-                  style={{ width: "50px", height: "20px" }}
-                  type="radio"
-                  {...register("gender")}
-                  value="female"
-                  defaultChecked={user?.gender === "female"}
-                />
-                Female
-                <Input
-                  style={{ width: "50px", height: "20px" }}
-                  type="radio"
-                  {...register("gender")}
-                  value="other"
-                  defaultChecked={user?.gender === "other"}
-                />
-                Other
+                <p>Country</p>
+                <Select
+                  style={{ width: "100%", marginBottom: "10px" }}
+                  {...register("country")}
+                >
+                  <option value="australia">Australia</option>
+                </Select>
               </FormLabel>
-            </SplitInputContainer>
-            <FormLabel>
-              <p>Country</p>
-              <Select
-                style={{ width: "100%", marginBottom: "10px" }}
-                {...register("country")}
-              >
-                <option value="australia">Australia</option>
-              </Select>
-            </FormLabel>
-            <FormLabel>
-              <p>Address</p>
-              <Input
-                style={{ width: "100%", marginBottom: "-5px" }}
-                {...register("address")}
-                defaultValue={user?.address?.address}
-              />
-              {addressOptions.map((option, index) => {
-                if (option.sla !== watchAddress) {
-                  return (
-                    <SearchOutcomeList
-                      key={index}
-                      onClick={() => setValue("address", option.sla)}
-                    >
-                      {option.sla}
-                    </SearchOutcomeList>
-                  );
+              <FormLabel>
+                <p>Address</p>
+                <Input
+                  style={{ width: "100%", marginBottom: "-5px" }}
+                  {...register("address")}
+                  defaultValue={user?.address?.address}
+                />
+                {addressOptions.map((option, index) => {
+                  if (option.sla !== watchAddress) {
+                    return (
+                      <SearchOutcomeList
+                        key={index}
+                        onClick={() => setValue("address", option.sla)}
+                      >
+                        {option.sla}
+                      </SearchOutcomeList>
+                    );
+                  }
+                })}
+              </FormLabel>
+              <PasswordBox>
+                <MainPasswordBox>
+                  <h2>Change your password</h2>
+                  <span>
+                    Só preencha os campos abaixo caso queira alterar sua senha
+                    atual.
+                  </span>
+                  <SplitInputContainer>
+                    <FormLabel>
+                      <p>Password</p>
+                      <Input type="password" {...register("password")} />
+                    </FormLabel>
+                    <FormLabel>
+                      <p>Confirm Password</p>
+                      <Input type="password" {...register("confirmPassword")} />
+                    </FormLabel>
+                  </SplitInputContainer>
+                </MainPasswordBox>
+              </PasswordBox>
+              <FormSubmitButton type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <ClipLoader color="#ffffff" size={20} />
+                ) : (
+                  "Update"
+                )}
+              </FormSubmitButton>
+            </div>
+            <AvatarContainer>
+              <img
+                src={
+                  user?.avatar
+                    ? `${import.meta.env.VITE_S3_URL}/avatar/${user.avatar}`
+                    : "https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
                 }
-              })}
-            </FormLabel>
-            <PasswordBox>
-              <MainPasswordBox>
-                <h2>Change your password</h2>
-                <span>
-                  Só preencha os campos abaixo caso queira alterar sua senha
-                  atual.
-                </span>
-                <SplitInputContainer>
-                  <FormLabel>
-                    <p>Password</p>
-                    <Input type="password" {...register("password")} />
-                  </FormLabel>
-                  <FormLabel>
-                    <p>Confirm Password</p>
-                    <Input type="password" {...register("confirmPassword")} />
-                  </FormLabel>
-                </SplitInputContainer>
-              </MainPasswordBox>
-            </PasswordBox>
-            <button type="submit">Update Cadastrado</button>
-          </div>
-          <AvatarContainer>
-            <img
-              src={
-                user?.avatar
-                  ? `${import.meta.env.VITE_S3_URL}/avatar/${user.avatar}`
-                  : "https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
-              }
-              alt="avatar"
-            />
-            <input
-              type="file"
-              name="uploadfile"
-              id="img"
-              style={{ display: "none" }}
-              onChange={handleFileChange}
-            />
-            <FormImageLabel htmlFor="img">upload image</FormImageLabel>
-          </AvatarContainer>
-        </Form>
-      </FormContainer>
-    </Container>
+                alt="avatar"
+              />
+              <input
+                type="file"
+                name="uploadfile"
+                id="img"
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+              />
+              <FormImageLabel htmlFor="img">upload image</FormImageLabel>
+            </AvatarContainer>
+          </Form>
+        </FormContainer>
+      </Container>
+    </LoadingOverlay>
   );
 }

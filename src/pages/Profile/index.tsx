@@ -48,6 +48,7 @@ export function Profile() {
         const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
         const result = await axios.get(`/api/user/${username}`);
         setUser(result.data);
+        console.log(result.data)
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }

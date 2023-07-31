@@ -36,6 +36,7 @@ export const MainContainer = styled.div`
     padding: 5px;
     border-radius: 4px;
     border: 1px solid #ced4da;
+    color: black;
   }
 
   h2 {
@@ -49,6 +50,7 @@ export const InputForm = styled.input`
   color: "#495057";
   border-radius: 4px;
   border: 1px solid #ced4da;
+  color: black;
 `;
 
 export const SelectForm = styled.select`
@@ -58,6 +60,7 @@ export const SelectForm = styled.select`
   border-radius: 4px;
   border: 1px solid #ced4da;
   margin-bottom: 10px;
+  color: black;
 `;
 
 export const FormSubmitButton = styled.button`
@@ -75,5 +78,10 @@ export const FormSubmitButton = styled.button`
 
   &:hover {
     background-color: #0069d9;
+  }
+  
+  &:disabled {
+    background-color: #c6c6c6;
+    cursor: not-allowed;
   }
 `;
