@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const Container = styled.div`
   display: flex;
@@ -272,6 +272,26 @@ export const Select = styled.select`
 `;
 
 export const ProductImage = styled.img`
-  width: 100px;
+  width: 700px;
   height: 140px;
+`;
+
+const spin = keyframes`
+  0% { 
+    transform: rotate(0deg); 
+  }
+  100% { 
+    transform: rotate(360deg); 
+  }
+`;
+
+export const LoadingSpinner = styled.div`
+  display: flex;
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: ${spin} 2s linear infinite;
+  margin: 450px auto;
 `;

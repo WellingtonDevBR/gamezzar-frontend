@@ -4,7 +4,6 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 20px;
-  width: 800px;
   height: 100%;
   border-radius: 5px;
   padding: 20px;
@@ -49,5 +48,73 @@ export const TabListSection = styled.section<TabListSectionProps>`
   &:hover {
     cursor: pointer;
     background-color: #025b87;
+  }
+`;
+
+export const ProposalCardContainer = styled.div`
+  display: flex;
+  gap: 20px;
+  margin-top: 25px;
+
+  img {
+    width: 100px;
+    height: 120px;
+  }
+`;
+
+export const ProposalCardRightSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+export const ProposalCardProfile = styled.div`
+  display: flex;
+  gap: 10px;
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+  }
+`;
+
+export const ProposalCardButton = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+export const SendMessageButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 30px;
+  background-color: ${(props) => props.theme['--done']};
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    filter: brightness(0.9);
+  }
+`;
+
+export const CancelButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 75px;
+  background-color: ${(props) => props.theme['--critical']};
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    filter: brightness(0.9);
   }
 `;

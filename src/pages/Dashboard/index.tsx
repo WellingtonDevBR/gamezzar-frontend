@@ -1,4 +1,9 @@
+// External Libraries
 import { useContext, useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
+
+// Styling
 import {
   Container,
   LeftSideMenuContainer,
@@ -7,6 +12,8 @@ import {
   SpanOptionButton,
   RightSideContainer,
 } from "./styles";
+
+// Components
 import { Opportunities } from "./components/Opportunities";
 import { Proposal } from "./components/Proposals";
 import { Collection } from "./components/Collection";
@@ -15,38 +22,51 @@ import { Profile } from "./components/Profile";
 import { Preferences } from "./components/Preferences";
 import { TradeHistory } from "./components/TradeHistory";
 import { Following } from "./components/Following";
-import { useAuth } from "../../context/AuthContext";
-import { NavLinkProps, Navigate } from "react-router-dom";
-import { useNavigate, useLocation } from "react-router-dom";
-import Cookies from "js-cookie";
-import { getAxiosInstance } from "../../services/axios";
 import { Wishlist } from "./components/Wishlist";
 
+// Services
+import { getAxiosInstance } from "../../services/axios";
+
 export function Dashboard() {
-  const { token } = useAuth();
+  // State Initialization
+  const [user, setUser] = useState<any>();
+  const [wishlist, setWishlist] = useState();
+
+  // Navigational Hooks
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Derived State
+  const token = Cookies.get("token");
   const [activeTab, setActiveTab] = useState(
     location.state?.tab || "Opportunities"
   );
-  const cookiedToken = Cookies.get("token");
 
-  if (!token && !cookiedToken) {
+  // Check user's login status
+  if (!token) {
     return <Navigate to="/login" replace />;
   }
 
-  const [wishlist, setWishlist] = useState();
+  // Fetch User's Wishlist
+  async function getWishList() {
+    const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    const response = await axios.get("/api/wishlist/");
+    setWishlist(response.data);
+  }
 
+  // Fetch User's Details
+  async function getLoginDetails() {
+    const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    const response = await axios.get("/api/user/details");
+    setUser(response.data);
+  }
+
+  // Effect to load data when component mounts
   useEffect(() => {
-    async function getWishList() {
-      const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${
-        token || cookiedToken
-      }`;
-      const response = await axios.get("/api/wishlist/");
-      setWishlist(response.data);
-    }
     getWishList();
+    getLoginDetails();
   }, []);
 
   return (
@@ -54,10 +74,16 @@ export function Dashboard() {
       <LeftSideMenuContainer>
         <ImageContainer>
           <img
-            src="https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
-            alt=""
+            src={
+              user?.avatar
+                ? `${import.meta.env.VITE_S3_URL}/avatar/${user.avatar}`
+                : "https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
+            }
+            alt="avatar"
           />
-          <p>Wellington Santos</p>
+          <p>
+            {user?.first_name} {user?.last_name}
+          </p>
         </ImageContainer>
         <NavigationContainer>
           <SpanOptionButton onClick={() => setActiveTab("Opportunities")}>
@@ -88,7 +114,7 @@ export function Dashboard() {
             Edit Profile
           </SpanOptionButton>
           <SpanOptionButton
-            backgroundColor={"#8c0f0f"}
+            backgroundColor={"#DF4949"}
             onClick={() => setActiveTab("Logout")}
           >
             Logout
@@ -115,7 +141,7 @@ export function Dashboard() {
             case "Preferences":
               return <Preferences />;
             case "Profile":
-              return <Profile />;
+              return <Profile user={user} />;
             case "Logout":
               Cookies.remove("token");
               navigate("/login");

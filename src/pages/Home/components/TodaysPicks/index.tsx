@@ -28,21 +28,25 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
   const [userGame, setUserGame] = useState(null);
   const [loggedUserCollection, setLoggedUserCollection] = useState(null);
 
-  const listOfGames = usersCollection.map((userCollection: any) => ({
-    src: `${import.meta.env.VITE_S3_URL}/games/${userCollection.image}`,
-    alt: `${userCollection.slug}`,
-    title: `${userCollection.title}`,
-    owner: `${userCollection.user.user_name}`,
-    avatar: `${import.meta.env.VITE_S3_URL}/avatar/${
-      userCollection.user.avatar
-    }`,
-  }));
+  const listOfGames = usersCollection
+    .filter((userCollection) => userCollection.user.user_id !== null) // Filter out entries with null user objects
+    .map((userCollection) => ({
+      src: `${import.meta.env.VITE_S3_URL}/games/${userCollection.image}`,
+      alt: `${userCollection.slug}`,
+      title: `${userCollection.title}`,
+      owner: `${userCollection.user.user_name}`,
+      avatar: `${import.meta.env.VITE_S3_URL}/avatar/${
+        userCollection.user.avatar
+      }`,
+    }));
+
+  
 
   const visibleCards = listOfGames.slice(0, visibleRows * 4);
 
   const handleUserGameClick = (index: any) => {
     setModalOpen(true);
-    setUserGame(usersCollection[index]);
+    setUserGame(usersCollection.filter((userCollection) => userCollection.user.user_id !== null)[index]);
   };
 
   useEffect(() => {

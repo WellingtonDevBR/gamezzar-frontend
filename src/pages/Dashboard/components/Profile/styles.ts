@@ -38,27 +38,32 @@ export const Form = styled.form`
   flex-direction: row;
   width: 100%;
   justify-content: space-between;
+`;
 
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 180px;
-    height: 40px;
-    border-radius: 5px;
-    border: 0;
+export const FormSubmitButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 40px;
+  border-radius: 5px;
+  border: 0;
+  background-color: #1e90ff;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background-color 0.2s;
+  float: right;
+
+  &:hover {
     background-color: #1e90ff;
-    color: #fff;
-    font-weight: bold;
-    font-size: 16px;
-    transition: background-color 0.2s;
-    float: right;
+    opacity: 0.8;
+    cursor: pointer;
+  }
 
-    &:hover {
-      background-color: #1e90ff;
-      opacity: 0.8;
-      cursor: pointer;
-    }
+  &:disabled {
+    background-color: #c6c6c6;
+    cursor: not-allowed;
   }
 `;
 
@@ -119,6 +124,7 @@ export const PasswordBox = styled.footer`
   flex-direction: column;
   width: ${MAIN_WIDTH};
   margin-top: 20px;
+  margin: 20px 0;
 `;
 
 export const SplitInputContainer = styled.div`
@@ -131,6 +137,10 @@ export const SplitInputContainer = styled.div`
   input {
     width: 180px;
   }
+`;
+
+export const InputDisabled = styled(Input)`
+  background-color: #d3d3d3; // A gray color, replace it with the exact color you want
 `;
 
 export const MainPasswordBox = styled.main`

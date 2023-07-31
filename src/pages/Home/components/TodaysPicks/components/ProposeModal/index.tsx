@@ -24,6 +24,7 @@ import {
   DISPOSITION,
   MANUAL_CONDITION,
 } from "../../../../../../helper/constants";
+import { getCityAndState } from "../../../../../../helper/cityState";
 import { getAxiosInstance } from "../../../../../../services/axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -78,7 +79,7 @@ export function ProposeModal({
     <>
       {isModalOpen && (
         <>
-          <ModalOverlay />
+          <ModalOverlay onClick={closeModal} />
           <Container>
             <Header>
               <p>Game Detail</p>
@@ -114,7 +115,11 @@ export function ProposeModal({
                         {`${game.user.first_name} ${game.user.last_name}`}{" "}
                         <span>1</span>
                       </h1>
-                      <p>São Paulo / SP</p>
+                      <p>
+                        {game.user.address.address
+                          ? getCityAndState(game.user.address.address)
+                          : "Address Not Set"}
+                      </p>
                     </div>
                   </section>
                   <section>
