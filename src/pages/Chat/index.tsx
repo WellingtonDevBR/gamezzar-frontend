@@ -186,10 +186,12 @@ export function Chat() {
             return (
               <UserInfoContainer onClick={() => getChatMessage(conversation)}>
                 <img
-                  src={`${import.meta.env.VITE_S3_URL}/avatar/${
-                    conversation?.user?.avatar
-                  }`}
-                  alt=""
+                  src={
+                    user?.user_id
+                      ? `${import.meta.env.VITE_S3_URL}/avatar/${conversation?.user?.avatar}`
+                      : "https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
+                  }
+                  alt="avatar"
                 />
                 <div>
                   <h2>

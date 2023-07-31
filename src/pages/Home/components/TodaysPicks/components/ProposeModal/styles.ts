@@ -50,6 +50,7 @@ export const CloseButton = styled.button`
   position: absolute;
   right: 10px;
   top: 10px;
+  color: #fff;
   background: transparent;
   border: none;
   font-size: 1.5em;
@@ -212,6 +213,8 @@ export const DispositionSpan = styled.span<DispositionSpanProps>`
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
   width: 100%;
   height: 50px;
   background-color: ${(props) => colorMapping[props.disposition]};

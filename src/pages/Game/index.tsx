@@ -20,12 +20,14 @@ import {
   ProductImage,
   IsOwnerOrWishButton,
   SignalImage,
+  LoadingSpinner, // Assuming this component exists in your project
 } from "./styles";
 import { useState, useEffect } from "react";
 import { StyledChartComponent } from "../../helper/chart";
 import { getAxiosInstance } from "../../services/axios";
 import { convertTimeFormat } from "../../helper/convertTimeFormat";
 import Cookies from "js-cookie";
+import axios, { CancelTokenSource } from "axios";
 import {
   satisfactionMapping,
   dispositionMapping,
@@ -33,6 +35,8 @@ import {
   discConditionMapping,
   manualConditionMapping,
 } from "../../helper/constants";
+import { getCityAndState } from "../../helper/cityState";
+import { StyledNavLink } from "../../components/Header/styles";
 
 interface GameProps {
   description: string;
@@ -48,15 +52,12 @@ interface GameProps {
   slug: string;
 }
 
+interface RouteParams {
+  id: string;
+}
+
 export function Game() {
-  const [loading, setLoading] = useState(true);
-  const { pathname } = useLocation();
-  const [selectedTab, setSelectedTab] = useState("owners");
-  const token = Cookies.get("token");
-  const [isWishGame, setIsWishGame] = useState(false);
-  const [gameOwners, setGameOwners] = useState<any[]>();
-  const [hasProduct, setHasProduct] = useState(false);
-  const [game, setGame] = useState<GameProps>({
+  const initialGame: GameProps = {
     description: "",
     title: "",
     region: "",
@@ -68,32 +69,103 @@ export function Game() {
     image: "",
     official_video_link: "",
     slug: "",
-  });
+  };
 
-  const formattedDate = convertTimeFormat(game.release_date);
-  let { id } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [game, setGame] = useState<GameProps>(initialGame);
+  const [gameOwners, setGameOwners] = useState<any[]>([]);
+  const [address, setAddress] = useState("");
+  const [distance, setDistance] = useState("");
+  const [isWishGame, setIsWishGame] = useState(false);
+  const [hasProduct, setHasProduct] = useState(false);
+  const [selectedTab, setSelectedTab] = useState("owners");
+  const { id } = useParams<any>();
+  const token = Cookies.get("token");
 
   useEffect(() => {
-    async function fetchData() {
-      const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-      const gameResponse = await axios.get(`/api/game/${id}`);
-      setGame(gameResponse.data.game);
-      setGameOwners(gameResponse.data.owners);
+    const source = axios.CancelToken.source(); // Create CancelToken source
 
-      if (token) {
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        const collectionResponse = await axios.get(
-          `/api/user-collection/has-collection/${id}`
+    fetchData(source); // Pass the token to fetchData
+
+    return () => {
+      source.cancel("Operation canceled by the user."); // Cancel ongoing request if the component unmounts
+    };
+  }, []);
+
+  const fetchData = async (cancelTokenSource: CancelTokenSource) => {
+    const axiosInstance = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    const gameResponse = await axiosInstance.get(`/api/game/${id}`, {
+      cancelToken: cancelTokenSource.token,
+    });
+    const gameData = gameResponse.data.game;
+    const owners = gameResponse.data.owners;
+
+    let userAddress = "";
+    if (token) {
+      try {
+        const userDetailsResponse = await axiosInstance.get(
+          "/api/user/details",
+          {
+            cancelToken: cancelTokenSource.token,
+          }
+        );
+        userAddress = userDetailsResponse.data.address.address;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    setAddress(userAddress);
+    setGame(gameData);
+    setGameOwners(owners);
+
+    if (owners.length > 0 && userAddress !== "") {
+      await handleCompareLocations(
+        userAddress,
+        owners[0].user.address.address,
+        cancelTokenSource
+      );
+    }
+
+    if (token) {
+      try {
+        const collectionResponse = await axiosInstance.get(
+          `/api/user-collection/has-collection/${id}`,
+          { cancelToken: cancelTokenSource.token }
         );
         if (collectionResponse.status === 200) {
           setHasProduct(true);
         }
+      } catch (error) {
+        console.error(error);
       }
     }
-    fetchData();
-    // window.scrollTo(0, 0);
+
     setLoading(false);
-  }, []);
+  };
+
+  const handleCompareLocations = async (
+    originAddress: string,
+    destinationAddress: string,
+    cancelTokenSource: CancelTokenSource
+  ) => {
+    const axiosInstance = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+    const response = await axiosInstance.get(
+      `/api/user/compare-locations/${originAddress}/${destinationAddress}`,
+      { cancelToken: cancelTokenSource.token }
+    );
+    setDistance(response?.data?.distance?.text);
+  };
+
+  const formattedDate = convertTimeFormat(game.release_date);
+
+  if (loading) {
+    return <LoadingSpinner />; // Display loading spinner while fetching data
+  }
+
+  console.log("distance", distance);
 
   return (
     <Container>
@@ -269,7 +341,9 @@ export function Game() {
                             />
                             <div>
                               <p>{owner.user.user_name}</p>
-                              <span>São Paulo / SP</span>
+                              <span>
+                                {getCityAndState(owner.user?.address?.address)}
+                              </span>
                             </div>
                           </th>
                           <th>
@@ -339,7 +413,19 @@ export function Game() {
                             </span>
                           </th>
                           <th>
-                            <span>12 km</span>
+                            <span>
+                              {!token ? (
+                                <StyledNavLink to="/login">Login</StyledNavLink>
+                              ) : !address ? (
+                                <StyledNavLink to="/dashboard">
+                                  Add Address
+                                </StyledNavLink>
+                              ) : distance ? (
+                                distance
+                              ) : (
+                                "Other's Address Unset"
+                              )}
+                            </span>
                           </th>
                         </tr>
                       );

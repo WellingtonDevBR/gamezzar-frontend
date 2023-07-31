@@ -119,6 +119,7 @@ export const PasswordBox = styled.footer`
   flex-direction: column;
   width: ${MAIN_WIDTH};
   margin-top: 20px;
+  margin: 20px 0;
 `;
 
 export const SplitInputContainer = styled.div`
@@ -131,6 +132,10 @@ export const SplitInputContainer = styled.div`
   input {
     width: 180px;
   }
+`;
+
+export const InputDisabled = styled(Input)`
+  background-color: #d3d3d3; // A gray color, replace it with the exact color you want
 `;
 
 export const MainPasswordBox = styled.main`

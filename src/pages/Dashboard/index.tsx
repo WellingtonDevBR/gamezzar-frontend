@@ -74,8 +74,12 @@ export function Dashboard() {
       <LeftSideMenuContainer>
         <ImageContainer>
           <img
-            src="https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
-            alt=""
+            src={
+              user?.avatar
+                ? `${import.meta.env.VITE_S3_URL}/avatar/${user.avatar}`
+                : "https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
+            }
+            alt="avatar"
           />
           <p>
             {user?.first_name} {user?.last_name}
@@ -137,7 +141,7 @@ export function Dashboard() {
             case "Preferences":
               return <Preferences />;
             case "Profile":
-              return <Profile />;
+              return <Profile user={user} />;
             case "Logout":
               Cookies.remove("token");
               navigate("/login");

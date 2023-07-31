@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import {
@@ -25,7 +25,7 @@ interface FormValues {
   password: string;
 }
 
-export const SignUp: FC = () => {
+export function SignUp() {
   const initialFormValues: FormValues = {
     firstname: "",
     lastname: "",
@@ -44,23 +44,36 @@ export const SignUp: FC = () => {
     let processedValue = value;
 
     if (name === "username") {
-      processedValue = value.replace(/\s/g, "-"); // Replace spaces with hyphens
-      if (processedValue.length > 18) {
-        // Limit length to 18 characters
-        processedValue = processedValue.slice(0, 18);
-      }
+      // Remove leading numbers and replace spaces with hyphens
+      processedValue = value.replace(/^[0-9]+/, "").replace(/\s/g, "-");
+
+      // Limit length to 10 characters
+      processedValue = processedValue.slice(0, 10);
     }
+
     setFormValues((prevValues) => ({
       ...prevValues,
-      [name]: value,
+      [name]: processedValue,
     }));
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    // Check if any required field is empty
+    if (
+      formValues.firstname.trim() === "" ||
+      formValues.lastname.trim() === "" ||
+      formValues.username.trim() === "" ||
+      formValues.email.trim() === "" ||
+      formValues.password.trim() === ""
+    ) {
+      setSignupStatus("error");
+      return;
+    }
+
     try {
-      // Data construscted as request body through whatsapp example
+      // Data constructed as the request body through whatsapp example
       const formData = {
         first_name: formValues.firstname,
         last_name: formValues.lastname,
@@ -128,6 +141,7 @@ export const SignUp: FC = () => {
             name="firstname"
             placeholder="Your First Name"
             onChange={handleInputChange}
+            value={formValues.firstname}
           />
 
           <Input
@@ -135,6 +149,7 @@ export const SignUp: FC = () => {
             name="lastname"
             placeholder="Your Last Name"
             onChange={handleInputChange}
+            value={formValues.lastname}
           />
 
           <Input
@@ -142,6 +157,7 @@ export const SignUp: FC = () => {
             name="username"
             placeholder="Your Username"
             onChange={handleInputChange}
+            value={formValues.username}
           />
 
           <Input
@@ -149,6 +165,7 @@ export const SignUp: FC = () => {
             name="email"
             placeholder="Your Email Address"
             onChange={handleInputChange}
+            value={formValues.email}
           />
 
           <Input
@@ -156,6 +173,7 @@ export const SignUp: FC = () => {
             name="password"
             placeholder="Your Password"
             onChange={handleInputChange}
+            value={formValues.password}
           />
           <LoginFormOptions>
             <div>
@@ -170,7 +188,13 @@ export const SignUp: FC = () => {
 
           <SignUpbtn type="submit">Signup </SignUpbtn>
         </LoginForm>
+
+        {signupStatus === "error" && (
+          <div style={{ color: "red" }}>
+            Please fill in all required fields.
+          </div>
+        )}
       </Container>
     </>
   );
-};
+}
