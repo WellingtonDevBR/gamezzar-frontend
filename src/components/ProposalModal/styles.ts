@@ -144,6 +144,7 @@ export const ProposeContainer = styled.section`
     padding: 0 10px;
     border-radius: 2px;
     border: 1px solid #c6c6c6;
+    color: black;
   }
 
   button {

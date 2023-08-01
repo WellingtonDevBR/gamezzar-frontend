@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { groupBy } from "lodash";
+import _, { groupBy } from "lodash";
 import {
   CloseButton,
   Container,
@@ -14,24 +14,62 @@ import {
   Header,
 } from "./styles";
 
-import bookletImg from "../../../../../../assets/booklet.svg";
-import discImg from "../../../../../../assets/disc.svg";
-import coverImg from "../../../../../../assets/cover.svg";
+import bookletImg from "../../assets/booklet.svg";
+import discImg from "../../assets/disc.svg";
+import coverImg from "../../assets/cover.svg";
 import { Star } from "phosphor-react";
 import {
   COVER_CONDITION,
   DISC_CONDITION,
   DISPOSITION,
   MANUAL_CONDITION,
-} from "../../../../../../helper/constants";
-import { getCityAndState } from "../../../../../../helper/cityState";
-import { getAxiosInstance } from "../../../../../../services/axios";
+} from "../../helper/constants";
+import { getCityAndState } from "../../helper/cityState";
+import { getAxiosInstance } from "../../services/axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
+interface Game {
+  user_id: number;
+  game_id: number;
+  title: string;
+  image: string;
+  edition: {
+    name: string;
+  };
+  region: {
+    name: string;
+  };
+  user: {
+    user_id: number;
+    first_name: string;
+    last_name: string;
+    avatar: string;
+    address: {
+      address: string;
+    };
+    inventory: {
+      disc_condition: number;
+      cover_condition: number;
+      manual_condition: number;
+      disposition: number;
+    };
+  };
+}
+
+interface UserCollectionItem {
+  item: {
+    game_id: number;
+    title: string;
+    platform: {
+      name: string;
+    };
+  };
+}
+
 interface ProposeModalProps {
-  game: any;
-  loggedUserCollection: any[];
+  game: Game;
+  loggedUserCollection: UserCollectionItem[];
   isModalOpen: boolean;
   setModalOpen: (value: boolean) => void;
 }
@@ -46,11 +84,10 @@ export function ProposeModal({
   const token = Cookies.get("token");
   const navigate = useNavigate();
 
-  const gamesByPlatform: any[] = groupBy(
+  const gamesByPlatform: _.Dictionary<UserCollectionItem[]> = _.groupBy(
     loggedUserCollection,
-    (game: any) => game.details.platform.name
+    (game: any) => game.item.platform.name
   );
-
   const closeModal = () => {
     setModalOpen(false);
   };
@@ -58,6 +95,8 @@ export function ProposeModal({
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedGameId(event.target.value);
   };
+
+  console.log('test', loggedUserCollection)
 
   const handleProposeClick = async () => {
     const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
@@ -138,10 +177,10 @@ export function ProposeModal({
                   <optgroup key={platform} label={platform}>
                     {games?.map((game) => (
                       <option
-                        key={game.details.game_id}
-                        value={game.details.game_id}
+                        key={game.item.game_id}
+                        value={game.item.game_id}
                       >
-                        {game.details.title}
+                        {game.item.title}
                       </option>
                     ))}
                   </optgroup>
