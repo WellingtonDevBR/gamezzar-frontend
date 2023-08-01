@@ -321,7 +321,7 @@ export function Game() {
                   <TableHead>
                     <tr>
                       <th>User</th>
-                      <th>Satisfaction</th>
+                      <th>Game Review</th>
                       <th>Disc Condition</th>
                       <th>Cover Condition</th>
                       <th>Manual Condition</th>

@@ -5,8 +5,9 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 1000px;
+  height: 750px;
   border-radius: 5px;
-  margin: 40px auto;
+  margin: 0 auto;
   padding: 20px;
 
   img {
@@ -25,6 +26,11 @@ export const Header = styled.header`
   justify-content: space-between;
   align-items: center;
   font-size: 1.6rem;
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: bold;
+  }
 `;
 
 export const Main = styled.main`
