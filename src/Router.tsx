@@ -15,6 +15,8 @@ import { Explorer } from "./pages/Explorer";
 import { EditWishlist } from "./pages/Dashboard/components/EditWishlist";
 import { CreateItem } from "./pages/CreateItem/Index";
 import { Logout } from "./pages/Logout";
+import { TraderProfile } from "./pages/TraderProfile";
+import { Activity } from "./pages/Activity";
 
 
 export function Router() {
@@ -35,6 +37,8 @@ export function Router() {
         <Route path="/user/wishlist/edit/:id" element={<EditWishlist />} />
         <Route path="/createitem" element={<CreateItem />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="traderprofile" element={<TraderProfile />} />
+        <Route path="/activity" element={<Activity />} />
       </Route>
     </Routes>
   );

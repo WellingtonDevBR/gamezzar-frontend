@@ -37,7 +37,7 @@ export const Card: React.FC<CardProps> = (props) => {
         <TitleText>
           <strong>{props.title}</strong>
         </TitleText>
-        <TitleLabel>BSC</TitleLabel>
+        <TitleLabel>Price</TitleLabel>
       </TitleCard>
       <ProfileHolder className="profile-holder">
         <ProfileImage className="profile-image"></ProfileImage>

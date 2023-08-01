@@ -1,4 +1,3 @@
-
 import { ArrowsClockwise, Heart, Tote } from "phosphor-react";
 import {
   HeaderContainer,
@@ -8,7 +7,7 @@ import {
   MainContainer,
   BoxContainer,
   Button,
-} from './styles';
+} from "./styles";
 
 interface CardProps {
   image: string;
@@ -18,7 +17,13 @@ interface CardProps {
   id: string;
 }
 
-export const CardBox: React.FC<CardProps> = ({ image, title, description, price, id }) => {
+export const CardBox: React.FC<CardProps> = ({
+  image,
+  title,
+  description,
+  price,
+  id,
+}) => {
   return (
     <BoxContainer>
       <HeaderContainer>
@@ -43,21 +48,19 @@ export const CardBox: React.FC<CardProps> = ({ image, title, description, price,
         </section>
         <footer>
           <div>
-            <img src="https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg" alt="Avatar" />
+            <img
+              src="https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
+              alt="Avatar"
+            />
           </div>
           <div>
             <p>Owned By</p>
             <span>Freddie Carpenter </span>
             <section>
               <Button>
-                <Tote size={15} weight="light" />   Trade
+                <Tote size={15} weight="light" /> Trade
               </Button>
-              <div>
-                <ArrowsClockwise size={15} weight="light" /> View History</div>
-              
-           
-                
-             
+              <ArrowsClockwise size={15} weight="light" /> View History
             </section>
           </div>
         </footer>
