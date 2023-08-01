@@ -41,6 +41,10 @@ export const Main = styled.main`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    h1 {
+      font-size: 1.6rem;
+      font-weight: bold;
+    }
   }
 `;
 
@@ -57,6 +61,7 @@ export const Select = styled.select`
   border-radius: 5px;
   border: 1px solid #ccc;
   padding: 0 10px;
+  color: black;
 `;
 
 // export const Select = forwardRef((props, ref) => <SelectBase {...props} ref={ref} />);

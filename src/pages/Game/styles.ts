@@ -176,7 +176,7 @@ export const TableHead = styled.thead`
     th {
       display: flex;
       align-items: center;
-      justify-content: center; /* Center the content horizontally */
+      justify-content: center; /* Center the content horizontally and vertically */
     }
   }
 `;
@@ -193,7 +193,7 @@ export const TableBody = styled.tbody`
   td {
     display: flex;
     align-items: center;
-    justify-content: center; /* Center the content horizontally */
+    justify-content: center; /* Center the content horizontally and vertically */
   }
 
   th:first-child {
@@ -226,6 +226,7 @@ interface SignalImageProps {
 export const SignalImage = styled.img<SignalImageProps>`
   width: ${(props) => (props.code >= 0 ? "50px" : "30px")};
   height: ${(props) => (props.code >= 0 ? "50px" : "30px")};
+  margin-left: 50px;
 
   filter: ${(props) => {
     switch (props.code) {

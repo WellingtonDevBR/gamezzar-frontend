@@ -76,85 +76,76 @@ export function Game() {
   const [gameOwners, setGameOwners] = useState<any[]>([]);
   const [address, setAddress] = useState("");
   const [distance, setDistance] = useState("");
-  const [isWishGame, setIsWishGame] = useState(false);
+  const [wishGame, setWishGame] = useState(null);
   const [hasProduct, setHasProduct] = useState(false);
   const [selectedTab, setSelectedTab] = useState("owners");
   const { id } = useParams<any>();
   const token = Cookies.get("token");
 
   useEffect(() => {
-    const source = axios.CancelToken.source(); // Create CancelToken source
-
-    fetchData(source); // Pass the token to fetchData
-
-    return () => {
-      source.cancel("Operation canceled by the user."); // Cancel ongoing request if the component unmounts
-    };
+    fetchData();
   }, []);
 
-  const fetchData = async (cancelTokenSource: CancelTokenSource) => {
+  const fetchData = async () => {
     const axiosInstance = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+    const token = Cookies.get("token");
     axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-    const gameResponse = await axiosInstance.get(`/api/game/${id}`, {
-      cancelToken: cancelTokenSource.token,
-    });
-    const gameData = gameResponse.data.game;
-    const owners = gameResponse.data.owners;
+    try {
+      const gameResponse = await axiosInstance.get(`/api/game/${id}`);
+      const gameData = gameResponse.data.game;
+      const owners = gameResponse.data.owners;
 
-    let userAddress = "";
-    if (token) {
-      try {
+      let userAddress = "";
+      if (token) {
+        setLoading(true);
+        const response = await axiosInstance.get(`/api/wishlist/${id}`);
+        setWishGame(response.data);
+
         const userDetailsResponse = await axiosInstance.get(
-          "/api/user/details",
-          {
-            cancelToken: cancelTokenSource.token,
-          }
+          "/api/user/details"
         );
         userAddress = userDetailsResponse.data.address.address;
-      } catch (error) {
-        console.error(error);
       }
-    }
 
-    setAddress(userAddress);
-    setGame(gameData);
-    setGameOwners(owners);
+      setAddress(userAddress);
+      setGame(gameData);
+      setGameOwners(owners);
 
-    if (owners.length > 0 && userAddress !== "") {
-      await handleCompareLocations(
-        userAddress,
-        owners[0].user.address.address,
-        cancelTokenSource
-      );
-    }
-
-    if (token) {
-      try {
-        const collectionResponse = await axiosInstance.get(
-          `/api/user-collection/has-collection/${id}`,
-          { cancelToken: cancelTokenSource.token }
+      if (owners.length > 0 && userAddress !== "") {
+        await handleCompareLocations(
+          userAddress,
+          owners[0].user.address.address
         );
-        if (collectionResponse.status === 200) {
-          setHasProduct(true);
-        }
-      } catch (error) {
-        console.error(error);
       }
-    }
 
-    setLoading(false);
+      if (token) {
+        try {
+          const collectionResponse = await axiosInstance.get(
+            `/api/user-collection/has-collection/${id}`
+          );
+          if (collectionResponse.status === 200) {
+            setHasProduct(true);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
   };
 
   const handleCompareLocations = async (
     originAddress: string,
-    destinationAddress: string,
-    cancelTokenSource: CancelTokenSource
+    destinationAddress: string
   ) => {
     const axiosInstance = getAxiosInstance(import.meta.env.VITE_BASE_URL);
     const response = await axiosInstance.get(
-      `/api/user/compare-locations/${originAddress}/${destinationAddress}`,
-      { cancelToken: cancelTokenSource.token }
+      `/api/user/compare-locations/${originAddress}/${destinationAddress}`
     );
     setDistance(response?.data?.distance?.text);
   };
@@ -164,8 +155,6 @@ export function Game() {
   if (loading) {
     return <LoadingSpinner />; // Display loading spinner while fetching data
   }
-
-  console.log("distance", distance);
 
   return (
     <Container>
@@ -195,7 +184,7 @@ export function Game() {
                   <IsOwnerOrWishButton>Edit This Game</IsOwnerOrWishButton>
                 </NavLink>
               </>
-            ) : isWishGame ? (
+            ) : wishGame ? (
               <>
                 <NavLink
                   style={{ textDecoration: "none" }}
@@ -209,7 +198,10 @@ export function Game() {
               </>
             ) : token ? (
               <>
-                <NavLink style={{ textDecoration: "none" }} to="/chat">
+                <NavLink
+                  style={{ textDecoration: "none" }}
+                  to={`/user/wishlist/edit/${id}`}
+                >
                   <Button backgroundColor={"#9b4545"}>I want</Button>
                 </NavLink>
                 <NavLink
@@ -415,7 +407,9 @@ export function Game() {
                           <th>
                             <span>
                               {!token ? (
-                                <StyledNavLink to="/login">Login</StyledNavLink>
+                                <StyledNavLink to="/login">
+                                  Need Login
+                                </StyledNavLink>
                               ) : !address ? (
                                 <StyledNavLink to="/dashboard">
                                   Add Address

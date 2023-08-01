@@ -42,7 +42,7 @@ export function Wishlist({ wishlist }: any) {
                 />
               </TableDataCellScore>
               <TableDataCellEdit>
-                <NavLink to={`/user/wishlist/edit/${game.wishlist_id}`}>
+                <NavLink to={`/user/wishlist/edit/${game.game_id}`}>
                   <span>Edit</span>
                 </NavLink>
               </TableDataCellEdit>

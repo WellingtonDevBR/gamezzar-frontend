@@ -11,6 +11,8 @@ export const Container = styled.div`
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
 
   h1 {
+    font-size: 24px;
+    font-weight: bold;
     margin-bottom: 45px;
   }
 `;

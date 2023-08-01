@@ -217,6 +217,7 @@ export function Profile() {
               name="Collections"
               onClick={() => setActiveTab("Collections")}
               active={activeTab === "Collections"}
+              quantity={userProfile.collections.length}
             />
             <NavigationTab
               name="Wishlist"
@@ -248,14 +249,17 @@ interface NavigationTabProps {
   name: string;
   onClick: () => void;
   active: boolean;
+  quantity?: number;
 }
 
 const NavigationTab: React.FC<NavigationTabProps> = ({
   name,
+  quantity,
   onClick,
   active,
 }) => (
   <NavigationTabContainer isActive={active} onClick={onClick}>
     {name}
+    {quantity && <span>{" "}({quantity})</span>}
   </NavigationTabContainer>
 );
