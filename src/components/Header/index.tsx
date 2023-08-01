@@ -23,7 +23,7 @@ import { useAuth } from "../../context/AuthContext";
 const NAV_ITEMS = [
   { title: "Home", path: "/" },
   { title: "Explore", path: "/explorer" },
-  { title: "Activity", path: "#" },
+  { title: "Activity", path: "/activity" },
   { title: "Community", path: "#" },
   { title: "Contact", path: "/contact" },
 ];

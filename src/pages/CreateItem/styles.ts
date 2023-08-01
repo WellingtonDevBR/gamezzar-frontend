@@ -29,24 +29,24 @@ export const SubTitle = styled.h3`
 `;
 
 export const Container = styled.div`
-  width: 1200px;
-  height: auto;
+ width: 100%;
+  max-width: 1200px; /* Set the maximum width for the container */
   margin: 0 auto;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  overflow: hidden;
+  flex-wrap: wrap;
 `;
 
 export const BoxContainer = styled.div`
+  width: 300px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 300px;
   height: 440px;
   border-radius: 20px;
-  margin: 50px;
+  margin: 20px; /* Adjust the margin to provide proper spacing */
   background-color: #343444;
 `;
 
@@ -67,9 +67,9 @@ export const ImageContainer = styled.div`
   
   img {
     width: 260px;
-    height: 100%;
+    height: 260px;
     border-radius: 20px;
-    margin: 3rem 1rem;
+    margin: 3.5rem 1rem;
   }
 `;
 
@@ -111,14 +111,19 @@ export const Button = styled.button`
   color: #fff;
   font-weight: 600;
   border: 1px solid #3a31c8;
-  font-size: 14px;
+  font-size: 16px;
   border-radius: 20px;
+  padding: 2px 2px 2px 2px;
+ 
 `;
 
 export const MainContainer = styled.div`
+   width: 100%;
+  max-width: 800px; 
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  padding: 50px;
+  padding: 20px;
   gap: 10px;
 
   section {
@@ -129,7 +134,7 @@ export const MainContainer = styled.div`
     gap: 20px;
 
     h1 {
-      padding: 10px 0;
+      padding: 0px 0;
       font-size: 14px;
       font-weight: 600;
     }
@@ -140,7 +145,7 @@ export const MainContainer = styled.div`
     flex-direction: row;
     justify-content: space-between;
     gap: 10px;
-    padding: 5px 0;
+    padding: 2px 0;
 
     img {
       width: 33px;
@@ -153,19 +158,24 @@ export const MainContainer = styled.div`
     span {
       font-size: 12px;
       font-weight: bold;
-      padding: 2px;
+      
+    }
+    section {
+      margin: 1rem;
+      padding: 1rem;
     }
   }
 `;
 
 export const ItemDetails = styled.div`
-  width: 800px;
-  min-height: 300px;
+width: 100%;
+  max-width: 800px; 
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  margin-top: 20px; 
 
   h3 {
     margin: 1rem 0;
@@ -180,7 +190,7 @@ export const ItemDetails = styled.div`
     border: 1px solid #fff;
     background: transparent;
     color: #fff;
-    margin-top: 1px;
+    margin-top: 2px;
   }
   input {
     width: 800px;

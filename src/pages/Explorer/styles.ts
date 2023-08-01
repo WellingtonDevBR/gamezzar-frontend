@@ -28,10 +28,12 @@ font-weight: 400;
   `;
 
 export const Container = styled.div`
-width: 100%;
-  max-width: 800px; /* Set the maximum width you desire */
+display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 1200px; 
   margin: 0 auto;
-  padding: 0 20px;
+  padding-left: 20px;
 
 `;
 
@@ -52,16 +54,11 @@ export const SelectBtn = styled.select`
 `;
 
 export const CardHolder = styled.div`
-  padding: 10px;
-  display: grid;
-  align-content: center;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: auto;
-  grid-gap: 3rem;
-  justify-content: space-evenly;
-  justify-items: center;
-  align-content: space-evenly;
-  align-items: center;
+   display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 20px;
+  margin-top: 20px;
+  gap: 30px;
 `;
 
 export const CardContainer = styled.div`
@@ -123,14 +120,10 @@ export const TitleText = styled.span`
 `;
 
 export const TitleLabel = styled.label`
-  width: 15%;
-  border-radius: 40px;
-  background-color: rgb(79, 57, 252);
+ background-color: #5142fc;
   color: white;
-  font-size: 0.8rem;
   padding: 5px 10px;
-  text-align: center;
-  font-weight: 600;
+  border-radius: 4px;
 `;
 
 export const ProfileHolder = styled.div`
@@ -196,28 +189,18 @@ export const HistoryBtn = styled.button`
 `;
 
  export const LoadMoreButton = styled.button`
- width: 154px;
-height: 54px;
-flex-shrink: 0;
- font-family: Urbanist;
-font-size: 15px;
-font-style: normal;
-font-weight: 700;
-line-height: 22px;
- width: 30%;
-  align-items: center;
-  justify-content: center;
-   background:  var(--background, #14141F, transparent );
-  border:  1px solid  #343434;
-  color: #b6b6b6;
-  padding: 10px 20px;
-  border-radius: 20px;
+   margin: 20px auto; 
+  padding: 12px 24px;
+  background-color: transparent;
+  color: white;
+  border: 1px solid #b6b6b6;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: 0.2s;
-  margin-bottom: 10px;
 
   &:hover {
-    background-color: #b6b6b6;
+    background-color: #343434;
     color: white;
   }
 `;
