@@ -200,7 +200,15 @@ export function Game() {
               <>
                 <NavLink
                   style={{ textDecoration: "none" }}
-                  to={`/user/wishlist/edit/${id}`}
+                  to={{
+                    pathname: `/user/wishlist/edit/${id}`,
+                  }}
+                  state={{
+                    from: {
+                      title: game.title,
+                      image: game.image,
+                    },
+                  }}
                 >
                   <Button backgroundColor={"#9b4545"}>I want</Button>
                 </NavLink>

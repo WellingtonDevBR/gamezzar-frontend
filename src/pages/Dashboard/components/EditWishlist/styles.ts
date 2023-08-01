@@ -53,6 +53,19 @@ export const Section = styled.section`
   flex-direction: column;
   width: 100%;
   gap: 0.3em;
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  select {
+    display: flex;
+
+    width: 100%;
+    padding: 10px 5px;
+    color: black;
+  }
 `;
 
 export const Select = styled.select`

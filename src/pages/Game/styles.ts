@@ -14,6 +14,11 @@ export const GameSection = styled.section`
   flex-direction: row;
   justify-content: center;
   gap: 12px;
+
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+  }
 `;
 
 interface ButtonContainerProps {
