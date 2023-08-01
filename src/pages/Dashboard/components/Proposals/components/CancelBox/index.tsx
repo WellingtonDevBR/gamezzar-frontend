@@ -24,16 +24,21 @@ export function CancelBox({ isOpen, onClose, proposal }) {
 
   const cancelProposal = async () => {
     // Replace with your actual endpoint and request data
-    const url = "/your-api-endpoint";
-    const data = {
-      // Your proposal data
-    };
     try {
-      const response = await axios.post(url, data);
+      const response = await axios.delete(
+        `/api/propose/${proposal.propose_id}`
+      );
       if (response.status === 200) {
+        await axios.post("/api/transaction", {
+          sender_id: proposal.sender.user_id,
+          receiver_id: proposal.receiver.user_id,
+          sender_game_id: proposal.sender_game.game_id,
+          receiver_game_id: proposal.receiver_game.game_id,
+          status: "cancelled",
+        });
         toast({
-          title: "Proposal sent.",
-          description: "Your proposal has been sent successfully",
+          title: "Proposal Cancelled.",
+          description: "Your proposal has been cancelled successfully",
           status: "success",
           duration: 5000,
           isClosable: true,
@@ -43,7 +48,7 @@ export function CancelBox({ isOpen, onClose, proposal }) {
     } catch (error) {
       toast({
         title: "An error occurred.",
-        description: "Unable to send your proposal.",
+        description: "Unable to cancel your proposal.",
         status: "error",
         duration: 5000,
         isClosable: true,

@@ -33,6 +33,7 @@ export function Dashboard() {
   const [wishlist, setWishlist] = useState<any[]>([]);
   const [userGames, setUserGames] = useState<any[]>([]);
   const [wishlistGames, setWishlistGames] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<any[]>([]);
 
   // Navigational Hooks
   const navigate = useNavigate();
@@ -64,10 +65,16 @@ export function Dashboard() {
     setUser(response.data);
   }
 
+  async function getTransactions() {
+    const response = await axios.get("/api/transaction/");
+    setTransactions(response.data);
+  }
+
   // Effect to load data when component mounts
   useEffect(() => {
     getWishList();
     getLoginDetails();
+    getTransactions();
   }, []);
 
   useEffect(() => {
@@ -92,30 +99,39 @@ export function Dashboard() {
   }, [wishlist]);
 
   useEffect(() => {
-    const matchedGames = wishlist.map((wishlistGame) => {
-      const userGame = userGames.find(
-        (userGame) => userGame.game_id === wishlistGame.game_id
-      );
-      return {
-        // User Account
-        game_one_game_id: wishlistGame.details.game_id,
-        game_one_title: wishlistGame.details.title,
-        game_one_image: wishlistGame.details.image,
-        user_one_user_id: wishlistGame.user.user_id,
-        user_one_first_name: wishlistGame.user.first_name,
-        user_one_last_name: wishlistGame.user.last_name,
-        user_one_avatar: wishlistGame.user.avatar,
-        // Another Acount User
-        game_two_game_id: userGame.user.wishlist.details.game_id,
-        game_two_title: userGame.user.wishlist.details.title,
-        game_two_image: userGame.user.wishlist.details.image,
-        user_two_user_id: userGame?.user?.user_id,
-        user_two_first_name: userGame?.user?.first_name,
-        user_two_last_name: userGame?.user?.last_name,
-        user_two_avatar: userGame?.user?.avatar,
-        user_two_address: userGame?.user?.address?.address,
-      };
-    });
+    const matchedGames = wishlist
+      .map((wishlistGame) => {
+        const userGame = userGames.find(
+          (userGame) =>
+            userGame.game_id === wishlistGame.game_id &&
+            userGame.user.user_id !== wishlistGame.user.user_id
+        );
+
+        if (!userGame) {
+          return null;
+        }
+
+        return {
+          // User Account
+          game_one_game_id: wishlistGame.details.game_id,
+          game_one_title: wishlistGame.details.title,
+          game_one_image: wishlistGame.details.image,
+          user_one_user_id: wishlistGame.user.user_id,
+          user_one_first_name: wishlistGame.user.first_name,
+          user_one_last_name: wishlistGame.user.last_name,
+          user_one_avatar: wishlistGame.user.avatar,
+          // Another Acount User
+          game_two_game_id: userGame.user.wishlist.details.game_id,
+          game_two_title: userGame.user.wishlist.details.title,
+          game_two_image: userGame.user.wishlist.details.image,
+          user_two_user_id: userGame?.user?.user_id,
+          user_two_first_name: userGame?.user?.first_name,
+          user_two_last_name: userGame?.user?.last_name,
+          user_two_avatar: userGame?.user?.avatar,
+          user_two_address: userGame?.user?.address?.address,
+        };
+      })
+      .filter((game) => game !== null); // Filter out the null values
     setWishlistGames(matchedGames);
   }, [userGames]);
 
@@ -185,7 +201,7 @@ export function Dashboard() {
             case "Collection":
               return <Collection />;
             case "History":
-              return <TradeHistory />;
+              return <TradeHistory transactions={transactions} />;
             case "Following":
               return <Following />;
             case "Preferences":
