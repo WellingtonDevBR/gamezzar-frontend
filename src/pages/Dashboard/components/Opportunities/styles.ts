@@ -12,7 +12,9 @@ export const Container = styled.div`
 
   div {
     h1 {
-        margin-bottom: 45px;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 45px;
     }
   }
 `;
@@ -57,7 +59,7 @@ export const InputBoxContainer = styled.div`
 
 export const FeedbackContainer = styled.div`
   display: flex;
-  flex-direction: space-between;
+  flex-direction: row;
   margin-top: 10px;
   padding: 10px;
   border-radius: 5px;

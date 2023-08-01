@@ -13,20 +13,36 @@ import {
 import { NavLink } from "react-router-dom";
 import Cookies from "js-cookie";
 import { getAxiosInstance } from "../../../../services/axios";
-import { satisfactionMapping, dispositionMapping } from "../../../../helper/constants";
+import {
+  satisfactionMapping,
+  dispositionMapping,
+} from "../../../../helper/constants";
 
 export function Collection() {
   const token = Cookies.get("token");
   const [collection, setCollection] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     async function getCollectionList() {
       const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      const response = await axios.get("/api/user-collection/all");
-      setCollection(response.data);
+      try {
+        const response = await axios.get("/api/user-collection/all");
+        setCollection(response.data);
+      } catch (error) {
+        console.error("Error fetching collection:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
     getCollectionList();
   }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>; // You can replace this with a spinner component if you prefer
+  }
+  console.log(collection)
   return (
     <Container>
       <h1>Collection</h1>
@@ -44,13 +60,13 @@ export function Collection() {
               <TableDataCellGame>
                 <img
                   src={`${import.meta.env.VITE_S3_URL}/games/${
-                    game.details.image
+                    game.item.image
                   }`}
                   alt="Game"
                 />
                 <div>
-                  <span>{game.details.title}</span>
-                  <span>{game.details.platform.name}</span>
+                  <span>{game.item.title}</span>
+                  <span>{game.item.platform.name}</span>
                 </div>
               </TableDataCellGame>
               <TableDataCellScore>

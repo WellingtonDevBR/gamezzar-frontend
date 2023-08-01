@@ -1,5 +1,6 @@
-import { CellSignalFull, Check, Envelope, Info } from "phosphor-react";
+import { CellSignalFull, Check, Envelope, Info, XCircle } from "phosphor-react";
 import React, { useState, ReactNode, useEffect } from "react";
+import { Collections } from "./components/Collections";
 
 import {
   Container,
@@ -25,30 +26,74 @@ import { convertTimeFormat } from "../../helper/convertTimeFormat";
 
 interface UserProps {
   first_name: string;
+  last_name: string;
   user_name: string;
   created_at: string;
   avatar: string;
+  address: {
+    address: string;
+  };
+  collections: [
+    {
+      game_id: string;
+      title: string;
+      disposition: number;
+      image: string;
+      details: {
+        platform: string;
+        region: string;
+      };
+    }
+  ];
+  preference: {
+    shipment_by_courier: boolean;
+    shipment_by_postal: boolean;
+    shipment_in_person: boolean;
+    status_message: string;
+  };
 }
 
 export function Profile() {
   const [activeTab, setActiveTab] = useState("Feedbacks");
-  const [user, setUser] = useState<UserProps>({
+  const [loading, setLoading] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProps>({
     user_name: "",
     created_at: "",
     first_name: "",
+    last_name: "",
     avatar: "",
+    address: {
+      address: "",
+    },
+    collections: [
+      {
+        game_id: "",
+        title: "",
+        disposition: 0,
+        image: "",
+        details: {
+          platform: "",
+          region: "",
+        },
+      },
+    ],
+    preference: {
+      shipment_by_courier: false,
+      shipment_by_postal: false,
+      shipment_in_person: false,
+      status_message: "",
+    },
   });
   const { username } = useParams();
 
-  const formattedDate = convertTimeFormat(user.created_at);
+  const formattedDate = convertTimeFormat(userProfile.created_at);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
         const result = await axios.get(`/api/user/${username}`);
-        setUser(result.data);
-        console.log(result.data)
+        setUserProfile(result.data);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
@@ -87,16 +132,34 @@ export function Profile() {
         </HeaderTopSection>
         <HeaderBottomSection>
           <SpanOptionsContainer>
-            <SpanOptionsBox>
-              <Check size={12} />
+            <SpanOptionsBox
+              isActive={userProfile?.preference?.shipment_in_person}
+            >
+              {userProfile?.preference?.shipment_in_person ? (
+                <Check size={12} />
+              ) : (
+                <XCircle size={12} />
+              )}
               Hand
             </SpanOptionsBox>
-            <SpanOptionsBox>
-              <Check size={12} />
+            <SpanOptionsBox
+              isActive={userProfile?.preference?.shipment_in_person}
+            >
+              {userProfile?.preference?.shipment_in_person ? (
+                <Check size={12} />
+              ) : (
+                <XCircle size={12} />
+              )}
               Mail
             </SpanOptionsBox>
-            <SpanOptionsBox>
-              <Check size={12} />
+            <SpanOptionsBox
+              isActive={userProfile?.preference?.shipment_in_person}
+            >
+              {userProfile?.preference?.shipment_in_person ? (
+                <Check size={12} />
+              ) : (
+                <XCircle size={12} />
+              )}
               Portador
             </SpanOptionsBox>
           </SpanOptionsContainer>
@@ -120,19 +183,21 @@ export function Profile() {
         <MainSectionContainer>
           <MainImageContainer>
             <img
-              src={`${import.meta.env.VITE_S3_URL}/avatar/${user.avatar}`}
+              src={`${import.meta.env.VITE_S3_URL}/avatar/${
+                userProfile.avatar
+              }`}
               alt="avatar"
             />
           </MainImageContainer>
           <MainContentContainer>
-            <h1>{user.first_name}</h1>
-            <span>Croydon Park / Sydney</span>
+            <h1>
+              {userProfile.first_name} {userProfile.last_name}
+            </h1>
+            <span>{userProfile.address.address}</span>
             <p>
-              CHANGE - NOW IT'S MANDATORY TO PAY TO ADD GAMES TO THE LIST !!
-              HONESTLY, THAT'S JUST NOT RIGHT. I HAVE MANY MORE GAMES, BUT I
-              WON'T PAY FOR SOMETHING THAT DOESN'T GIVE ME 100% RETURN OR
-              SALES!! UNFORTUNATELY, I'LL ONLY KEEP THE ONES ALREADY LISTED AND
-              SLOWLY ABANDON THE WEBSITE...
+              {userProfile.preference?.status_message
+                ? userProfile.preference?.status_message
+                : "No status message!"}
             </p>
           </MainContentContainer>
         </MainSectionContainer>
@@ -152,6 +217,7 @@ export function Profile() {
               name="Collections"
               onClick={() => setActiveTab("Collections")}
               active={activeTab === "Collections"}
+              quantity={userProfile.collections.length}
             />
             <NavigationTab
               name="Wishlist"
@@ -166,7 +232,7 @@ export function Profile() {
               case "Opportunities":
                 return <div>This is the Oportunidades content.</div>;
               case "Collections":
-                return <div>This is the Coleção content.</div>;
+                return <Collections games={userProfile.collections} />;
               case "Wishlist":
                 return <div>This is the Desejos content.</div>;
               default:
@@ -183,14 +249,17 @@ interface NavigationTabProps {
   name: string;
   onClick: () => void;
   active: boolean;
+  quantity?: number;
 }
 
 const NavigationTab: React.FC<NavigationTabProps> = ({
   name,
+  quantity,
   onClick,
   active,
 }) => (
   <NavigationTabContainer isActive={active} onClick={onClick}>
     {name}
+    {quantity && <span>{" "}({quantity})</span>}
   </NavigationTabContainer>
 );

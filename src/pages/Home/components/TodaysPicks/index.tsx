@@ -12,10 +12,10 @@ import {
 } from "./styles";
 import { Button } from "../../../../components/Button";
 import { useEffect, useState } from "react";
-import { ProposeModal } from "./components/ProposeModal";
 import Cookie from "js-cookie";
 import { NavLink } from "react-router-dom";
 import { getAxiosInstance } from "../../../../services/axios";
+import { ProposeModal } from "../../../../components/ProposalModal";
 
 interface TodaysDetalsProps {
   usersCollection: any[];

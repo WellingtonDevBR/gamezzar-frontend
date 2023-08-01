@@ -103,7 +103,7 @@ export function AddGame() {
         <GameDetails>
           <Image
             src={`${import.meta.env.VITE_S3_URL}/games/${
-              newUser.image || game?.details?.image || game?.image
+              newUser.image || game?.item?.image || game?.image
             }`}
             alt="ac-valhalla"
           />
@@ -144,7 +144,7 @@ export function AddGame() {
         <div>
           <p>Preferences</p>
           {SelectItems({
-            name: "Disposition",
+            name: "Distribution",
             apiName: "disposition",
             arrayOptions: DISPOSITION,
             defaultValue: game?.disposition || game?.inventory?.disposition,

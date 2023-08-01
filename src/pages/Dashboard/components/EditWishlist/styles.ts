@@ -5,8 +5,9 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 1000px;
+  height: 750px;
   border-radius: 5px;
-  margin: 40px auto;
+  margin: 0 auto;
   padding: 20px;
 
   img {
@@ -25,6 +26,11 @@ export const Header = styled.header`
   justify-content: space-between;
   align-items: center;
   font-size: 1.6rem;
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: bold;
+  }
 `;
 
 export const Main = styled.main`
@@ -41,6 +47,10 @@ export const Main = styled.main`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    h1 {
+      font-size: 1.6rem;
+      font-weight: bold;
+    }
   }
 `;
 
@@ -49,6 +59,19 @@ export const Section = styled.section`
   flex-direction: column;
   width: 100%;
   gap: 0.3em;
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  select {
+    display: flex;
+
+    width: 100%;
+    padding: 10px 5px;
+    color: black;
+  }
 `;
 
 export const Select = styled.select`
@@ -57,6 +80,7 @@ export const Select = styled.select`
   border-radius: 5px;
   border: 1px solid #ccc;
   padding: 0 10px;
+  color: black;
 `;
 
 // export const Select = forwardRef((props, ref) => <SelectBase {...props} ref={ref} />);

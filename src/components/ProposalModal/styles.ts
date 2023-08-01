@@ -144,6 +144,7 @@ export const ProposeContainer = styled.section`
     padding: 0 10px;
     border-radius: 2px;
     border: 1px solid #c6c6c6;
+    color: black;
   }
 
   button {
@@ -200,14 +201,14 @@ interface DispositionSpanProps {
 }
 
 const colorMapping = [
-  "red",
-  "lightyellow",
-  "yellow",
-  "lightblue",
-  "blue",
-  "lightgreen",
-  "green",
-]; // colors for scores 0-6
+  "#ff6f6f", // red
+  "#ffce8a", // light yellow
+  "#ffc300", // medium yellow
+  "#9ec6ff", // light blue
+  "#b1b1ff", // blue
+  "#b2efb2", // light green
+  "#8cff8c", // green
+];
 
 export const DispositionSpan = styled.span<DispositionSpanProps>`
   display: flex;

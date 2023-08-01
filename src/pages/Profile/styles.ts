@@ -45,6 +45,7 @@ interface SpanOptionsBoxProps {
   isClickable?: boolean;
   backgroundColor?: string;
   hoverColor?: string;
+  isActive?: boolean;
 }
 
 export const SpanOptionsBox = styled.span<SpanOptionsBoxProps>`
@@ -57,13 +58,14 @@ export const SpanOptionsBox = styled.span<SpanOptionsBoxProps>`
   width: 80px;
   height: 20px;
   border-radius: 5px;
-  background-color: ${(props) => props.backgroundColor || "#3a31c8"};
+  background-color: ${(props) =>
+    props.isActive ? props.theme["--done"] : props.theme["--critical"]};
 
   cursor: pointer;
   transition: 0.2s;
 
   &:hover {
-    background-color: ${(props) => props.hoverColor || "#3a31c8"};
+    filter: brightness(0.8);
   }
 `;
 
@@ -89,7 +91,7 @@ export const MainImageContainer = styled.div`
   display: flex;
 
   img {
-    width: 80px;
+    width: 150px;
     height: 80px;
     border-radius: 50%;
   }
