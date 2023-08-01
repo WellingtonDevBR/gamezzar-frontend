@@ -30,7 +30,9 @@ import { getAxiosInstance } from "../../services/axios";
 export function Dashboard() {
   // State Initialization
   const [user, setUser] = useState<any>();
-  const [wishlist, setWishlist] = useState();
+  const [wishlist, setWishlist] = useState<any[]>([]);
+  const [userGames, setUserGames] = useState<any[]>([]);
+  const [wishlistGames, setWishlistGames] = useState<any[]>([]);
 
   // Navigational Hooks
   const navigate = useNavigate();
@@ -47,18 +49,17 @@ export function Dashboard() {
     return <Navigate to="/login" replace />;
   }
 
+  const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
   // Fetch User's Wishlist
   async function getWishList() {
-    const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     const response = await axios.get("/api/wishlist/");
     setWishlist(response.data);
   }
 
   // Fetch User's Details
   async function getLoginDetails() {
-    const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     const response = await axios.get("/api/user/details");
     setUser(response.data);
   }
@@ -68,6 +69,55 @@ export function Dashboard() {
     getWishList();
     getLoginDetails();
   }, []);
+
+  useEffect(() => {
+    // Fetch UserGame
+    async function getUserGame() {
+      const promises = wishlist.map((game) => {
+        return axios.get(
+          `/api/user-collection/collection/${game.details.game_id}`
+        );
+      });
+
+      try {
+        const responses = await Promise.all(promises);
+        const userGames = responses.map((response) => response.data);
+        setUserGames(userGames);
+      } catch (error) {
+        console.error("Error fetching user games:", error);
+        // Handle the error if necessary
+      }
+    }
+    getUserGame();
+  }, [wishlist]);
+
+  useEffect(() => {
+    const matchedGames = wishlist.map((wishlistGame) => {
+      const userGame = userGames.find(
+        (userGame) => userGame.game_id === wishlistGame.game_id
+      );
+      return {
+        // User Account
+        game_one_game_id: wishlistGame.details.game_id,
+        game_one_title: wishlistGame.details.title,
+        game_one_image: wishlistGame.details.image,
+        user_one_user_id: wishlistGame.user.user_id,
+        user_one_first_name: wishlistGame.user.first_name,
+        user_one_last_name: wishlistGame.user.last_name,
+        user_one_avatar: wishlistGame.user.avatar,
+        // Another Acount User
+        game_two_game_id: userGame.user.wishlist.details.game_id,
+        game_two_title: userGame.user.wishlist.details.title,
+        game_two_image: userGame.user.wishlist.details.image,
+        user_two_user_id: userGame?.user?.user_id,
+        user_two_first_name: userGame?.user?.first_name,
+        user_two_last_name: userGame?.user?.last_name,
+        user_two_avatar: userGame?.user?.avatar,
+        user_two_address: userGame?.user?.address?.address,
+      };
+    });
+    setWishlistGames(matchedGames);
+  }, [userGames]);
 
   return (
     <Container>
@@ -125,7 +175,7 @@ export function Dashboard() {
         {(() => {
           switch (activeTab) {
             case "Opportunities":
-              return <Opportunities />;
+              return <Opportunities wishlist={wishlistGames} />;
             case "Proposals":
               return <Proposal />;
             case "Trades":

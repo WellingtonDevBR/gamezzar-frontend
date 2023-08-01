@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Container,
   InputListContainer,
@@ -9,8 +10,35 @@ import {
   TradesProfileContainer,
   SpanOptionContainer,
 } from "./styles";
+import { MessageBox } from "../Proposals/components/MessageBox";
 
-export function Opportunities() {
+export function Opportunities({ wishlist }) {
+  const [isMessageBoxOpen, setIsMessageBoxOpen] = useState(false);
+  const [currentGame, setCurrentGame] = useState(null);
+
+  const handleMessageClick = (game) => {
+    const proposal = {
+      interested_game_id: game.game_two_game_id,
+      interested_user_id: game.user_two_user_id,
+      owner_game_id: game.game_one_game_id,
+      owner_user_id: game.user_one_user_id,
+      sender: {
+        user_id: game.user_two_user_id, // Replace with the actual receiver ID
+        first_name: game.user_two_first_name,
+        last_name: game.user_two_last_name,
+        avatar: game.user_two_avatar,
+      },
+      receiver: {
+        user_id: game.user_one_user_id, // Replace with the actual sender ID
+        first_name: game.user_one_first_name, // Replace with the actual sender first name
+        last_name: game.user_one_last_name, // Replace with the actual sender last name
+        avatar: game.user_one_avatar,
+      },
+    };
+    setCurrentGame(proposal);
+    setIsMessageBoxOpen(true);
+  };
+
   return (
     <Container>
       <div>
@@ -48,42 +76,63 @@ export function Opportunities() {
           </div>
         </InputBoxContainer>
       </div>
-      <FeedbackContainer>
-        <TradedGamesContainer>
-          <TradesImagesContainer>
-            <img
-              src="https://gamezzar-images.s3.us-east-2.amazonaws.com/games/grand-theft-auto-v.png"
-              alt=""
-            />
-            <img
-              src="https://gamezzar-images.s3.us-east-2.amazonaws.com/games/zelda-breath-of-the-wild.svg"
-              alt=""
-            />
-          </TradesImagesContainer>
-          <TradesProfileContainer>
-            <div>
-              <img
-                src="https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
-                alt=""
+      {wishlist.map((game) => {
+        return (
+          <FeedbackContainer>
+            <TradedGamesContainer>
+              <TradesImagesContainer>
+                <img
+                  src={`${import.meta.env.VITE_S3_URL}/games/${
+                    game.game_one_image
+                  }`}
+                  alt={`${game.game_one_title}`}
+                />
+                <img
+                  src={`${import.meta.env.VITE_S3_URL}/games/${
+                    game.game_two_image
+                  }`}
+                  alt={`${game.game_two_title}`}
+                />
+              </TradesImagesContainer>
+              <TradesProfileContainer>
+                <div>
+                  <img
+                    src={`${import.meta.env.VITE_S3_URL}/avatar/${
+                      game.user_two_avatar
+                    }`}
+                    alt={game.user_two_first_name}
+                  />
+                  <div>
+                    <p>
+                      {game.user_two_first_name} {game.user_two_last_name}{" "}
+                      <span>36</span>
+                    </p>
+                    <span>Sydney / SP</span>
+                  </div>
+                </div>
+                <div>
+                  <SpanOptionContainer
+                    backgroundColor="#6c757d"
+                    onClick={() => handleMessageClick(game)}
+                  >
+                    Message
+                  </SpanOptionContainer>
+                  <SpanOptionContainer backgroundColor="#025b87">
+                    Trade
+                  </SpanOptionContainer>
+                </div>
+              </TradesProfileContainer>
+            </TradedGamesContainer>
+            {isMessageBoxOpen && (
+              <MessageBox
+                onClose={() => setIsMessageBoxOpen(false)}
+                proposal={currentGame}
+                isSender={true} // modify this prop depending on the logic of who is the sender
               />
-              <div>
-                <p>
-                  Wellington Santos <span>36</span>
-                </p>
-                <span>Sydney / SP</span>
-              </div>
-            </div>
-            <div>
-              <SpanOptionContainer backgroundColor="#6c757d">
-                Message
-              </SpanOptionContainer>
-              <SpanOptionContainer backgroundColor="#025b87">
-                Propose
-              </SpanOptionContainer>
-            </div>
-          </TradesProfileContainer>
-        </TradedGamesContainer>
-      </FeedbackContainer>
+            )}
+          </FeedbackContainer>
+        );
+      })}
     </Container>
   );
 }

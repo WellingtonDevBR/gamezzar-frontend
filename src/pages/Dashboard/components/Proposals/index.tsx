@@ -163,7 +163,7 @@ export function Proposal() {
                                 {propose.receiver.first_name}{" "}
                                 {propose.receiver.last_name}
                               </h4>
-                              <p>Endereço</p>
+                              <p>Address</p>
                             </div>
                           </ProposalCardProfile>
                           <ProposalCardButton>
@@ -171,7 +171,7 @@ export function Proposal() {
                               type="button"
                               onClick={() => setIsMessageBoxOpen(true)}
                             >
-                              Enviar Mensagem
+                              Send Message
                             </SendMessageButton>
                             {isMessageBoxOpen && (
                               <MessageBox

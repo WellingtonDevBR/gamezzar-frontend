@@ -342,7 +342,7 @@ export function Game() {
                             <div>
                               <p>{owner.user.user_name}</p>
                               <span>
-                                {getCityAndState(owner.user?.address?.address)}
+                                {owner.user?.address?.address ? getCityAndState(owner.user?.address?.address) : "Address Unset"}
                               </span>
                             </div>
                           </th>
