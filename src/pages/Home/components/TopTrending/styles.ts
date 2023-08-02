@@ -23,6 +23,7 @@ export const TopTrendingCard = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+
   p {
     display: flex;
     align-items: center;

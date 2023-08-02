@@ -6,6 +6,11 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 6rem;
+
+  h1 {
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
 `;
 
 export const CardList = styled.div`

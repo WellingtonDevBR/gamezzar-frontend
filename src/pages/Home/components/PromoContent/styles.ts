@@ -48,7 +48,11 @@ export const ImageContainer = styled.div`
   }
 `;
 
-export const LeftHeaderContainer = styled.div``;
+export const LeftHeaderContainer = styled.div`
+  h1 {
+    font-size: 32px;
+  }
+`;
 
 export const RightHeaderContainer = styled.div``;
 

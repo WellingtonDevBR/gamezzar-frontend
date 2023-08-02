@@ -4,6 +4,10 @@ export const Container = styled.section`
   display: flex;
   flex-direction: column;
   margin-top: 2rem;
+  h1 {
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
 `;
 
 export const TopSellersCard = styled.div`
