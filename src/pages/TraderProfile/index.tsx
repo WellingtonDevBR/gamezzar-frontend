@@ -9,7 +9,7 @@ export function TraderProfile() {
         <Title>Trader Profile</Title>
         <SubTitle>Home / Pages / Author</SubTitle>
       </PageNav>
-      <HeaderBox title="Traders Profile" owner="SalvadorDali" isComingSoon={true} />  
+      {/* <HeaderBox title="Traders Profile" owner="SalvadorDali" />   */}
       <Container>
         {/* Your existing content */}
         <CardHolder className="card-holder">

@@ -82,6 +82,7 @@ export const Input = styled.input`
   border: 1px solid #ccc;
   padding: 0 10px;
   margin-bottom: 20px;
+  color: black;
 `;
 
 export const AvatarContainer = styled.div`
@@ -103,6 +104,7 @@ export const Select = styled.select`
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
+  color: black;
 `;
 
 export const SearchOutcomeList = styled.div`
@@ -114,6 +116,7 @@ export const SearchOutcomeList = styled.div`
   border-radius: 5px;
   padding: 10px;
   max-height: 200px;
+  color: black;
 
   &:hover {
     background-color: green;

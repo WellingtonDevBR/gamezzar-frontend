@@ -1,12 +1,12 @@
 import { Container } from "./styles";
 import { TopTrending } from "./components/TopTrending";
-import { TopSellers } from "./components/TopSeller";
 import { PromoContent } from "./components/PromoContent";
 import { TodaysDeals } from "./components/TodaysPicks";
 import { PopularCollection } from "./components/PopularCollection";
 import { CardOptionList } from "./components/CardOptionList";
 import { getAxiosInstance } from "../../services/axios";
 import { useState, useEffect } from "react";
+import { TopSellers } from "./components/TopSeller";
 
 export function Home() {
   const [games, setGames] = useState<any[]>([]);

@@ -45,14 +45,7 @@ interface UserProps {
       };
     }
   ];
-  feedbacks: [
-    {
-      giverId: string;
-      receiverId: string;
-      gameId: string;
-      rating: number;
-    }
-  ];
+
   preference: {
     shipment_by_courier: boolean;
     shipment_by_postal: boolean;
@@ -85,12 +78,6 @@ export function Profile() {
         },
       },
     ],
-    feedbacks: {
-      giverId: "",
-      receiverId: "",
-      gameId: "",
-      rating: 0,
-    },
     preference: {
       shipment_by_courier: false,
       shipment_by_postal: false,
