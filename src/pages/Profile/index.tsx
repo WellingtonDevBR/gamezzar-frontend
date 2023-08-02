@@ -85,7 +85,7 @@ export function Profile() {
         },
       },
     ],
-    Feedbacks: {
+    feedbacks: {
       giverId: "",
       receiverId: "",
       gameId: "",
