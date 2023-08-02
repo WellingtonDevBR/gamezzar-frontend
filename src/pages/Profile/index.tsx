@@ -45,6 +45,14 @@ interface UserProps {
       };
     }
   ];
+  feedbacks: [
+    {
+      giverId: string;
+      receiverId: string;
+      gameId: string;
+      rating: number;
+    }
+  ];
   preference: {
     shipment_by_courier: boolean;
     shipment_by_postal: boolean;
@@ -77,6 +85,12 @@ export function Profile() {
         },
       },
     ],
+    Feedbacks: {
+      giverId: "",
+      receiverId: "",
+      gameId: "",
+      rating: 0,
+    },
     preference: {
       shipment_by_courier: false,
       shipment_by_postal: false,
@@ -85,7 +99,6 @@ export function Profile() {
     },
   });
   const { username } = useParams();
-
   const formattedDate = convertTimeFormat(userProfile.created_at);
 
   useEffect(() => {
@@ -260,6 +273,6 @@ const NavigationTab: React.FC<NavigationTabProps> = ({
 }) => (
   <NavigationTabContainer isActive={active} onClick={onClick}>
     {name}
-    {quantity && <span>{" "}({quantity})</span>}
+    {quantity && <span> ({quantity})</span>}
   </NavigationTabContainer>
 );

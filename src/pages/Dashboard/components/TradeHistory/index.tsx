@@ -8,14 +8,40 @@ import {
   Thead,
   Tr,
   Tooltip,
-  Badge
+  Badge,
+  Button,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  FormControl,
+  FormLabel,
+  Textarea,
+  RadioGroup,
+  Stack,
+  Radio,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { InactiveTradesImageContainer } from "./styles";
 import { convertTimeFormat } from "../../../../helper/convertTimeFormat";
+import { getAxiosInstance } from "../../../../services/axios";
+import Cookies from "js-cookie";
 
 export function TradeHistory({ transactions }: any) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [activeTab, setActiveTab] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [feedback, setFeedback] = useState("");
+  const [feedbackType, setFeedbackType] = useState("");
+  const [receiverId, setReceiverId] = useState("");
+  const toast = useToast();
+  const token = Cookies.get("token");
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "cancelled":
@@ -27,6 +53,41 @@ export function TradeHistory({ transactions }: any) {
       default:
         return <Badge>{status}</Badge>;
     }
+  };
+
+  const handleOpenFeedback = (transactionId, receiverId) => {
+    setSelectedTransaction(transactionId);
+    setReceiverId(receiverId);
+    onOpen();
+  };
+
+  const handleFeedbackSubmit = async () => {
+    const feedbackData = {
+      transaction_id: selectedTransaction,
+      comment: feedback,
+      score: feedbackType,
+      receiver_id: receiverId,
+    };
+
+    const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    const response = await axios.post("/api/feedback", feedbackData);
+
+    if (response.status === 201) {
+      onClose();
+      toast({
+        title: "Feedback.",
+        description: "Your Feedback has been sent successfully",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+
+    setFeedback("");
+    setFeedbackType("");
+    setSelectedTransaction(null);
+    onClose();
   };
 
   return (
@@ -51,6 +112,7 @@ export function TradeHistory({ transactions }: any) {
               <Th>Bidding Item</Th>
               <Th>Status</Th>
               <Th>Last Update</Th>
+              <Th>Actions</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -95,6 +157,22 @@ export function TradeHistory({ transactions }: any) {
                 </Td>
                 <Td>{getStatusBadge(trade.status)}</Td>
                 <Td>{convertTimeFormat(trade.created_at)}</Td>
+                <Td>
+                  <Td>
+                    <Button
+                      size="sm"
+                      colorScheme="purple"
+                      onClick={() =>
+                        handleOpenFeedback(
+                          trade.transaction_id,
+                          trade.sender.user_id
+                        )
+                      }
+                    >
+                      Give Feedback
+                    </Button>
+                  </Td>
+                </Td>
               </Tr>
             ))}
           </Tbody>
@@ -108,6 +186,40 @@ export function TradeHistory({ transactions }: any) {
           <span>No feedbacks available</span>
         </InactiveTradesImageContainer>
       )}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent bg="blackAlpha.600">
+          <ModalHeader>Give Feedback</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl>
+              <FormLabel>Feedback Type</FormLabel>
+              <RadioGroup onChange={setFeedbackType} value={feedbackType}>
+                <Stack direction="row">
+                  <Radio value="positive">😊 Positive</Radio>
+                  <Radio value="neutral">😐 Neutral</Radio>
+                  <Radio value="negative">😟 Negative</Radio>
+                </Stack>
+              </RadioGroup>
+              <FormLabel mt={3}>Feedback</FormLabel>
+              <Textarea
+                placeholder="Write your feedback here"
+                onChange={(e) => setFeedback(e.target.value)}
+                value={feedback}
+              />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={handleFeedbackSubmit}>
+              Submit
+            </Button>
+            <Button colorScheme="red" variant="solid" onClick={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }

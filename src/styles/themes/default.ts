@@ -14,6 +14,10 @@ export const defaultTheme = {
 
 export const theme = extendTheme({
   colors: {
+    purple: {
+      50: "#F5F3FF",
+      100: "#ECE9FE",
+    },
     background: "#14141F",
     white: "#FFFFFF",
     primary: "#5142FC",

@@ -15,12 +15,15 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { getAxiosInstance } from "../../../../../../services/axios";
+import Cookies from 'js-cookie';
 
 // MessageBox Component
 export function CancelBox({ isOpen, onClose, proposal }) {
   const toast = useToast();
+  const token = Cookies.get('token');
 
   const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
   const cancelProposal = async () => {
     // Replace with your actual endpoint and request data
@@ -28,6 +31,7 @@ export function CancelBox({ isOpen, onClose, proposal }) {
       const response = await axios.delete(
         `/api/propose/${proposal.propose_id}`
       );
+      console.log(response)
       if (response.status === 200) {
         await axios.post("/api/transaction", {
           sender_id: proposal.sender.user_id,
