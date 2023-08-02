@@ -96,16 +96,14 @@ export function ProposeModal({
     setSelectedGameId(event.target.value);
   };
 
-  console.log('test', loggedUserCollection)
-
   const handleProposeClick = async () => {
     const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     const response = await axios.post("/api/propose/", {
-      interested_game_id: selectedGameId,
-      owner_game_id: game.game_id,
-      owner_user_id: game.user.user_id,
-      status: 3,
+      bidder_game_id: selectedGameId,
+      receiver_game_id: game.game_id,
+      receiver_id: game.user.user_id,
+      status: "pending",
     });
     if (response.status == 201) {
       navigate("/dashboard");

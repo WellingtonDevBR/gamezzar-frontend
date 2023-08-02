@@ -189,7 +189,7 @@ export function Game() {
                 <NavLink
                   style={{ textDecoration: "none" }}
                   to={{
-                    pathname: `/game/add/${id}`,
+                    pathname: `/user/wishlist/edit/${id}`,
                   }}
                   state={{ from: gameOwners }}
                 >

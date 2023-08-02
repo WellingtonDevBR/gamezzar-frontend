@@ -189,3 +189,11 @@ export const CardType = styled.span`
   padding: 0.25rem 0.5rem;
   text-align: center;
 `;
+
+export const CardTitle = styled.h2`
+  font-size: 0.875rem;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;

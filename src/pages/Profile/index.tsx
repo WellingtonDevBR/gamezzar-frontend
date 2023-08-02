@@ -1,6 +1,7 @@
 import { CellSignalFull, Check, Envelope, Info, XCircle } from "phosphor-react";
 import React, { useState, ReactNode, useEffect } from "react";
 import { Collections } from "./components/Collections";
+import { Spinner, Center } from "@chakra-ui/react";
 
 import {
   Container,
@@ -23,6 +24,8 @@ import { Feedback } from "./components/Feedbacks";
 import { useParams } from "react-router-dom";
 import { getAxiosInstance } from "../../services/axios";
 import { convertTimeFormat } from "../../helper/convertTimeFormat";
+import { Wishlist } from "./components/Wishlist";
+import Cookies from "js-cookie";
 
 interface UserProps {
   first_name: string;
@@ -57,6 +60,8 @@ interface UserProps {
 export function Profile() {
   const [activeTab, setActiveTab] = useState("Feedbacks");
   const [loading, setLoading] = useState(false);
+  const [userFeedbacks, setUserFeedbacks] = useState<any[]>([]);
+  const [userWishlists, setUserWishlists] = useState<any[]>([]);
   const [userProfile, setUserProfile] = useState<UserProps>({
     user_name: "",
     created_at: "",
@@ -85,21 +90,53 @@ export function Profile() {
       status_message: "",
     },
   });
+  const token = Cookies.get("token");
   const { username } = useParams();
   const formattedDate = convertTimeFormat(userProfile.created_at);
+  const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
 
   useEffect(() => {
-    const fetchData = async () => {
+    setLoading(true); // add this line
+    const fetchUser = async () => {
       try {
-        const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
         const result = await axios.get(`/api/user/${username}`);
         setUserProfile(result.data);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
     };
-    fetchData();
+
+    const fetchUserFeedback = async () => {
+      try {
+        const result = await axios.get(`/api/user/${username}/feedbacks`);
+        setUserFeedbacks(result.data);
+        setLoading(false); // add this line
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    const fetchUserWishlist = async () => {
+      try {
+        const result = await axios.get(`/api/user/${username}/wishlist`);
+        console.log(result.data);
+        setUserWishlists(result.data);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+    fetchUserFeedback();
+    fetchUser();
+    fetchUserWishlist();
   }, []);
+
+  if (loading) {
+    return (
+      <Center h="100vh">
+        <Spinner size="xl" />
+      </Center>
+    );
+  }
 
   return (
     <Container>
@@ -160,7 +197,7 @@ export function Profile() {
               ) : (
                 <XCircle size={12} />
               )}
-              Portador
+              Courier
             </SpanOptionsBox>
           </SpanOptionsContainer>
           <ProfileMenuContainer>
@@ -204,23 +241,24 @@ export function Profile() {
         <MainNavigationContainer>
           <TabsContainer>
             <NavigationTab
-              name="Feedbacks"
+              name={`Feedbacks (${userFeedbacks?.length})`}
               onClick={() => setActiveTab("Feedbacks")}
               active={activeTab === "Feedbacks"}
             />
+            {token && (
+              <NavigationTab
+                name="Opportunities"
+                onClick={() => setActiveTab("Opportunities")}
+                active={activeTab === "Opportunities"}
+              />
+            )}
             <NavigationTab
-              name="Opportunities"
-              onClick={() => setActiveTab("Opportunities")}
-              active={activeTab === "Opportunities"}
-            />
-            <NavigationTab
-              name="Collections"
+              name={`Collections (${userProfile.collections.length})`}
               onClick={() => setActiveTab("Collections")}
               active={activeTab === "Collections"}
-              quantity={userProfile.collections.length}
             />
             <NavigationTab
-              name="Wishlist"
+              name={`Wishlist (${userWishlists.length})`}
               onClick={() => setActiveTab("Wishlist")}
               active={activeTab === "Wishlist"}
             />
@@ -228,13 +266,13 @@ export function Profile() {
           {(() => {
             switch (activeTab) {
               case "Feedbacks":
-                return <Feedback />;
+                return <Feedback feedbacks={userFeedbacks} />;
               case "Opportunities":
                 return <div>This is the Oportunidades content.</div>;
               case "Collections":
                 return <Collections games={userProfile.collections} />;
               case "Wishlist":
-                return <div>This is the Desejos content.</div>;
+                return <Wishlist wishlists={userWishlists} />;
               default:
                 return null;
             }

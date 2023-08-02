@@ -19,6 +19,7 @@ export function Opportunities({ wishlist }) {
   const [currentGame, setCurrentGame] = useState(null);
 
   const handleMessageClick = (game) => {
+    console.log(game)
     const proposal = {
       interested_game_id: game.game_two_game_id,
       interested_user_id: game.user_two_user_id,
@@ -84,9 +85,9 @@ export function Opportunities({ wishlist }) {
           </div>
         </InputBoxContainer>
       </div>
-      {wishlist.map((game) => {
+      {wishlist.map((game, index) => {
         return (
-          <FeedbackContainer>
+          <FeedbackContainer key={index}>
             <TradedGamesContainer>
               <TradesImagesContainer>
                 <img

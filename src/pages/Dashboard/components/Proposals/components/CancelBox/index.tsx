@@ -13,30 +13,38 @@ import {
   useToast,
   Tooltip,
   Divider,
+  Spinner,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { getAxiosInstance } from "../../../../../../services/axios";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 // MessageBox Component
-export function CancelBox({ isOpen, onClose, proposal }) {
+export function CancelBox({ isOpen, onClose, proposal, isBidder }) {
   const toast = useToast();
-  const token = Cookies.get('token');
-
+  const token = Cookies.get("token");
   const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  const navigate = useNavigate();
+
+  const {
+    isOpen: isSubmitting,
+    onOpen: startSubmitting,
+    onClose: endSubmitting,
+  } = useDisclosure();
 
   const cancelProposal = async () => {
-    // Replace with your actual endpoint and request data
+    startSubmitting();
     try {
       const response = await axios.delete(
         `/api/propose/${proposal.propose_id}`
       );
-      console.log(response)
       if (response.status === 200) {
         await axios.post("/api/transaction", {
-          sender_id: proposal.sender.user_id,
+          bidder_id: proposal.bidder.user_id,
           receiver_id: proposal.receiver.user_id,
-          sender_game_id: proposal.sender_game.game_id,
+          bidder_game_id: proposal.bidder_game.game_id,
           receiver_game_id: proposal.receiver_game.game_id,
           status: "cancelled",
         });
@@ -47,6 +55,9 @@ export function CancelBox({ isOpen, onClose, proposal }) {
           duration: 5000,
           isClosable: true,
         });
+        navigate(0);
+        navigate("/dashboard", { state: { tab: "Proposals" } });
+        endSubmitting();
         onClose();
       }
     } catch (error) {
@@ -58,13 +69,14 @@ export function CancelBox({ isOpen, onClose, proposal }) {
         isClosable: true,
       });
     }
+    endSubmitting();
   };
 
   return (
     <Center>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent maxW="50%" bg="blackAlpha.600">
+        <ModalContent maxW="60%" bg="blackAlpha.600">
           <ModalHeader color="white" borderBottom="">
             Cancel Proposal
             <Divider />
@@ -75,7 +87,9 @@ export function CancelBox({ isOpen, onClose, proposal }) {
                 <Image
                   boxSize="170px"
                   src={`${import.meta.env.VITE_S3_URL}/games/${
-                    proposal.receiver_game.image
+                    isBidder
+                      ? proposal.bidder_game.image
+                      : proposal.receiver_game.image
                   }`}
                   alt={proposal.receiver_game.title}
                   mr={3}
@@ -85,19 +99,26 @@ export function CancelBox({ isOpen, onClose, proposal }) {
                 <Image
                   boxSize="170px"
                   src={`${import.meta.env.VITE_S3_URL}/games/${
-                    proposal.sender_game.image
+                    isBidder
+                      ? proposal.receiver_game.image
+                      : proposal.bidder_game.image
                   }`}
-                  alt={proposal.sender_game.title}
                 />
               </Tooltip>
               <Text ml={4} color="white" fontSize="2xl">
                 Your proposal cancelation notifies{" "}
                 <Text as="span" fontWeight="bold" color="red">
-                  {`${proposal.sender.first_name
-                    .toString()
-                    .toUpperCase()} ${proposal.sender.last_name
-                    .toString()
-                    .toUpperCase()}`}
+                  {isBidder
+                    ? `${proposal.receiver.first_name
+                        .toString()
+                        .toUpperCase()} ${proposal.receiver.last_name
+                        .toString()
+                        .toUpperCase()}`
+                    : `${proposal.bidder.first_name
+                        .toString()
+                        .toUpperCase()} ${proposal.bidder.last_name
+                        .toString()
+                        .toUpperCase()}`}
                 </Text>{" "}
                 Are you sure you want to cancel this proposal?
               </Text>
@@ -107,7 +128,13 @@ export function CancelBox({ isOpen, onClose, proposal }) {
             <Button colorScheme="red" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button colorScheme="blue" onClick={cancelProposal}>
+            <Button
+              colorScheme="blue"
+              onClick={cancelProposal}
+              isLoading={isSubmitting}
+              spinner={<Spinner color="#c6c6c6" />}
+              disabled={isSubmitting}
+            >
               Confirm
             </Button>
           </ModalFooter>

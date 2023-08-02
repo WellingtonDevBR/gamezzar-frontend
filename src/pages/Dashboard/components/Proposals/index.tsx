@@ -18,37 +18,22 @@ import { MessageBox } from "./components/MessageBox";
 import LoadingOverlay from "react-loading-overlay";
 import { CancelBox } from "./components/CancelBox";
 
-export function Proposal() {
+export function Proposal({ proposals, userId }) {
   const [activeTab, setActiveTab] = useState("received");
-  const [userId, setUserId] = useState("");
-  const [proposals, setProposals] = useState<any[]>([]);
   const [isMessageBoxOpen, setIsMessageBoxOpen] = useState(false);
   const [isCancelBoxOpen, setIsCancelBoxOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const token = Cookies.get("token");
 
   // filter proposals received by the current user
-  const receivedProposals = proposals.filter(
-    (propose) => propose.owner_user_id === userId
+  const sentProposals = proposals.filter(
+    (propose) => propose.bidder_id === userId
   );
 
   // filter proposals sent by the current user
-  const sentProposals = proposals.filter(
-    (propose) => propose.interested_user_id === userId
+  const receivedProposals = proposals.filter(
+    (propose) => propose.receiver_id === userId
   );
-
-  useEffect(() => {
-    setIsLoading(true);
-    async function getProposals() {
-      const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      const response = await axios.get("/api/propose/all");
-      setUserId(response.data.user_id);
-      setProposals(response.data.proposals);
-      setIsLoading(false);
-    }
-    getProposals();
-  }, []);
 
   const handleCancelBox = (proposalId) => {
     // Toggle the CancelBox state for the specific proposal
@@ -92,22 +77,22 @@ export function Proposal() {
                         />
                         <img
                           src={`${import.meta.env.VITE_S3_URL}/games/${
-                            propose.sender_game.image
+                            propose.bidder_game.image
                           }`}
-                          alt="Project Image"
+                          alt={propose.bidder_game.title}
                         />
                         <ProposalCardRightSection>
                           <ProposalCardProfile>
                             <img
                               src={`${import.meta.env.VITE_S3_URL}/avatar/${
-                                propose.sender.avatar
+                                propose.bidder.avatar
                               }`}
-                              alt="Project Image"
+                              alt="Profile Image"
                             />
                             <div>
                               <h4>
-                                {propose.sender.first_name}{" "}
-                                {propose.sender.last_name}
+                                {propose.bidder.first_name}{" "}
+                                {propose.bidder.last_name}
                               </h4>
                               <p>Game Description</p>
                             </div>
@@ -124,6 +109,7 @@ export function Proposal() {
                                 onClose={() => setIsMessageBoxOpen(false)}
                                 proposal={propose}
                                 isSender={true}
+                                isOpen={isMessageBoxOpen}
                               />
                             )}
                             <CancelButton
@@ -137,6 +123,7 @@ export function Proposal() {
                             {isCancelBoxOpen[propose.propose_id] && (
                               <CancelBox
                                 isOpen={isCancelBoxOpen[propose.propose_id]}
+                                isBidder={false}
                                 onClose={() =>
                                   handleCancelBox(propose.propose_id)
                                 }
@@ -166,15 +153,15 @@ export function Proposal() {
                       <ProposalCardContainer key={propose.propose_id}>
                         <img
                           src={`${import.meta.env.VITE_S3_URL}/games/${
-                            propose.sender_game.image
+                            propose.bidder_game.image
                           }`}
-                          alt="Project Image"
+                          alt={propose.bidder_game.title}
                         />
                         <img
                           src={`${import.meta.env.VITE_S3_URL}/games/${
                             propose.receiver_game.image
                           }`}
-                          alt="Project Image"
+                          alt={propose.receiver_game.title}
                         />
                         <ProposalCardRightSection>
                           <ProposalCardProfile>
@@ -197,16 +184,34 @@ export function Proposal() {
                               type="button"
                               onClick={() => setIsMessageBoxOpen(true)}
                             >
-                              Send Message
+                              Message
                             </SendMessageButton>
                             {isMessageBoxOpen && (
                               <MessageBox
                                 onClose={() => setIsMessageBoxOpen(false)}
                                 proposal={propose}
                                 isSender={false}
+                                isOpen={isMessageBoxOpen}
                               />
                             )}
-                            <CancelButton type="button">Cancelar</CancelButton>
+                            <CancelButton
+                              type="button"
+                              onClick={() =>
+                                handleCancelBox(propose.propose_id)
+                              }
+                            >
+                              Cancel
+                            </CancelButton>
+                            {isCancelBoxOpen[propose.propose_id] && (
+                              <CancelBox
+                                isOpen={isCancelBoxOpen[propose.propose_id]}
+                                isBidder={true}
+                                onClose={() =>
+                                  handleCancelBox(propose.propose_id)
+                                }
+                                proposal={propose}
+                              />
+                            )}
                           </ProposalCardButton>
                         </ProposalCardRightSection>
                       </ProposalCardContainer>

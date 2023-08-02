@@ -116,7 +116,7 @@ export const SearchOutcomeList = styled.div`
   border-radius: 5px;
   padding: 10px;
   max-height: 200px;
-  color: black;
+  color: white;
 
   &:hover {
     background-color: green;

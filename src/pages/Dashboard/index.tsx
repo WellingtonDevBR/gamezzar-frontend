@@ -34,6 +34,8 @@ export function Dashboard() {
   const [userGames, setUserGames] = useState<any[]>([]);
   const [wishlistGames, setWishlistGames] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<any[]>([]);
+  const [proposals, setProposals] = useState<any[]>([]);
+  const [userId, setUserId] = useState("");
 
   // Navigational Hooks
   const navigate = useNavigate();
@@ -67,7 +69,16 @@ export function Dashboard() {
 
   async function getTransactions() {
     const response = await axios.get("/api/transaction/");
+    console.log(response);
     setTransactions(response.data);
+  }
+
+  async function getProposals() {
+    const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    const response = await axios.get("/api/propose/all");
+    setUserId(response.data.user_id);
+    setProposals(response.data.proposals);
   }
 
   // Effect to load data when component mounts
@@ -75,6 +86,7 @@ export function Dashboard() {
     getWishList();
     getLoginDetails();
     getTransactions();
+    getProposals();
   }, []);
 
   useEffect(() => {
@@ -107,7 +119,8 @@ export function Dashboard() {
             userGame.user.user_id !== wishlistGame.user.user_id
         );
 
-        if (!userGame) {
+        // bidder and bidden has the same wish and collection matching
+        if (!userGame?.user?.wishlist?.details?.image) {
           return null;
         }
 
@@ -193,9 +206,9 @@ export function Dashboard() {
             case "Opportunities":
               return <Opportunities wishlist={wishlistGames} />;
             case "Proposals":
-              return <Proposal />;
+              return <Proposal proposals={proposals} userId={userId} />;
             case "Trades":
-              return <Trades />;
+              return <Trades proposals={proposals} />;
             case "Wishlist":
               return <Wishlist wishlist={wishlist} />;
             case "Collection":

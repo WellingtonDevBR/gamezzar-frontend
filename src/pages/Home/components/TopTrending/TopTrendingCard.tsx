@@ -1,10 +1,10 @@
 import { NavLink } from "react-router-dom";
-import { CardTitle } from "../TodaysPicks/styles";
 import {
   TopTrendingCardContent,
   TopTrendingCardImage,
   TopTrendingCard,
   TopTrendingCardPhoto,
+  CardTitle,
 } from "./styles";
 import { ICardData } from "./utils";
 

@@ -68,7 +68,6 @@ export const SignalImage = styled.img<SignalImageProps>`
   width: 50px;
   height: 50px;
   filter: ${(props) => {
-    console.log("props: ", props.code);
     switch (props.code) {
       case -1:
       case 0:

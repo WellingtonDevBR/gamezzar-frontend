@@ -29,7 +29,6 @@ export function Collection() {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       try {
         const response = await axios.get("/api/user-collection/all");
-        console.log('response', response)
         setCollection(response.data);
       } catch (error) {
         console.error("Error fetching collection:", error);
@@ -43,7 +42,6 @@ export function Collection() {
   if (isLoading) {
     return <div>Loading...</div>; // You can replace this with a spinner component if you prefer
   }
-  console.log(collection)
   return (
     <Container>
       <h1>Collection</h1>

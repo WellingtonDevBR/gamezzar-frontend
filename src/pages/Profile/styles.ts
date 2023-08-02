@@ -1,14 +1,18 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  width: 1000px;
-  height: 100%;
-  margin: 0 auto;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;  
+  min-height: 100vh;  
+  justify-content: space-between;
+  width: 1000px;
+  margin: 0 auto;
 `;
+
+export const Footer = styled.footer`
+  // your footer styles here
+`;
+
 
 export const HeaderContainer = styled.header`
   display: flex;
@@ -76,6 +80,7 @@ export const ProfileMenuContainer = styled.div`
 
 export const MainContainer = styled.main`
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 10px;
   width: 100%;

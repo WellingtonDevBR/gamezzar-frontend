@@ -122,16 +122,16 @@ export function TradeHistory({ transactions }: any) {
                 <Td>
                   <Box display="flex" alignItems="center">
                     <Tooltip
-                      label={trade.sender_game.title}
+                      label={trade.bidder_game.title}
                       aria-label="A tooltip"
                     >
                       <Image
                         boxSize="80px"
                         objectFit="cover"
                         src={`${import.meta.env.VITE_S3_URL}/games/${
-                          trade.sender_game.image
+                          trade.bidder_game.image
                         }`}
-                        alt={trade.sender_game.title}
+                        alt={trade.bidder_game.title}
                         mr={3}
                       />
                     </Tooltip>
@@ -165,7 +165,7 @@ export function TradeHistory({ transactions }: any) {
                       onClick={() =>
                         handleOpenFeedback(
                           trade.transaction_id,
-                          trade.sender.user_id
+                          trade.bidder.user_id
                         )
                       }
                     >

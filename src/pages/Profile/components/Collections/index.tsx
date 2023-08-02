@@ -1,11 +1,12 @@
+import { Box, Button, Tooltip, Flex, useDisclosure } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { Container } from "./styles";
-import { GameCard } from "./components/GameCard/GameCard";
 import Cookies from "js-cookie";
 import { getAxiosInstance } from "../../../../services/axios";
 import { LoginRequiredModal } from "./components/LoginRequiredModal";
 import { useNavigate } from "react-router-dom";
 import { ProposeModal } from "../../../../components/ProposalModal";
+import { Image } from "@chakra-ui/react";
+import { GameCard } from "./components/GameCard/GameCard";
 
 export function Collections({ games }) {
   const [selectedGame, setSelectedGame] = useState(null);
@@ -58,7 +59,7 @@ export function Collections({ games }) {
   }
 
   return (
-    <Container>
+    <Flex wrap="wrap" justifyContent="flex-start">
       {games.map((game) => (
         <GameCard
           key={game.game_id}
@@ -79,6 +80,6 @@ export function Collections({ games }) {
         onRequestClose={() => setLoginRequiredModalOpen(false)}
         onLoginRedirect={handleLoginRedirect}
       />
-    </Container>
+    </Flex>
   );
 }
