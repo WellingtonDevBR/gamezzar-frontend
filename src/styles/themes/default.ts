@@ -23,6 +23,9 @@ export const theme = extendTheme({
     surface: "#FFFFFF",
     secondary: "#EBEBEB",
   },
+  shadows: {
+    purple: '0 0 0 3px rgba(159, 122, 234, 0.6)'
+  },
   fonts: {
     body: "'Urbanist', sans-serif",
     heading: "'Urbanist', sans-serif",

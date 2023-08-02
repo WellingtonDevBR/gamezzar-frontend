@@ -29,6 +29,7 @@ export function Collection() {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       try {
         const response = await axios.get("/api/user-collection/all");
+        console.log('response', response)
         setCollection(response.data);
       } catch (error) {
         console.error("Error fetching collection:", error);
@@ -50,8 +51,8 @@ export function Collection() {
         <TableHeaderContainer>
           <tr>
             <th style={{ textAlign: "left" }}>Game</th>
-            <th style={{ textAlign: "left" }}>Satisfaction</th>
-            <th style={{ textAlign: "left" }}>Disposition</th>
+            <th style={{ textAlign: "left" }}>Game Review</th>
+            <th style={{ textAlign: "left" }}>Distribution</th>
           </tr>
         </TableHeaderContainer>
         <TableBodyContainer>

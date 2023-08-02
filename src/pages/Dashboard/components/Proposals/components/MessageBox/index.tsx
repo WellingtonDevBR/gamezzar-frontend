@@ -44,7 +44,7 @@ export function MessageBox({ onClose, proposal, isSender }: MessageBoxProps) {
   const handleSendMessage = async () => {
     const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    console.log('box', proposal)
+    console.log("box", proposal);
     const response = await axios.post("/api/message/", {
       ...proposal,
       message,
@@ -56,8 +56,6 @@ export function MessageBox({ onClose, proposal, isSender }: MessageBoxProps) {
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(event.target.value);
   };
-
-  console.log('proposal', proposal)
 
   return (
     <>

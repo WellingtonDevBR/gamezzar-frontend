@@ -16,12 +16,14 @@ import Cookies from "js-cookie";
 import { getAxiosInstance } from "../../../../services/axios";
 import { MessageBox } from "./components/MessageBox";
 import LoadingOverlay from "react-loading-overlay";
+import { CancelBox } from "./components/CancelBox";
 
 export function Proposal() {
   const [activeTab, setActiveTab] = useState("received");
   const [userId, setUserId] = useState("");
   const [proposals, setProposals] = useState<any[]>([]);
   const [isMessageBoxOpen, setIsMessageBoxOpen] = useState(false);
+  const [isCancelBoxOpen, setIsCancelBoxOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const token = Cookies.get("token");
 
@@ -47,6 +49,14 @@ export function Proposal() {
     }
     getProposals();
   }, []);
+
+  const handleCancelBox = (proposalId) => {
+    // Toggle the CancelBox state for the specific proposal
+    setIsCancelBoxOpen((prevState: any) => ({
+      ...prevState,
+      [proposalId]: !prevState[proposalId],
+    }));
+  };
 
   return (
     <LoadingOverlay active={isLoading} spinner text="Loading...">
@@ -116,7 +126,23 @@ export function Proposal() {
                                 isSender={true}
                               />
                             )}
-                            <CancelButton type="button">Cancelar</CancelButton>
+                            <CancelButton
+                              type="button"
+                              onClick={() =>
+                                handleCancelBox(propose.propose_id)
+                              }
+                            >
+                              Cancelar
+                            </CancelButton>
+                            {isCancelBoxOpen[propose.propose_id] && (
+                              <CancelBox
+                                isOpen={isCancelBoxOpen[propose.propose_id]}
+                                onClose={() =>
+                                  handleCancelBox(propose.propose_id)
+                                }
+                                proposal={propose}
+                              />
+                            )}
                           </ProposalCardButton>
                         </ProposalCardRightSection>
                       </ProposalCardContainer>

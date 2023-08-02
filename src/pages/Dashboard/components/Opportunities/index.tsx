@@ -11,8 +11,10 @@ import {
   SpanOptionContainer,
 } from "./styles";
 import { MessageBox } from "../Proposals/components/MessageBox";
+import { TradeBox } from "./TradeBox";
 
 export function Opportunities({ wishlist }) {
+  const [isTradeBoxOpen, setIsTradeBoxOpen] = useState(false);
   const [isMessageBoxOpen, setIsMessageBoxOpen] = useState(false);
   const [currentGame, setCurrentGame] = useState(null);
 
@@ -37,6 +39,12 @@ export function Opportunities({ wishlist }) {
     };
     setCurrentGame(proposal);
     setIsMessageBoxOpen(true);
+  };
+
+  const handleTradeClick = (game) => {
+    // your logic for handling the trade click event
+    setCurrentGame(game);
+    setIsTradeBoxOpen(true);
   };
 
   return (
@@ -117,9 +125,19 @@ export function Opportunities({ wishlist }) {
                   >
                     Message
                   </SpanOptionContainer>
-                  <SpanOptionContainer backgroundColor="#025b87">
+                  <SpanOptionContainer
+                    backgroundColor="#5142FC"
+                    onClick={() => handleTradeClick(game)}
+                  >
                     Trade
                   </SpanOptionContainer>
+                  {isTradeBoxOpen && (
+                    <TradeBox
+                      isOpen={isTradeBoxOpen}
+                      onClose={() => setIsTradeBoxOpen(false)}
+                      proposal={currentGame}
+                    />
+                  )}
                 </div>
               </TradesProfileContainer>
             </TradedGamesContainer>
