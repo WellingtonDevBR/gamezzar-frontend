@@ -19,6 +19,7 @@ import { TraderProfile } from "./pages/TraderProfile";
 import { Activity } from "./pages/Activity";
 
 
+
 export function Router() {
   return (
     <Routes>
@@ -39,6 +40,7 @@ export function Router() {
         <Route path="/logout" element={<Logout />} />
         <Route path="traderprofile" element={<TraderProfile />} />
         <Route path="/activity" element={<Activity />} />
+        
       </Route>
     </Routes>
   );
