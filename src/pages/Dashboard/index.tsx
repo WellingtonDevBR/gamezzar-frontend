@@ -26,6 +26,7 @@ import { Wishlist } from "./components/Wishlist";
 
 // Services
 import { getAxiosInstance } from "../../services/axios";
+import { useTabContext } from "../../context/DashboardContext";
 
 export function Dashboard() {
   // State Initialization
@@ -43,13 +44,16 @@ export function Dashboard() {
 
   // Derived State
   const token = Cookies.get("token");
-  const [activeTab, setActiveTab] = useState(
-    location.state?.tab || "Opportunities"
-  );
+  // const [activeTab, setActiveTab] = useState(
+  //   location.state?.tab || "Opportunities"
+  // );
 
+  const { activeTab, setActiveTab } = useTabContext();
 
-
-  
+  // Optionally set the initial activeTab on component mount
+  useEffect(() => {
+    setActiveTab(location.state?.tab || "Opportunities");
+  }, []);
 
   // Check user's login status
   if (!token) {

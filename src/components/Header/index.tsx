@@ -23,6 +23,7 @@ import { getAxiosInstance } from "../../services/axios";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { HStack } from "@chakra-ui/react";
+import { useTabContext } from "../../context/DashboardContext";
 
 const NAV_ITEMS = [
   { title: "Home", path: "/" },
@@ -49,7 +50,7 @@ export function Header() {
   const [inputWidth, setInputWidth] = useState("0px");
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
-
+  const { setActiveTab } = useTabContext();
   const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
 
   const fetchProducts = async (search: string) => {
@@ -244,6 +245,7 @@ export function Header() {
               dir="rtl"
             >
               <MenuItem
+                onClick={() => setActiveTab("Opportunities")}
                 as={RouterLink}
                 to="/dashboard"
                 bg="#5142FC"
@@ -252,16 +254,9 @@ export function Header() {
               >
                 Dashboard
               </MenuItem>
+
               <MenuItem
-                as={RouterLink}
-                to="/chat"
-                bg="#5142FC"
-                _hover={{ bg: "#3f32ca" }}
-                _active={{ bg: "#31279e" }}
-              >
-                Go to Chat
-              </MenuItem>
-              <MenuItem
+                onClick={() => setActiveTab("Profile")}
                 as={RouterLink}
                 to={"/dashboard"}
                 state={{ tab: "Profile" }}
@@ -272,14 +267,25 @@ export function Header() {
                 Go to Profile
               </MenuItem>
               <MenuItem
+                onClick={() => setActiveTab("Preferences")}
                 as={RouterLink}
                 to={"/dashboard"}
                 state={{ tab: "Preferences" }}
+                replace
                 bg="#5142FC"
                 _hover={{ bg: "#3f32ca" }}
                 _active={{ bg: "#31279e" }}
               >
                 Settings
+              </MenuItem>
+              <MenuItem
+                as={RouterLink}
+                to="/chat"
+                bg="#5142FC"
+                _hover={{ bg: "#3f32ca" }}
+                _active={{ bg: "#31279e" }}
+              >
+                Go to Chat
               </MenuItem>
               <MenuItem
                 as={RouterLink}
