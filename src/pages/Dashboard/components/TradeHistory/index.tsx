@@ -32,7 +32,8 @@ import { convertTimeFormat } from "../../../../helper/convertTimeFormat";
 import { getAxiosInstance } from "../../../../services/axios";
 import Cookies from "js-cookie";
 
-export function TradeHistory({ transactions }: any) {
+export function TradeHistory({ transactions, userId }: any) {
+  console.log("transactions", transactions);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [activeTab, setActiveTab] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
@@ -90,6 +91,24 @@ export function TradeHistory({ transactions }: any) {
     onClose();
   };
 
+  const uniqueTransactions = transactions.reduce((unique, current) => {
+    const isDuplicate = unique.some(
+      (item) => item.transaction_id === current.transaction_id
+    );
+
+    if (!isDuplicate) {
+      unique.push(current);
+    }
+
+    return unique;
+  }, []);
+
+  // Then, keep only the transactions that involve the user
+  // And transactions where both users haven't given feedback
+  const filteredTransactions = uniqueTransactions.filter((item) => {
+    return item.bidder.user_id === userId || item.receiver.user_id === userId;
+  });
+
   return (
     <Box
       mt={5}
@@ -116,7 +135,7 @@ export function TradeHistory({ transactions }: any) {
             </Tr>
           </Thead>
           <Tbody>
-            {transactions.map((trade) => (
+            {filteredTransactions.map((trade) => (
               <Tr key={trade.transaction_id}>
                 <Td>{trade.transaction_id}</Td>
                 <Td>
@@ -159,18 +178,25 @@ export function TradeHistory({ transactions }: any) {
                 <Td>{convertTimeFormat(trade.created_at)}</Td>
                 <Td>
                   <Td>
-                    <Button
-                      size="sm"
-                      colorScheme="purple"
-                      onClick={() =>
-                        handleOpenFeedback(
-                          trade.transaction_id,
-                          trade.bidder.user_id
-                        )
-                      }
-                    >
-                      Give Feedback
-                    </Button>
+                    {trade.feedback.feedback_giver.user_id === userId ||
+                    trade.feedback.feedback_receiver.user_id ? (
+                      <Badge colorScheme="green">Feedback Given</Badge>
+                    ) : (
+                      <Button
+                        size="sm"
+                        colorScheme="purple"
+                        onClick={() =>
+                          handleOpenFeedback(
+                            trade.transaction_id,
+                            userId !== trade.receiver.user_id
+                              ? trade.receiver.user_id
+                              : trade.bidder.user_id
+                          )
+                        }
+                      >
+                        Give Feedback
+                      </Button>
+                    )}
                   </Td>
                 </Td>
               </Tr>

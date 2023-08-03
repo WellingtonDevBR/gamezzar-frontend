@@ -30,7 +30,6 @@ import Cookies from "js-cookie";
 import React from "react";
 
 export function Trades({ proposals }: any) {
-  console.log(proposals);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [activeTab, setActiveTab] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
@@ -79,7 +78,6 @@ export function Trades({ proposals }: any) {
         `/api/propose/${currentTrade.propose_id}`
       );
       if (response.status === 200) {
-        console.log("test");
         const response = await axios.post(`/api/transaction/`, {
           bidder_id: currentTrade.bidder.user_id,
           receiver_id: currentTrade.receiver.user_id,

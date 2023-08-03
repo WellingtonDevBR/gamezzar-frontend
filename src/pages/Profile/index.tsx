@@ -176,23 +176,23 @@ export function Profile() {
                 <Check size={12} />
               ) : (
                 <XCircle size={12} />
-              )}
-              Hand
+              )}{" "}
+              In Person
             </SpanOptionsBox>
             <SpanOptionsBox
-              isActive={userProfile?.preference?.shipment_in_person}
+              isActive={userProfile?.preference?.shipment_by_postal}
             >
-              {userProfile?.preference?.shipment_in_person ? (
+              {userProfile?.preference?.shipment_by_postal ? (
                 <Check size={12} />
               ) : (
                 <XCircle size={12} />
               )}
-              Mail
+              Postal
             </SpanOptionsBox>
             <SpanOptionsBox
-              isActive={userProfile?.preference?.shipment_in_person}
+              isActive={userProfile?.preference?.shipment_by_courier}
             >
-              {userProfile?.preference?.shipment_in_person ? (
+              {userProfile?.preference?.shipment_by_courier ? (
                 <Check size={12} />
               ) : (
                 <XCircle size={12} />

@@ -69,7 +69,6 @@ export function Dashboard() {
 
   async function getTransactions() {
     const response = await axios.get("/api/transaction/");
-    console.log(response);
     setTransactions(response.data);
   }
 
@@ -214,7 +213,9 @@ export function Dashboard() {
             case "Collection":
               return <Collection />;
             case "History":
-              return <TradeHistory transactions={transactions} />;
+              return (
+                <TradeHistory transactions={transactions} userId={userId} />
+              );
             case "Following":
               return <Following />;
             case "Preferences":
