@@ -1,24 +1,20 @@
 import {
-  Container,
-  LogoContainer,
-  NavigationContainer,
-  NavList,
-  NavItem,
-  ButtonContainer,
-  HeaderDivider,
-  LinkContainer,
-  StyledNavLink,
-  SignUpLink,
-  Dropdown,
-  DropdownMenu,
-} from "./styles";
+  Flex,
+  Box,
+  Link,
+  Button,
+  Image,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from "@chakra-ui/react";
+import { ChevronDownIcon, SearchIcon } from "@chakra-ui/icons";
 import HeaderLogo from "../../assets/logo.svg";
-import { MagnifyingGlass } from "phosphor-react";
-import { NavLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import Cookies from "js-cookie";
 import { getAxiosInstance } from "../../services/axios";
 import { useState, useEffect } from "react";
-import { useAuth } from "../../context/AuthContext";
 
 const NAV_ITEMS = [
   { title: "Home", path: "/" },
@@ -54,49 +50,155 @@ export function Header() {
   }, []);
 
   return (
-    <>
-      <Container>
-        <LogoContainer>
-          <NavLink to="/" reloadDocument>
-            <img src={HeaderLogo} alt="logo" />
-          </NavLink>
-        </LogoContainer>
-        <NavigationContainer>
-          <NavList>
-            {NAV_ITEMS.map(({ title, path }) => (
-              <NavItem key={title}>
-                <a href={path}>{title}</a>
-              </NavItem>
-            ))}
-          </NavList>
-        </NavigationContainer>
-        <ButtonContainer>
-          <MagnifyingGlass size={32} color={"white"} />
-          {user !== null ? (
-            <Dropdown>
-              <StyledNavLink to="/dashboard" is_logged_in={token}>
-                <span>Hello, {user.user_name}</span>
-              </StyledNavLink>
-              <DropdownMenu>
-                <NavLink to="/chat">Go to Chat</NavLink>
-                <NavLink to="/profile">Go to Profile</NavLink>
-                <NavLink to="/settings">Settings</NavLink>
-                <NavLink to="/logout">Logout</NavLink>
-              </DropdownMenu>
-            </Dropdown>
-          ) : (
-            <LinkContainer>
-              <StyledNavLink to="/login">
-                <span>Login / </span>
-              </StyledNavLink>
-              <SignUpLink to="/signup">
-                <span>Sign Up</span>
-              </SignUpLink>
-            </LinkContainer>
-          )}
-        </ButtonContainer>
-      </Container>
-      <HeaderDivider />
-    </>
+    <Flex
+      as="header"
+      width="full"
+      align="center"
+      justifyContent="space-between"
+      p={4}
+      bg="blackAlpha.400"
+      color="white"
+    >
+      {/* Logo */}
+      <Box>
+        <Link as={RouterLink} to="/">
+          <Image src={HeaderLogo} alt="logo" h="40px" />
+        </Link>
+      </Box>
+
+      {/* Middle Links */}
+      <Box>
+        <Flex>
+          {NAV_ITEMS.map((navItem) => (
+            <Link as={RouterLink} to={navItem.path} key={navItem.title} mx={2}>
+              {navItem.title}
+            </Link>
+          ))}
+        </Flex>
+      </Box>
+
+      {/* Search, Login, and Signup Buttons */}
+      <Flex align="center">
+        <Button
+          leftIcon={<SearchIcon />}
+          variant="outline"
+          colorScheme="teal"
+          mr={2}
+        >
+          Search
+        </Button>
+
+        {user !== null ? (
+          <Menu>
+            <MenuButton
+              as={Button}
+              rightIcon={<ChevronDownIcon />}
+              bg="#5142FC"
+              color="white"
+              _hover={{
+                bg: "#3f32ca",
+              }}
+              _active={{
+                bg: "#31279e",
+              }}
+            >
+              Hello, {user.user_name}
+            </MenuButton>
+            <MenuList
+              bg="#5142FC"
+              color="white"
+              borderColor="gray.600"
+              borderWidth="1px"
+              borderRadius="md"
+              py={1}
+              dir="rtl"
+            >
+              <MenuItem
+                as={RouterLink}
+                to="/dashboard"
+                bg="#5142FC"
+                _hover={{ bg: "#3f32ca" }}
+                _active={{ bg: "#31279e" }}
+              >
+                Dashboard
+              </MenuItem>
+              <MenuItem
+                as={RouterLink}
+                to="/chat"
+                bg="#5142FC"
+                _hover={{ bg: "#3f32ca" }}
+                _active={{ bg: "#31279e" }}
+              >
+                Go to Chat
+              </MenuItem>
+              <MenuItem
+                as={RouterLink}
+                to={'/dashboard'}
+                state={{ tab: 'Profile'}}
+                bg="#5142FC"
+                _hover={{ bg: "#3f32ca" }}
+                _active={{ bg: "#31279e" }}
+              >
+                Go to Profile
+              </MenuItem>
+              <MenuItem
+                as={RouterLink}
+                to={'/dashboard'}
+                state={{ tab: 'Preferences'}}
+                bg="#5142FC"
+                _hover={{ bg: "#3f32ca" }}
+                _active={{ bg: "#31279e" }}
+              >
+                Settings
+              </MenuItem>
+              <MenuItem
+                as={RouterLink}
+                to="/logout"
+                bg="#5142FC"
+                _hover={{ bg: "#3f32ca" }}
+                _active={{ bg: "#31279e" }}
+              >
+                Logout
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        ) : (
+          <Box>
+            <Button
+              as={RouterLink}
+              to="/login"
+              mr={2}
+              color="white"
+              bg="purple.500"
+              _hover={{
+                bg: "purple.600",
+              }}
+              _active={{
+                bg: "purple.700",
+              }}
+            >
+              Login
+            </Button>
+            <Button
+              as={RouterLink}
+              to="/signup"
+              colorScheme="teal"
+              variant="outline"
+              color="white"
+              _hover={{
+                bg: "teal.500",
+                color: "white",
+              }}
+              _active={{
+                bg: "teal.600",
+                color: "white",
+              }}
+            >
+              Sign Up
+            </Button>
+          </Box>
+        )}
+      </Flex>
+    </Flex>
   );
 }

@@ -47,6 +47,10 @@ export function Dashboard() {
     location.state?.tab || "Opportunities"
   );
 
+
+
+  
+
   // Check user's login status
   if (!token) {
     return <Navigate to="/login" replace />;

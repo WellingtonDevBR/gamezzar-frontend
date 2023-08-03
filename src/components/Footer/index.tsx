@@ -1,8 +1,21 @@
-import { Box, Flex, Input, Button } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Text,
+  Link,
+  Input,
+  Button,
+  useBreakpointValue,
+  VStack,
+  Stack,
+  HStack,
+} from "@chakra-ui/react";
 import { FooterLogo } from "./components/FooterLogo";
 import { FooterLinks } from "./components/FooterLinks";
 
 export function Footer() {
+  const direction = useBreakpointValue({ base: "column", md: "row" });
+
   return (
     <Flex
       as="footer"
@@ -15,50 +28,39 @@ export function Footer() {
       color="white"
       minHeight="20vh"
     >
-      <Box
+      <Stack
+        direction={direction}
+        spacing={8}
+        align={direction === "column" ? "center" : "stretch"}
+        justify="space-between"
         w="full"
-        maxW="1000px"
-        display="flex"
-        direction="column"
-        gap="4"
-        mb="4"
+        maxW="1000"
+        px={0}
       >
-        <FooterLogo />
+        <Box w={["100%", "200px"]}>
+          <FooterLogo />
+        </Box>
+
         <FooterLinks
           title="My Account"
-          links={[
-            "Authors",
-            "Collection",
-            "Author Profile",
-            "Create Collection",
-          ]}
+          links={["My Collections", "My Profile", "New Game"]}
         />
-        <FooterLinks
-          title="Resource"
-          links={[
-            "Authors",
-            "Collection",
-            "Author Profile",
-            "Create Collection",
-          ]}
-        />
+
         <FooterLinks
           title="Company"
-          links={["About Us", "Contact Us", "Our Blog", "Discover"]}
+          links={["Contact Us", "Our Blog", "FAQs"]}
         />
-        <Box as="section" display="flex" direction="column" gap="7">
-          <h3>Subscribe Us</h3>
-          <Flex direction={{ base: "column", md: "row" }}>
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              mr={{ base: "0", md: "2" }}
-              mb={{ base: "2", md: "0" }}
-            />
+
+        <Box as="section">
+          <Text mb={2} fontSize="lg" fontWeight="bold">
+            Subscribe Us
+          </Text>
+          <HStack spacing={2}>
+            <Input type="email" placeholder="Enter your email" />
             <Button colorScheme="teal">Send</Button>
-          </Flex>
+          </HStack>
         </Box>
-      </Box>
+      </Stack>
     </Flex>
   );
 }

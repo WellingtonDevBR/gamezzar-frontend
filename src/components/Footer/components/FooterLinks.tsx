@@ -1,21 +1,21 @@
-import { FooterSection } from "../styles";
+import { Box, Text, VStack, Link, useBreakpointValue } from "@chakra-ui/react";
 
-interface FooterLinksProps {
-  title: string;
-  links: string[];
-}
-
-export function FooterLinks({ title, links }: FooterLinksProps) {
+export function FooterLinks({ title, links }) {
+  const direction = useBreakpointValue({ base: "column", md: "row" });
   return (
-    <FooterSection>
-      <h3>{title}</h3>
-      <>
-        {links.map((link, index) => (
-          <a key={index} href="#">
-            {link}
-          </a>
-        ))}
-      </>
-    </FooterSection>
+    <VStack
+      direction={direction}
+      spacing={direction === "column" ? "1" : "4"}
+      align={direction === "column" ? "center" : "start"}
+    >
+      <Text fontSize="lg" fontWeight="bold" mb={2}>
+        {title}
+      </Text>
+      {links.map((link, index) => (
+        <Link href="#" key={index}>
+          {link}
+        </Link>
+      ))}
+    </VStack>
   );
 }

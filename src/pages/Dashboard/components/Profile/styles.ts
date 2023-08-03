@@ -146,6 +146,7 @@ export const SplitInputContainer = styled.div`
 
 export const InputDisabled = styled(Input)`
   background-color: #d3d3d3; // A gray color, replace it with the exact color you want
+  cursor: not-allowed;
 `;
 
 export const MainPasswordBox = styled.main`

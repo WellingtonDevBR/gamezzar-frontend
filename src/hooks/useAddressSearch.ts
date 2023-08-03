@@ -11,6 +11,7 @@ type AddressData = {
 type UseAddressSearchResult = {
   addressOptions: AddressData[];
   fetchAddressOptions: (address: string) => Promise<void>;
+  setAddressOptions: (addressOptions: AddressData[]) => void;
 };
 
 export const useAddressSearch = (): UseAddressSearchResult => {
@@ -34,5 +35,5 @@ export const useAddressSearch = (): UseAddressSearchResult => {
     }
   };
 
-  return { addressOptions, fetchAddressOptions };
+  return { addressOptions, fetchAddressOptions, setAddressOptions };
 };
