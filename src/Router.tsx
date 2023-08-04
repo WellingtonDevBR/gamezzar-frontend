@@ -18,6 +18,7 @@ import { Logout } from "./pages/Logout";
 import { TraderProfile } from "./pages/TraderProfile";
 import { Activity } from "./pages/Activity";
 import { FAQ } from "./pages/FAQ";
+import { Blog } from "./pages/Blog";
 
 
 
@@ -42,7 +43,7 @@ export function Router() {
         <Route path="traderprofile" element={<TraderProfile />} />
         <Route path="/activity" element={<Activity />} />
         <Route path="/faq" element={<FAQ />} />
-        
+        <Route path="/blog" element={<Blog />} />
       </Route>
     </Routes>
   );

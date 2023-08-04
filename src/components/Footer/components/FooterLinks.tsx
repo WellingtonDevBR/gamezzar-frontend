@@ -1,12 +1,14 @@
-import { Box, Text, VStack, Link, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Text, VStack, useBreakpointValue } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 
-const dictioonaryOfLinks = [
-  {
-    "Our Blog": "/blog",
-    "Contact Us": "/contact-us",
-    FAQs: "/faq",
-  },
-];
+const dictionaryOfLinks = {
+  "Our Blog": "/blog",
+  "Contact Us": "/contact-us",
+  FAQs: "/faq",
+  "My Collections": "/dashboard",
+  "My Profile": "/dashboard",
+  "New Game": "/user/request/new-game",
+};
 
 export function FooterLinks({ title, links }) {
   const direction = useBreakpointValue({ base: "column", md: "row" });
@@ -20,15 +22,11 @@ export function FooterLinks({ title, links }) {
         {title}
       </Text>
       {links.map((link, index) => (
-        <Link
-          key={index}
-          href={dictioonaryOfLinks[0][link]}
-          _hover={{ textDecoration: "none" }}
-        >
+        <RouterLink key={index} to={dictionaryOfLinks[link]}>
           <Text fontSize="md" fontWeight="medium">
             {link}
           </Text>
-        </Link>
+        </RouterLink>
       ))}
     </VStack>
   );

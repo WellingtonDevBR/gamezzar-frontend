@@ -36,8 +36,8 @@ export function TopSellers({ users }: TopSellersProps) {
 
   return (
     <>
-      <Heading as="h1" size="lg" mb={5}>
-        Top Sellers
+      <Heading as="h1" mb={5}>
+        <Text fontSize="3xl">Top Sellers</Text>
       </Heading>
       <Box maxW="container.xl" mx="auto">
         <Grid

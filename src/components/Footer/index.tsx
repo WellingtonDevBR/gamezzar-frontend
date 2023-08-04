@@ -2,11 +2,9 @@ import {
   Box,
   Flex,
   Text,
-  Link,
   Input,
   Button,
   useBreakpointValue,
-  VStack,
   Stack,
   HStack,
 } from "@chakra-ui/react";

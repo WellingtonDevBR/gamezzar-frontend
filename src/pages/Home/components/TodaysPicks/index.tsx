@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 import { getAxiosInstance } from "../../../../services/axios";
 import { ProposeModal } from "../../../../components/ProposalModal";
 import { CardGame } from "./components/CardGame";
-import { SimpleGrid, Heading } from "@chakra-ui/react";
+import { SimpleGrid, Heading, Text } from "@chakra-ui/react";
 import { Card } from "../../../Explorer/Card";
 
 interface TodaysDetalsProps {
@@ -46,10 +46,10 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
   // Main render return
   return (
     <>
-      <Heading as="h1" size="lg" mb={5}>
-        Today's Picks
-      </Heading>
       <Container>
+        <Heading as="h1" mb={5}>
+          <Text fontSize="3xl">Today's Picks</Text>
+        </Heading>
         <SimpleGrid columns={{ base: 1, sm: 2, md: 4, lg: 5 }} spacing="20px">
           {visibleCards.map((card: any, index: any) => (
             <Card

@@ -15,11 +15,14 @@ import finalfantasyImg from "../../../../assets/finalfantasy.svg";
 import metalgear from "../../../../assets/metalgear.svg";
 import tkof from "../../../../assets/tkof.svg";
 import mario from "../../../../assets/mario.svg";
+import { Heading, Text } from "@chakra-ui/react";
 
 export function PopularCollection() {
   return (
     <Container>
-      <h1>Popular Collection</h1>
+      <Heading as="h1" mb={3} mt={10}>
+        <Text fontSize="3xl">Top Sellers</Text>
+      </Heading>
       <PopularCollectionsList>
         <PopularCollectionsCard>
           <PopularCollectionsHeader>

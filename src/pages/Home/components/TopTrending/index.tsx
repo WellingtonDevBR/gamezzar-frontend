@@ -39,7 +39,7 @@ export function TopTrending({ games }: TopTrendingProps) {
 
   return (
     <>
-      <Heading as="h1" size="lg" fontWeight="bold">
+      <Heading as="h1" size="lg" fontWeight="bold" mb={5}>
         Top Trending
       </Heading>
       <Carousel data={newData} />
