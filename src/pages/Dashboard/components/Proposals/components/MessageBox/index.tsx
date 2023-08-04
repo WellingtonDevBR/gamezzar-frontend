@@ -44,7 +44,7 @@ interface MessageBoxProps {
   onClose: () => void;
   proposal: IProposal;
   isSender: boolean;
-  isOpen: boolean;
+  isOpen?: boolean;
 }
 
 export function MessageBox({

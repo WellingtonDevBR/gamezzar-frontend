@@ -11,8 +11,8 @@ export function GameCard({ game, onGameClick }) {
 
   return (
     <Box
-      w="200px"
-      h="200px"
+      w="150px" // Changed from 200px to 150px
+      h="150px" // Changed from 200px to 150px
       m="10px"
       backgroundSize="cover"
       position="relative"

@@ -34,7 +34,7 @@ export const HeaderSectionContainer = styled.section`
   gap: 2px;
   select {
     width: 100%;
-    height: 25px;
+    height: 35px;
     border: 1px solid #fff;
     /* padding: 0 100px; */
     color: #495057;

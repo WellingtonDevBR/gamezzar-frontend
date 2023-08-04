@@ -12,6 +12,16 @@ import {
 } from "./styles";
 import { MessageBox } from "../Proposals/components/MessageBox";
 import { TradeBox } from "./TradeBox";
+import {
+  Box,
+  Flex,
+  Text,
+  Select,
+  Checkbox,
+  Spacer,
+  Avatar,
+  Button,
+} from "@chakra-ui/react";
 
 export function Opportunities({ wishlist }) {
   const [isTradeBoxOpen, setIsTradeBoxOpen] = useState(false);
@@ -19,7 +29,7 @@ export function Opportunities({ wishlist }) {
   const [currentGame, setCurrentGame] = useState(null);
 
   const handleMessageClick = (game) => {
-    console.log(game)
+    console.log(game);
     const proposal = {
       interested_game_id: game.game_two_game_id,
       interested_user_id: game.user_two_user_id,
@@ -49,42 +59,41 @@ export function Opportunities({ wishlist }) {
   };
 
   return (
-    <Container>
-      <div>
-        <h1>Opportunities</h1>
+    <Box
+      w="700px"
+      mt="20px"
+      p="20px"
+      borderRadius="5px"
+      boxShadow="0px 0px 5px 0px rgba(0, 0, 0, 0.2)"
+    >
+      <Flex flexDirection="column">
+        <Text fontSize="24px" fontWeight="bold" mb="45px">
+          Opportunities
+        </Text>
         <InputListContainer>
           <HeaderSectionContainer>
-            <p>My Wishlist</p>
-            <select name="wishlist" id="wishlist">
-              <option value="" disabled selected>
-                Select your option
-              </option>
+            <Text>My Wishlist</Text>
+            <Select placeholder="Select your option" fontWeight="bold" size="lg">
               <option value="steam">Steam</option>
               <option value="psn">PSN</option>
               <option value="xbox">Xbox</option>
               <option value="nintendo">Nintendo</option>
-            </select>
+            </Select>
           </HeaderSectionContainer>
           <HeaderSectionContainer>
-            <p>My Collection</p>
-            <select name="collection" id="collection">
-              <option value="" disabled selected>
-                Select your option
-              </option>
+            <Text>My Collection</Text>
+            <Select placeholder="Select your option" fontWeight="bold">
               <option value="steam">Steam</option>
               <option value="psn">PSN</option>
               <option value="xbox">Xbox</option>
               <option value="nintendo">Nintendo</option>
-            </select>
+            </Select>
           </HeaderSectionContainer>
         </InputListContainer>
         <InputBoxContainer>
-          <div>
-            <input type="checkbox" />
-            <span>Apenas pessoas que sigo</span>
-          </div>
+          <Checkbox defaultIsChecked>Only people I follow</Checkbox>
         </InputBoxContainer>
-      </div>
+      </Flex>
       {wishlist.map((game, index) => {
         return (
           <FeedbackContainer key={index}>
@@ -105,7 +114,7 @@ export function Opportunities({ wishlist }) {
               </TradesImagesContainer>
               <TradesProfileContainer>
                 <div>
-                  <img
+                  <Avatar
                     src={`${import.meta.env.VITE_S3_URL}/avatar/${
                       game.user_two_avatar
                     }`}
@@ -120,18 +129,24 @@ export function Opportunities({ wishlist }) {
                   </div>
                 </div>
                 <div>
-                  <SpanOptionContainer
-                    backgroundColor="#6c757d"
+                  <Button
+                    bg="#6c757d"
+                    color="white"
+                    borderRadius="5px"
+                    _hover={{ filter: "brightness(85%)" }}
                     onClick={() => handleMessageClick(game)}
                   >
                     Message
-                  </SpanOptionContainer>
-                  <SpanOptionContainer
-                    backgroundColor="#5142FC"
+                  </Button>
+                  <Button
+                    bg="#5142FC"
+                    color="white"
+                    borderRadius="5px"
+                    _hover={{ filter: "brightness(85%)" }}
                     onClick={() => handleTradeClick(game)}
                   >
                     Trade
-                  </SpanOptionContainer>
+                  </Button>
                   {isTradeBoxOpen && (
                     <TradeBox
                       isOpen={isTradeBoxOpen}
@@ -152,6 +167,6 @@ export function Opportunities({ wishlist }) {
           </FeedbackContainer>
         );
       })}
-    </Container>
+    </Box>
   );
 }

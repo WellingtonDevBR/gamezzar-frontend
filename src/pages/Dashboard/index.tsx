@@ -2,6 +2,7 @@
 import { useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate, useLocation, Navigate } from "react-router-dom";
+import { Box, Button, Image, Text, VStack, Avatar } from "@chakra-ui/react";
 
 // Styling
 import {
@@ -27,6 +28,7 @@ import { Wishlist } from "./components/Wishlist";
 // Services
 import { getAxiosInstance } from "../../services/axios";
 import { useTabContext } from "../../context/DashboardContext";
+import { HStack } from "@chakra-ui/react";
 
 export function Dashboard() {
   // State Initialization
@@ -37,6 +39,7 @@ export function Dashboard() {
   const [transactions, setTransactions] = useState<any[]>([]);
   const [proposals, setProposals] = useState<any[]>([]);
   const [userId, setUserId] = useState("");
+  const [followees, setFollowees] = useState<any[]>([]);
 
   // Navigational Hooks
   const navigate = useNavigate();
@@ -44,10 +47,10 @@ export function Dashboard() {
 
   // Derived State
   const token = Cookies.get("token");
-  // const [activeTab, setActiveTab] = useState(
-  //   location.state?.tab || "Opportunities"
-  // );
+  const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
+  // Context
   const { activeTab, setActiveTab } = useTabContext();
 
   // Optionally set the initial activeTab on component mount
@@ -59,9 +62,6 @@ export function Dashboard() {
   if (!token) {
     return <Navigate to="/login" replace />;
   }
-
-  const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
   // Fetch User's Wishlist
   async function getWishList() {
@@ -75,11 +75,13 @@ export function Dashboard() {
     setUser(response.data);
   }
 
+  // Fetch User's Transactions
   async function getTransactions() {
     const response = await axios.get("/api/transaction/");
     setTransactions(response.data);
   }
 
+  // Fetch User's Proposals
   async function getProposals() {
     const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -88,12 +90,20 @@ export function Dashboard() {
     setProposals(response.data.proposals);
   }
 
+  // Fetch User Followees
+  async function getFollowees() {
+    const response = await axios.get("/api/user/follow/");
+    console.log(response.data);
+    setFollowees(response.data);
+  }
+
   // Effect to load data when component mounts
   useEffect(() => {
     getWishList();
     getLoginDetails();
     getTransactions();
     getProposals();
+    getFollowees();
   }, []);
 
   useEffect(() => {
@@ -156,58 +166,132 @@ export function Dashboard() {
   }, [userGames]);
 
   return (
-    <Container>
-      <LeftSideMenuContainer>
-        <ImageContainer>
-          <img
-            src={
-              user?.avatar
-                ? `${import.meta.env.VITE_S3_URL}/avatar/${user.avatar}`
-                : "https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
-            }
-            alt="avatar"
-          />
-          <p>
-            {user?.first_name} {user?.last_name}
-          </p>
-        </ImageContainer>
-        <NavigationContainer>
-          <SpanOptionButton onClick={() => setActiveTab("Opportunities")}>
-            Opportunities
-          </SpanOptionButton>
-          <SpanOptionButton onClick={() => setActiveTab("Proposals")}>
-            Proposals
-          </SpanOptionButton>
-          <SpanOptionButton onClick={() => setActiveTab("Trades")}>
-            Ongoing Trades
-          </SpanOptionButton>
-          <SpanOptionButton onClick={() => setActiveTab("Wishlist")}>
-            Wishlist
-          </SpanOptionButton>
-          <SpanOptionButton onClick={() => setActiveTab("Collection")}>
-            My Collection
-          </SpanOptionButton>
-          <SpanOptionButton onClick={() => setActiveTab("History")}>
-            Trade History
-          </SpanOptionButton>
-          <SpanOptionButton onClick={() => setActiveTab("Following")}>
-            Following
-          </SpanOptionButton>
-          <SpanOptionButton onClick={() => setActiveTab("Preferences")}>
-            Preferences
-          </SpanOptionButton>
-          <SpanOptionButton onClick={() => setActiveTab("Profile")}>
-            Edit Profile
-          </SpanOptionButton>
-          <SpanOptionButton
-            backgroundColor={"#DF4949"}
-            onClick={() => setActiveTab("Logout")}
+    <Box
+      d="flex"
+      flexDirection="row"
+      h="100%"
+      w="1000px"
+      m="50px auto"
+      mt="50px"
+      justifyContent="center"
+    >
+      <HStack alignItems="right">
+        <VStack w="200px" h="100%" spacing="20px">
+          <Box d="flex" flexDirection="column">
+            <Avatar
+              src={
+                user?.avatar
+                  ? `${import.meta.env.VITE_S3_URL}/avatar/${user.avatar}`
+                  : "https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
+              }
+              alt="avatar"
+              w="80px"
+              h="80px"
+            />
+            <Text>
+              {user?.first_name} {user?.last_name}
+            </Text>
+          </Box>
+          <VStack
+            d="flex"
+            flexDirection="column"
+            bg="#5142FC"
+            justifyContent="center"
+            width="100%"
+            borderRadius="10px"
           >
-            Logout
-          </SpanOptionButton>
-        </NavigationContainer>
-      </LeftSideMenuContainer>
-      <RightSideContainer>
+            <Button
+              bg={activeTab === "Opportunities" ? "#3f32ca" : "#5142FC"} // Change the background color based on the active tab
+              _hover={{ bg: "#3f32ca" }}
+              _active={{ bg: "#31279e" }}
+              width="100%"
+              p="30px"
+              onClick={() => setActiveTab("Opportunities")}
+            >
+              Opportunities
+            </Button>
+            <Button
+              bg={activeTab === "Proposals" ? "#3f32ca" : "#5142FC"} // Change the background color based on the active tab
+              _hover={{ bg: "#3f32ca" }}
+              _active={{ bg: "#31279e" }}
+              width="100%"
+              p="30px"
+              onClick={() => setActiveTab("Proposals")}
+            >
+              Proposals
+            </Button>
+            <Button
+              bg={activeTab === "Trades" ? "#3f32ca" : "#5142FC"}
+              _hover={{ bg: "#3f32ca" }}
+              _active={{ bg: "#31279e" }}
+              width="100%"
+              p="30px"
+              onClick={() => setActiveTab("Trades")}
+            >
+              Ongoing Trades
+            </Button>
+            <Button
+              bg={activeTab === "Wishlist" ? "#3f32ca" : "#5142FC"}
+              _hover={{ bg: "#3f32ca" }}
+              _active={{ bg: "#31279e" }}
+              width="100%"
+              p="30px"
+              onClick={() => setActiveTab("Wishlist")}
+            >
+              Wishlist
+            </Button>
+            <Button
+              bg={activeTab === "Collection" ? "#3f32ca" : "#5142FC"}
+              _hover={{ bg: "#3f32ca" }}
+              _active={{ bg: "#31279e" }}
+              width="100%"
+              p="30px"
+              onClick={() => setActiveTab("Collection")}
+            >
+              My Collection
+            </Button>
+            <Button
+              bg={activeTab === "History" ? "#3f32ca" : "#5142FC"}
+              _hover={{ bg: "#3f32ca" }}
+              _active={{ bg: "#31279e" }}
+              width="100%"
+              p="30px"
+              onClick={() => setActiveTab("History")}
+            >
+              Trade History
+            </Button>
+            <Button
+              bg={activeTab === "Following" ? "#3f32ca" : "#5142FC"}
+              _hover={{ bg: "#3f32ca" }}
+              _active={{ bg: "#31279e" }}
+              width="100%"
+              p="30px"
+              onClick={() => setActiveTab("Following")}
+            >
+              Following
+            </Button>
+            <Button
+              bg={activeTab === "Preferences" ? "#3f32ca" : "#5142FC"}
+              _hover={{ bg: "#3f32ca" }}
+              _active={{ bg: "#31279e" }}
+              width="100%"
+              p="30px"
+              onClick={() => setActiveTab("Preferences")}
+            >
+              Preferences
+            </Button>
+            <Button
+              bg={activeTab === "Profile" ? "#3f32ca" : "#5142FC"}
+              _hover={{ bg: "#3f32ca" }}
+              _active={{ bg: "#31279e" }}
+              width="100%"
+              p="30px"
+              onClick={() => setActiveTab("Profile")}
+            >
+              Edit Profile
+            </Button>
+          </VStack>
+        </VStack>
         {(() => {
           switch (activeTab) {
             case "Opportunities":
@@ -225,7 +309,7 @@ export function Dashboard() {
                 <TradeHistory transactions={transactions} userId={userId} />
               );
             case "Following":
-              return <Following />;
+              return <Following followees={followees} token={token} setFollowees={setFollowees} />;
             case "Preferences":
               return <Preferences />;
             case "Profile":
@@ -238,7 +322,7 @@ export function Dashboard() {
               return null;
           }
         })()}
-      </RightSideContainer>
-    </Container>
+      </HStack>
+    </Box>
   );
 }

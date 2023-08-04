@@ -48,6 +48,8 @@ export const Wishlist: React.FC<WishlistProps> = ({ wishlists }) => {
           key={game.wishlist.details.title}
           onClick={() => handleClick(game.wishlist.details.game_id)}
           cursor="pointer"
+          w="150px"
+          h="150px"
         >
           <Tooltip label={game.wishlist.details.title} fontSize="md">
             <Image

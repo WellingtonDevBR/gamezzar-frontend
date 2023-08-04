@@ -1,16 +1,22 @@
 import { CellSignalFull, Check, Envelope, Info, XCircle } from "phosphor-react";
 import React, { useState, ReactNode, useEffect } from "react";
 import { Collections } from "./components/Collections";
-import { Spinner, Center } from "@chakra-ui/react";
+import {
+  Spinner,
+  Center,
+  Box,
+  Button,
+  HStack,
+  Text,
+  useDisclosure,
+  useColorModeValue,
+} from "@chakra-ui/react";
 
 import {
   Container,
   HeaderContainer,
   HeaderTopSection,
   HeaderBottomSection,
-  SpanOptionsBox,
-  SpanOptionsContainer,
-  ProfileMenuContainer,
   HeaderTopContent,
   MainContainer,
   MainSectionContainer,
@@ -26,6 +32,10 @@ import { getAxiosInstance } from "../../services/axios";
 import { convertTimeFormat } from "../../helper/convertTimeFormat";
 import { Wishlist } from "./components/Wishlist";
 import Cookies from "js-cookie";
+import { AuthenticationModal } from "../../components/AuthenticationModal";
+import { FollowUserModal } from "./components/FollowModal";
+import { ReportUserModal } from "./components/ReportModal";
+import { Image } from "@chakra-ui/react";
 
 interface UserProps {
   first_name: string;
@@ -62,6 +72,7 @@ export function Profile() {
   const [loading, setLoading] = useState(false);
   const [userFeedbacks, setUserFeedbacks] = useState<any[]>([]);
   const [userWishlists, setUserWishlists] = useState<any[]>([]);
+  const [isUserBeingFollowed, setIsUserBeingFollowed] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProps>({
     user_name: "",
     created_at: "",
@@ -90,10 +101,19 @@ export function Profile() {
       status_message: "",
     },
   });
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const token = Cookies.get("token");
   const { username } = useParams();
   const formattedDate = convertTimeFormat(userProfile.created_at);
   const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+  const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+
+  const openFollowModal = () => setIsFollowModalOpen(true);
+  const closeFollowModal = () => setIsFollowModalOpen(false);
+
+  const openReportModal = () => setIsReportModalOpen(true);
+  const closeReportModal = () => setIsReportModalOpen(false);
 
   useEffect(() => {
     setLoading(true); // add this line
@@ -125,17 +145,59 @@ export function Profile() {
         console.error("Failed to fetch data:", error);
       }
     };
+
+    const fetchIfAlreadyFollowsUser = async () => {
+      try {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        const result = await axios.get(`/api/user/follow/${username}`);
+        setIsUserBeingFollowed(!!result.data);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+    fetchIfAlreadyFollowsUser();
     fetchUserFeedback();
     fetchUser();
     fetchUserWishlist();
   }, []);
 
-  if (loading) {
-    return (
-      <Center h="100vh">
-        <Spinner size="xl" />
-      </Center>
-    );
+  async function handleFollowUser() {
+    if (!token) {
+      onOpen();
+      return;
+    }
+    openFollowModal();
+  }
+
+  async function handleInboxUser() {
+    if (!token) {
+      onOpen();
+      return;
+    }
+    try {
+      const response = await axios.post(
+        `/api/user/${username}/follow`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Do something with the response, if necessary.
+      console.log(response.data);
+    } catch (error) {
+      console.error("Failed to follow the user:", error);
+    }
+  }
+
+  async function handleReportUser() {
+    if (!token) {
+      onOpen();
+      return;
+    }
+    openReportModal();
   }
 
   return (
@@ -168,64 +230,127 @@ export function Profile() {
           </HeaderTopContent>
         </HeaderTopSection>
         <HeaderBottomSection>
-          <SpanOptionsContainer>
-            <SpanOptionsBox
-              isActive={userProfile?.preference?.shipment_in_person}
+          <HStack spacing={4}>
+            <Box
+              backgroundColor={
+                userProfile?.preference?.shipment_in_person
+                  ? "green.500"
+                  : "red.500"
+              }
+              color={useColorModeValue("white", "gray.800")}
+              p={2}
+              borderRadius="md"
             >
-              {userProfile?.preference?.shipment_in_person ? (
-                <Check size={12} />
-              ) : (
-                <XCircle size={12} />
-              )}{" "}
-              In Person
-            </SpanOptionsBox>
-            <SpanOptionsBox
-              isActive={userProfile?.preference?.shipment_by_postal}
+              <HStack>
+                {userProfile?.preference?.shipment_in_person ? (
+                  <Check size={12} />
+                ) : (
+                  <XCircle size={12} />
+                )}{" "}
+                <Text as="b">In Person</Text>
+              </HStack>
+            </Box>
+            <Box
+              backgroundColor={
+                userProfile?.preference?.shipment_by_postal
+                  ? "green.500"
+                  : "red.500"
+              }
+              color={useColorModeValue("white", "gray.800")}
+              p={2}
+              borderRadius="md"
             >
-              {userProfile?.preference?.shipment_by_postal ? (
-                <Check size={12} />
-              ) : (
-                <XCircle size={12} />
-              )}
-              Postal
-            </SpanOptionsBox>
-            <SpanOptionsBox
-              isActive={userProfile?.preference?.shipment_by_courier}
+              <HStack>
+                {userProfile?.preference?.shipment_by_postal ? (
+                  <Check size={12} />
+                ) : (
+                  <XCircle size={12} />
+                )}{" "}
+                <Text as="b">Postal</Text>
+              </HStack>
+            </Box>
+            <Box
+              backgroundColor={
+                userProfile?.preference?.shipment_by_courier
+                  ? "green.500"
+                  : "red.500"
+              }
+              color={useColorModeValue("white", "gray.800")}
+              p={2}
+              borderRadius="md"
             >
-              {userProfile?.preference?.shipment_by_courier ? (
-                <Check size={12} />
-              ) : (
-                <XCircle size={12} />
-              )}
-              Courier
-            </SpanOptionsBox>
-          </SpanOptionsContainer>
-          <ProfileMenuContainer>
-            <SpanOptionsBox backgroundColor="#21d873" hoverColor="#0c6e38">
-              <CellSignalFull size={12} />
-              Follow
-            </SpanOptionsBox>
-            <SpanOptionsBox backgroundColor="#c6c6c6" hoverColor="#807e7e">
-              <Envelope size={12} />
+              <HStack>
+                {userProfile?.preference?.shipment_by_courier ? (
+                  <Check size={12} />
+                ) : (
+                  <XCircle size={12} />
+                )}{" "}
+                <Text as="b">Courier</Text>
+              </HStack>
+            </Box>
+          </HStack>
+          <HStack spacing={4}>
+            {isUserBeingFollowed ? (
+              <Button
+                leftIcon={<CellSignalFull size={12} />}
+                colorScheme="orange"
+                onClick={handleFollowUser}
+              >
+                Unfollow
+              </Button>
+            ) : (
+              <Button
+                leftIcon={<CellSignalFull size={12} />}
+                colorScheme="blue"
+                onClick={handleFollowUser}
+              >
+                Follow
+              </Button>
+            )}
+
+            <Button
+              onClick={handleInboxUser}
+              leftIcon={<Envelope size={12} />}
+              colorScheme="gray"
+            >
               Inbox
-            </SpanOptionsBox>
-            <SpanOptionsBox backgroundColor="#b81515" hoverColor="#700b0b">
-              <Info size={12} />
+            </Button>
+            <Button
+              onClick={handleReportUser}
+              leftIcon={<Info size={12} />}
+              colorScheme="red"
+            >
               Report
-            </SpanOptionsBox>
-          </ProfileMenuContainer>
+            </Button>
+            <AuthenticationModal isOpen={isOpen} onClose={onClose} />
+            <FollowUserModal
+              axios={axios}
+              followeeUserName={username}
+              token={token}
+              isOpen={isFollowModalOpen}
+              onClose={closeFollowModal}
+              isUserBeingFollowed={isUserBeingFollowed}
+              setIsUserBeingFollowed={setIsUserBeingFollowed}
+            />
+            <ReportUserModal
+              isOpen={isReportModalOpen}
+              onClose={closeReportModal}
+            />
+          </HStack>
         </HeaderBottomSection>
       </HeaderContainer>
       <MainContainer>
         <MainSectionContainer>
-          <MainImageContainer>
-            <img
+          <Box>
+            <Image
+              borderRadius="full"
+              boxSize="150px"
               src={`${import.meta.env.VITE_S3_URL}/avatar/${
                 userProfile.avatar
               }`}
               alt="avatar"
             />
-          </MainImageContainer>
+          </Box>
           <MainContentContainer>
             <h1>
               {userProfile.first_name} {userProfile.last_name}
