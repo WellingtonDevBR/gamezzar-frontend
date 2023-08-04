@@ -86,3 +86,6 @@ export const DISPOSITION = [
   "I want to trade anyway",
   "I will consider offers with affection",
 ];
+
+
+export const regions = ["Oceania", "America", "Europe", "Asia"];
