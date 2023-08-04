@@ -36,7 +36,7 @@ export function Router() {
         <Route path="/Contact" element={<Contact />} />
         <Route path="/explorer" element={<Explorer />} />
         <Route path="/user/wishlist/edit/:id" element={<EditWishlist />} />
-        <Route path="/createitem" element={<CreateItem />} />
+        <Route path="/user/request/new-game" element={<CreateItem />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="traderprofile" element={<TraderProfile />} />
         <Route path="/activity" element={<Activity />} />

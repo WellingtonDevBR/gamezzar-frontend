@@ -14,6 +14,7 @@ import { AuthenticationModal } from "../../components/AuthenticationModal";
 import { getAxiosInstance } from "../../services/axios";
 import Cookies from "js-cookie";
 import { ProposeModal } from "../../components/ProposalModal";
+import { Link } from "react-router-dom";
 
 interface CardProps {
   key: string;
@@ -34,7 +35,14 @@ export function Card(props: CardProps) {
   const token = Cookies.get("token");
 
   return (
-    <Box bg="#343444" borderRadius="lg" overflow="hidden" p={4} w="full" width="200px">
+    <Box
+      bg="#343444"
+      borderRadius="lg"
+      overflow="hidden"
+      p={4}
+      w="full"
+      width="200px"
+    >
       <Box position="relative">
         <Image
           h={imageSize}
@@ -108,13 +116,15 @@ export function Card(props: CardProps) {
             isModalOpen={isProposeModalOpen}
             setModalOpen={setIsProposeModalOpen}
           />
-          <Button
-            bg="#5142fc"
-            color="#fff"
-            _hover={{ filter: "brightness(0.9)" }}
-          >
-            Details
-          </Button>
+          <Link to={`/game/${props.game.item.game_id}`}>
+            <Button
+              bg="#5142fc"
+              color="#fff"
+              _hover={{ filter: "brightness(0.9)" }}
+            >
+              Details
+            </Button>
+          </Link>
         </HStack>
       </VStack>
     </Box>

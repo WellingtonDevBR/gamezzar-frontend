@@ -27,7 +27,7 @@ import { useTabContext } from "../../context/DashboardContext";
 
 const NAV_ITEMS = [
   { title: "Home", path: "/" },
-  { title: "Explore", path: "/explorer" },
+  { title: "Explorer", path: "/explorer" },
   // { title: "Activity", path: "/activity" },
   { title: "Community", path: "#" },
   // { title: "Contact", path: "/contact" },
@@ -130,19 +130,39 @@ export function Header() {
       p={4}
       bg="blackAlpha.400"
       color="white"
+      borderBottom="1px solid #242323"
     >
       {/* Logo */}
       <Box>
         <Link as={RouterLink} to="/">
-          <Image src={HeaderLogo} alt="logo" h="40px" />
+          <Image objectFit="fill" src={HeaderLogo} alt="logo" h="70px" />
         </Link>
       </Box>
 
       {/* Middle Links */}
       <Box>
-        <Flex>
+        <Flex
+          align="center"
+          justify="space-around"
+          spacing="50px"
+          w="100%"
+          h="50px"
+        >
           {NAV_ITEMS.map((navItem) => (
-            <Link as={RouterLink} to={navItem.path} key={navItem.title} mx={2}>
+            <Link
+              as={RouterLink}
+              to={navItem.path}
+              key={navItem.title}
+              mx={2}
+              fontSize="lg" // Use a larger font size
+              fontWeight="semibold" // Make the font weight semi-bold
+              _hover={{
+                // Hover effects
+                textDecoration: "none", // Add underline on hover
+                color: "#5142FC", // Change color on hover
+              }}
+              p={2} // Add padding to give more clickable area
+            >
               {navItem.title}
             </Link>
           ))}

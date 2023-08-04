@@ -30,7 +30,7 @@ export function Explorer() {
   axios.defaults.headers.Authorization = `Bearer ${token}`;
 
   useEffect(() => {
-    document.title = "Explore | Gamezzar";
+    document.title = "Explorer | Gamezzar";
     fetchMoreData(); // Pass offset to fetchMoreData function
   }, []);
 
@@ -105,9 +105,9 @@ export function Explorer() {
         >
           <VStack>
             <Heading as="h1" size="lg">
-              Explore
+              Explorer
             </Heading>
-            <Text>Home / Explore</Text>
+            <Text>Home / Explorer</Text>
           </VStack>
         </Flex>
 
@@ -126,10 +126,9 @@ export function Explorer() {
           {collections.map((collection) => {
             return (
               <Card
-                like={collection.like}
+                key={collection.item.game_id}
                 title={collection.item.title}
                 owner={collection.user.user_name}
-                isComingSoon={collection.is_coming_soon}
                 image={collection.item.image}
                 avatar={collection.user.avatar}
                 userCollections={userCollections}
