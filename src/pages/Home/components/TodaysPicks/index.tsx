@@ -6,6 +6,8 @@ import { NavLink } from "react-router-dom";
 import { getAxiosInstance } from "../../../../services/axios";
 import { ProposeModal } from "../../../../components/ProposalModal";
 import { CardGame } from "./components/CardGame";
+import { SimpleGrid } from "@chakra-ui/react";
+import { Card } from "../../../Explorer/Card";
 
 interface TodaysDetalsProps {
   usersCollection: any[];
@@ -18,9 +20,6 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [userGame, setUserGame] = useState(null);
   const [loggedUserCollection, setLoggedUserCollection] = useState(null);
-
-  console.log(usersCollection)
-
   // Fetching data function
   useEffect(() => {
     async function fetchCollection() {
@@ -32,7 +31,7 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
     fetchCollection();
   }, []);
 
-  const visibleCards = usersCollection.slice(0, visibleRows * 4);
+  const visibleCards = usersCollection.slice(0, visibleRows * 5);
 
   // Handler functions
   const handleUserGameClick = (index: any) => {
@@ -48,21 +47,20 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
   return (
     <Container>
       <h1>Today's Picks</h1>
-      <CardList>
+      <SimpleGrid columns={{ base: 1, sm: 2, md: 4, lg: 5 }} spacing="20px">
         {visibleCards.map((card: any, index: any) => (
-          <CardGame
-            key={index}
-            src={`${import.meta.env.VITE_S3_URL}/games/${card.item.image}`}
-            alt={card.item.alt}
+          <Card
+            key={card.item.game_id}
+            image={card.item.image}
             title={card.item.title}
             owner={card.user.user_name}
-            avatar={`${import.meta.env.VITE_S3_URL}/avatar/${card.user.avatar}`}
-            token={token}
-            onTradeClick={() => handleUserGameClick(index)}
+            avatar={card.user.avatar}
+            userCollections={usersCollection}
+            game={card}
           />
         ))}
-      </CardList>
-      {visibleRows * 4 < usersCollection.length && (
+      </SimpleGrid>
+      {visibleRows * 5 < usersCollection.length && (
         <ShowMoreButton onClick={() => setVisibleRows(visibleRows + 1)}>
           Show more
         </ShowMoreButton>

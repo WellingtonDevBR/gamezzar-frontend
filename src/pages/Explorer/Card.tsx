@@ -16,8 +16,7 @@ import Cookies from "js-cookie";
 import { ProposeModal } from "../../components/ProposalModal";
 
 interface CardProps {
-  isComingSoon: boolean;
-  like: number;
+  key: string;
   title: string;
   owner: string;
   image: string;
@@ -80,7 +79,7 @@ export function Card(props: CardProps) {
         <HStack mt={4} spacing={2}>
           {token ? (
             <Button
-              minWidth={"60%"}
+              minWidth={"50%"}
               colorScheme="blackAlpha.100"
               border="1px solid #5142fc"
               _hover={{ bg: "#5142fc" }}
@@ -90,7 +89,7 @@ export function Card(props: CardProps) {
             </Button>
           ) : (
             <Button
-              minWidth={"60%"}
+              minWidth={"50%"}
               colorScheme="blackAlpha.100"
               border="1px solid #5142fc"
               _hover={{ bg: "#5142fc" }}
@@ -110,7 +109,7 @@ export function Card(props: CardProps) {
             setModalOpen={setIsProposeModalOpen}
           />
           <Button
-            bg="transparent"
+            bg="#5142fc"
             color="#fff"
             _hover={{ filter: "brightness(0.9)" }}
           >

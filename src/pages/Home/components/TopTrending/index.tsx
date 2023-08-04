@@ -1,12 +1,12 @@
-import {
-  CarouselContainer,
-  Navigation,
-  NavigationButton,
-  Ellipsis,
-  CircleDot,
-  CarouselList,
-} from "./styles";
 import { useState } from "react";
+import {
+  Flex,
+  Heading,
+  Button,
+  Box,
+  Grid,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { ICardData } from "./utils";
 import { TrendingCard } from "./TopTrendingCard";
 
@@ -28,10 +28,6 @@ interface TopTrendingProps {
   games: GameProps[];
 }
 
-interface CarouselProps {
-  data: GameProps[];
-}
-
 export function TopTrending({ games }: TopTrendingProps) {
   const newData = games.map((game: GameProps) => {
     return {
@@ -43,9 +39,9 @@ export function TopTrending({ games }: TopTrendingProps) {
 
   return (
     <>
-      <header>
-        <h1 style={{ fontSize: "1.4rem", fontWeight: "bold" }}>Top Trending</h1>
-      </header>
+      <Heading as="h1" size="lg" fontWeight="bold">
+        Top Trending
+      </Heading>
       <Carousel data={newData} />
     </>
   );
@@ -53,37 +49,58 @@ export function TopTrending({ games }: TopTrendingProps) {
 
 const Carousel: React.FC<any> = ({ data }: any) => {
   const [current, setCurrent] = useState(0);
-  const pages = Math.ceil(data.length / 5);
+  const itemsPerRow = useBreakpointValue({
+    base: 1,
+    sm: 2,
+    md: 3,
+    lg: 4,
+    xl: 5,
+  });
 
   const next = () => {
-    setCurrent(current === data.length - 5 ? 0 : current + 1);
+    setCurrent(current === itemsPerRow - 1 ? 0 : current + 1);
   };
 
   const prev = () => {
-    setCurrent(current === 0 ? data.length - 5 : current - 1);
+    setCurrent(current === 0 ? itemsPerRow - 1 : current - 1);
   };
 
   return (
-    <CarouselContainer>
-      <CarouselList>
-        {data.slice(current, current + 5).map((item, index) => (
-          <TrendingCard key={index} item={item} />
-        ))}
-      </CarouselList>
-
-      <Navigation>
-        <NavigationButton onClick={prev} disabled={current === 0}>
-          &#8612;
-        </NavigationButton>
-        <Ellipsis>
-          {Array.from({ length: pages }, (_, index) => (
-            <CircleDot key={index} active={current === index} />
+    <Box>
+      <Grid
+        templateColumns={{
+          base: "repeat(1, 1fr)",
+          sm: "repeat(2, 1fr)",
+          md: "repeat(3, 1fr)",
+          lg: "repeat(4, 1fr)",
+          xl: "repeat(5, 1fr)",
+        }}
+        gap={6}
+      >
+        {data
+          .slice(current, current + itemsPerRow)
+          .map((item: ICardData, index: number) => (
+            <TrendingCard key={index} item={item} />
           ))}
-        </Ellipsis>
-        <NavigationButton onClick={next} disabled={current === data.length - 4}>
+      </Grid>
+      <Flex justifyContent="center" alignItems="center" gap={4} mt={6}>
+        <Button
+          onClick={prev}
+          disabled={current === 0}
+          variant="ghost"
+          colorScheme="whiteAlpha"
+        >
+          &#8612;
+        </Button>
+        <Button
+          onClick={next}
+          disabled={current === itemsPerRow - 1}
+          variant="ghost"
+          colorScheme="whiteAlpha"
+        >
           &#8614;
-        </NavigationButton>
-      </Navigation>
-    </CarouselContainer>
+        </Button>
+      </Flex>
+    </Box>
   );
 };

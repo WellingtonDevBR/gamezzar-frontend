@@ -1,37 +1,73 @@
-// index.tsx
+import {
+  Box,
+  Grid,
+  Heading,
+  Image,
+  LinkBox,
+  LinkOverlay,
+  Text,
+  Tooltip,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 
-import { TopSellersCard, Container, TopSellerProfile } from "./styles";
-import { NavLink } from "react-router-dom";
+interface IUser {
+  user_id: string;
+  user_name: string;
+  avatar: string;
+}
 
-// Top Sellers Section
-export function TopSellers({ users }: any) {
-  const productCardWidth = 85 + 1.7 * 2; // Width of the image + 2 * gap
-  const containerWidth = 800; // Max width of the container
+interface TopSellersProps {
+  users: IUser[];
+}
 
-  const productsPerRow = Math.floor(containerWidth / productCardWidth);
-  const displayedUsers = users.slice(0, productsPerRow);
+export function TopSellers({ users }: TopSellersProps) {
+  const displayedUsers = users.slice(0, 10);
+
+  const columns = useBreakpointValue({
+    base: 2,
+    sm: 3,
+    md: 5,
+    lg: 7,
+    xl: 10,
+  });
+
+  const truncate = (input: string) =>
+    input.length > 8 ? `${input.substring(0, 8)}...` : input;
 
   return (
-    <Container>
-      <h1>Top Sellers</h1>
-      <TopSellersCard>
-        {displayedUsers.map((user: any) => (
-          <NavLink
-            style={{ all: "unset" }}
-            to={`/profile/${user.user_name}`}
-          >
-            <TopSellerProfile key={user.user_id}>
-              <img
-                src={`${import.meta.env.VITE_S3_URL}/avatar/${
-                  user.avatar
-                }`}
-                alt="avatar"
-              />
-              <p>{user.user_name}</p>
-            </TopSellerProfile>
-          </NavLink>
+    <Box maxW="container.xl" mx="auto">
+      <Heading as="h1" size="lg" mb={5}>
+        Top Sellers
+      </Heading>
+      <Grid
+        templateColumns={`repeat(${columns}, 1fr)`}
+        gap={4}
+        align="center"
+        justify="center"
+      >
+        {displayedUsers.map((user: IUser) => (
+          <LinkBox rounded="md" key={user.user_id}>
+            <Image
+              borderRadius="full"
+              minH="80px"
+              minW="80px"
+              maxW="80px"
+              maxH="80px"
+              src={`${import.meta.env.VITE_S3_URL}/avatar/${user.avatar}`}
+              alt={user.user_name}
+              mb="1rem"
+              objectFit="cover"
+            />
+            <Tooltip label={user.user_name} placement="top" hasArrow>
+              <LinkOverlay href={`/profile/${user.user_name}`}>
+                <Text fontSize="xl" isTruncated>
+                  {truncate(user.user_name)}
+                </Text>
+              </LinkOverlay>
+            </Tooltip>
+          </LinkBox>
         ))}
-      </TopSellersCard>
-    </Container>
+      </Grid>
+    </Box>
   );
 }

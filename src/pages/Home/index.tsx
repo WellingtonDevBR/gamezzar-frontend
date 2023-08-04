@@ -1,5 +1,4 @@
 import { Container } from "./styles";
-import { TopTrending } from "./components/TopTrending";
 import { PromoContent } from "./components/PromoContent";
 import { TodaysDeals } from "./components/TodaysPicks";
 import { PopularCollection } from "./components/PopularCollection";
@@ -8,6 +7,7 @@ import { getAxiosInstance } from "../../services/axios";
 import { useState, useEffect } from "react";
 import { TopSellers } from "./components/TopSeller";
 import Cookies from "js-cookie";
+import { TopTrending } from "./components/TopTrending";
 
 export function Home() {
   const [games, setGames] = useState<any[]>([]);
