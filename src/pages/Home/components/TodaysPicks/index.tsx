@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 import { getAxiosInstance } from "../../../../services/axios";
 import { ProposeModal } from "../../../../components/ProposalModal";
 import { CardGame } from "./components/CardGame";
-import { SimpleGrid } from "@chakra-ui/react";
+import { SimpleGrid, Heading } from "@chakra-ui/react";
 import { Card } from "../../../Explorer/Card";
 
 interface TodaysDetalsProps {
@@ -45,34 +45,38 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
 
   // Main render return
   return (
-    <Container>
-      <h1>Today's Picks</h1>
-      <SimpleGrid columns={{ base: 1, sm: 2, md: 4, lg: 5 }} spacing="20px">
-        {visibleCards.map((card: any, index: any) => (
-          <Card
-            key={card.item.game_id}
-            image={card.item.image}
-            title={card.item.title}
-            owner={card.user.user_name}
-            avatar={card.user.avatar}
-            userCollections={usersCollection}
-            game={card}
+    <>
+      <Heading as="h1" size="lg" mb={5}>
+        Today's Picks
+      </Heading>
+      <Container>
+        <SimpleGrid columns={{ base: 1, sm: 2, md: 4, lg: 5 }} spacing="20px">
+          {visibleCards.map((card: any, index: any) => (
+            <Card
+              key={card.item.game_id}
+              image={card.item.image}
+              title={card.item.title}
+              owner={card.user.user_name}
+              avatar={card.user.avatar}
+              userCollections={usersCollection}
+              game={card}
+            />
+          ))}
+        </SimpleGrid>
+        {visibleRows * 5 < usersCollection.length && (
+          <ShowMoreButton onClick={() => setVisibleRows(visibleRows + 1)}>
+            Show more
+          </ShowMoreButton>
+        )}
+        {isModalOpen && (
+          <ProposeModal
+            setModalOpen={setModalOpen}
+            isModalOpen={isModalOpen}
+            game={userGame}
+            loggedUserCollection={loggedUserCollection}
           />
-        ))}
-      </SimpleGrid>
-      {visibleRows * 5 < usersCollection.length && (
-        <ShowMoreButton onClick={() => setVisibleRows(visibleRows + 1)}>
-          Show more
-        </ShowMoreButton>
-      )}
-      {isModalOpen && (
-        <ProposeModal
-          setModalOpen={setModalOpen}
-          isModalOpen={isModalOpen}
-          game={userGame}
-          loggedUserCollection={loggedUserCollection}
-        />
-      )}
-    </Container>
+        )}
+      </Container>
+    </>
   );
 }

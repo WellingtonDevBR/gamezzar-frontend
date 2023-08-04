@@ -17,6 +17,7 @@ import { CreateItem } from "./pages/CreateItem/Index";
 import { Logout } from "./pages/Logout";
 import { TraderProfile } from "./pages/TraderProfile";
 import { Activity } from "./pages/Activity";
+import { FAQ } from "./pages/FAQ";
 
 
 
@@ -33,13 +34,14 @@ export function Router() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/game/add/:id" element={<AddGame />} />
         <Route path="*" element={<PageNotFound />} />
-        <Route path="/Contact" element={<Contact />} />
+        <Route path="/contact-us" element={<Contact />} />
         <Route path="/explorer" element={<Explorer />} />
         <Route path="/user/wishlist/edit/:id" element={<EditWishlist />} />
         <Route path="/user/request/new-game" element={<CreateItem />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="traderprofile" element={<TraderProfile />} />
         <Route path="/activity" element={<Activity />} />
+        <Route path="/faq" element={<FAQ />} />
         
       </Route>
     </Routes>

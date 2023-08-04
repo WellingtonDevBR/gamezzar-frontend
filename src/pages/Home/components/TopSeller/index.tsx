@@ -35,39 +35,41 @@ export function TopSellers({ users }: TopSellersProps) {
     input.length > 8 ? `${input.substring(0, 8)}...` : input;
 
   return (
-    <Box maxW="container.xl" mx="auto">
+    <>
       <Heading as="h1" size="lg" mb={5}>
         Top Sellers
       </Heading>
-      <Grid
-        templateColumns={`repeat(${columns}, 1fr)`}
-        gap={4}
-        align="center"
-        justify="center"
-      >
-        {displayedUsers.map((user: IUser) => (
-          <LinkBox rounded="md" key={user.user_id}>
-            <Image
-              borderRadius="full"
-              minH="80px"
-              minW="80px"
-              maxW="80px"
-              maxH="80px"
-              src={`${import.meta.env.VITE_S3_URL}/avatar/${user.avatar}`}
-              alt={user.user_name}
-              mb="1rem"
-              objectFit="cover"
-            />
-            <Tooltip label={user.user_name} placement="top" hasArrow>
-              <LinkOverlay href={`/profile/${user.user_name}`}>
-                <Text fontSize="xl" isTruncated>
-                  {truncate(user.user_name)}
-                </Text>
-              </LinkOverlay>
-            </Tooltip>
-          </LinkBox>
-        ))}
-      </Grid>
-    </Box>
+      <Box maxW="container.xl" mx="auto">
+        <Grid
+          templateColumns={`repeat(${columns}, 1fr)`}
+          gap={4}
+          align="center"
+          justify="center"
+        >
+          {displayedUsers.map((user: IUser) => (
+            <LinkBox rounded="md" key={user.user_id}>
+              <Image
+                borderRadius="full"
+                minH="80px"
+                minW="80px"
+                maxW="80px"
+                maxH="80px"
+                src={`${import.meta.env.VITE_S3_URL}/avatar/${user.avatar}`}
+                alt={user.user_name}
+                mb="1rem"
+                objectFit="cover"
+              />
+              <Tooltip label={user.user_name} placement="top" hasArrow>
+                <LinkOverlay href={`/profile/${user.user_name}`}>
+                  <Text fontSize="xl" isTruncated>
+                    {truncate(user.user_name)}
+                  </Text>
+                </LinkOverlay>
+              </Tooltip>
+            </LinkBox>
+          ))}
+        </Grid>
+      </Box>
+    </>
   );
 }

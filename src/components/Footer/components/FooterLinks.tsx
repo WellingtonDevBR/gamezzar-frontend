@@ -1,5 +1,13 @@
 import { Box, Text, VStack, Link, useBreakpointValue } from "@chakra-ui/react";
 
+const dictioonaryOfLinks = [
+  {
+    "Our Blog": "/blog",
+    "Contact Us": "/contact-us",
+    FAQs: "/faq",
+  },
+];
+
 export function FooterLinks({ title, links }) {
   const direction = useBreakpointValue({ base: "column", md: "row" });
   return (
@@ -12,8 +20,14 @@ export function FooterLinks({ title, links }) {
         {title}
       </Text>
       {links.map((link, index) => (
-        <Link href="#" key={index}>
-          {link}
+        <Link
+          key={index}
+          href={dictioonaryOfLinks[0][link]}
+          _hover={{ textDecoration: "none" }}
+        >
+          <Text fontSize="md" fontWeight="medium">
+            {link}
+          </Text>
         </Link>
       ))}
     </VStack>
