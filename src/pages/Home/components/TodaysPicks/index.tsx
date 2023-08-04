@@ -1,8 +1,4 @@
-import {
-  Container,
-  CardList,
-  ShowMoreButton,
-} from "./styles";
+import { Container, CardList, ShowMoreButton } from "./styles";
 import { Button } from "../../../../components/Button";
 import { useEffect, useState } from "react";
 import Cookie from "js-cookie";
@@ -15,7 +11,6 @@ interface TodaysDetalsProps {
   usersCollection: any[];
 }
 
-
 export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
   // All states
   const token = Cookie.get("token");
@@ -23,6 +18,8 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [userGame, setUserGame] = useState(null);
   const [loggedUserCollection, setLoggedUserCollection] = useState(null);
+
+  console.log(usersCollection)
 
   // Fetching data function
   useEffect(() => {
@@ -35,24 +32,16 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
     fetchCollection();
   }, []);
 
-  // Data preprocessing
-  const listOfGames = usersCollection
-    .filter((userCollection) => userCollection.user.user_id !== null)
-    .map((userCollection) => ({
-      src: `${import.meta.env.VITE_S3_URL}/games/${userCollection.image}`,
-      alt: `${userCollection.slug}`,
-      title: `${userCollection.title}`,
-      owner: `${userCollection.user.user_name}`,
-      avatar: `${import.meta.env.VITE_S3_URL}/avatar/${
-        userCollection.user.avatar
-      }`,
-    }));
-  const visibleCards = listOfGames.slice(0, visibleRows * 4);
+  const visibleCards = usersCollection.slice(0, visibleRows * 4);
 
   // Handler functions
   const handleUserGameClick = (index: any) => {
     setModalOpen(true);
-    setUserGame(usersCollection.filter((userCollection) => userCollection.user.user_id !== null)[index]);
+    setUserGame(
+      usersCollection.filter(
+        (userCollection) => userCollection.user.user_id !== null
+      )[index]
+    );
   };
 
   // Main render return
@@ -63,17 +52,17 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
         {visibleCards.map((card: any, index: any) => (
           <CardGame
             key={index}
-            src={card.src}
-            alt={card.alt}
-            title={card.title}
-            owner={card.owner}
-            avatar={card.avatar}
+            src={`${import.meta.env.VITE_S3_URL}/games/${card.item.image}`}
+            alt={card.item.alt}
+            title={card.item.title}
+            owner={card.user.user_name}
+            avatar={`${import.meta.env.VITE_S3_URL}/avatar/${card.user.avatar}`}
             token={token}
             onTradeClick={() => handleUserGameClick(index)}
           />
         ))}
       </CardList>
-      {visibleRows * 4 < listOfGames.length && (
+      {visibleRows * 4 < usersCollection.length && (
         <ShowMoreButton onClick={() => setVisibleRows(visibleRows + 1)}>
           Show more
         </ShowMoreButton>

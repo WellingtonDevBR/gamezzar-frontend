@@ -30,15 +30,25 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 interface Game {
-  user_id: number;
   game_id: number;
-  title: string;
-  image: string;
-  edition: {
-    name: string;
-  };
-  region: {
-    name: string;
+  disposition: number;
+  satisfaction: number;
+  disc_condition: number;
+  manual_condition: number;
+  cover_condition: number;
+  item: {
+    game_id: number;
+    title: string;
+    platform: {
+      name: string;
+    };
+    edition: {
+      name: string;
+    };
+    region: {
+      name: string;
+    };
+    image: string;
   };
   user: {
     user_id: number;
@@ -47,12 +57,6 @@ interface Game {
     avatar: string;
     address: {
       address: string;
-    };
-    inventory: {
-      disc_condition: number;
-      cover_condition: number;
-      manual_condition: number;
-      disposition: number;
     };
   };
 }
@@ -112,6 +116,7 @@ export function ProposeModal({
     }
   };
 
+  console.log(game)
   return (
     <>
       {isModalOpen && (
@@ -124,19 +129,19 @@ export function ProposeModal({
             <CloseButton onClick={closeModal}>X</CloseButton>
             <Section>
               <img
-                src={`${import.meta.env.VITE_S3_URL}/games/${game.image}`}
-                alt={game.title}
+                src={`${import.meta.env.VITE_S3_URL}/games/${game.item.image}`}
+                alt={game.item.title}
               />
               <UserGameContainer>
-                <h1>{game.title}</h1>
+                <h1>{game.item.title}</h1>
                 <VersionRegionContainer>
                   <div>
                     <b>Version</b>
-                    <span>{game.edition.name}</span>
+                    <span>{game.item.edition.name}</span>
                   </div>
                   <div>
                     <b>Region</b>
-                    <span>{game.region.name}</span>
+                    <span>{game.item.region.name}</span>
                   </div>
                 </VersionRegionContainer>
                 <UserFeedBackContainer>
@@ -174,10 +179,7 @@ export function ProposeModal({
                 {Object.entries(gamesByPlatform).map(([platform, games]) => (
                   <optgroup key={platform} label={platform}>
                     {games?.map((game) => (
-                      <option
-                        key={game.item.game_id}
-                        value={game.item.game_id}
-                      >
+                      <option key={game.item.game_id} value={game.item.game_id}>
                         {game.item.title}
                       </option>
                     ))}
@@ -194,8 +196,8 @@ export function ProposeModal({
                   <img src={discImg} alt="disc" />
                   <h1>Disc</h1>
                 </div>
-                <div>{StarsMapping(game.user.inventory.disc_condition)}</div>
-                <p>{DISC_CONDITION[game.user.inventory.disc_condition]}</p>
+                <div>{StarsMapping(game.disc_condition)}</div>
+                <p>{DISC_CONDITION[game.disc_condition]}</p>
               </section>
               <section>
                 <div>
@@ -203,9 +205,9 @@ export function ProposeModal({
                   <h1>Cover</h1>
                 </div>
                 <div>
-                  <div>{StarsMapping(game.user.inventory.cover_condition)}</div>
+                  <div>{StarsMapping(game.cover_condition)}</div>
                 </div>
-                <p>{MANUAL_CONDITION[game.user.inventory.cover_condition]}</p>
+                <p>{MANUAL_CONDITION[game.cover_condition]}</p>
               </section>
               <section>
                 <div>
@@ -214,14 +216,14 @@ export function ProposeModal({
                 </div>
                 <div>
                   <div>
-                    {StarsMapping(game.user.inventory.manual_condition)}
+                    {StarsMapping(game.manual_condition)}
                   </div>
                 </div>
-                <p>{COVER_CONDITION[game.user.inventory.manual_condition]}</p>
+                <p>{COVER_CONDITION[game.manual_condition]}</p>
               </section>
             </MainContainer>
-            <DispositionSpan disposition={game.user.inventory.disposition}>
-              {DISPOSITION[game.user.inventory.disposition]}
+            <DispositionSpan disposition={game.disposition}>
+              {DISPOSITION[game.disposition]}
             </DispositionSpan>
           </Container>
         </>

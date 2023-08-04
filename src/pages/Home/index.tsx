@@ -7,22 +7,27 @@ import { CardOptionList } from "./components/CardOptionList";
 import { getAxiosInstance } from "../../services/axios";
 import { useState, useEffect } from "react";
 import { TopSellers } from "./components/TopSeller";
+import Cookies from "js-cookie";
 
 export function Home() {
   const [games, setGames] = useState<any[]>([]);
   const [topVendors, setTopVendors] = useState<any[]>([]);
   const [userCollections, setUserCollections] = useState<any[]>([]);
-
+  const [offset, setOffset] = useState(0);
+  const token = Cookies.get("token");
+  const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+  axios.defaults.headers.Authorization = `Bearer ${token}`;
   useEffect(() => {
+    document.title = "Home | Gamezzar";
     const fetchData = async () => {
       try {
-        const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
         const gamesReponse = await axios.get("/api/game/get-all");
         setGames(gamesReponse.data);
 
         const usersCollectionResponse = await axios.get(
-          "/api/user-collection/"
+          `/api/user-collection/?offset=${offset}`
         );
+        console.log("test", usersCollectionResponse);
         setUserCollections(usersCollectionResponse.data);
 
         const topVendorsResponse = await axios.get("/api/user/top-vendors");

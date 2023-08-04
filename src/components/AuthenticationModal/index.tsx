@@ -21,7 +21,7 @@ export function AuthenticationModal({
   onClose,
 }: AuthenticationModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent bg="blackAlpha.800">
         <ModalHeader>Authentication Required</ModalHeader>
