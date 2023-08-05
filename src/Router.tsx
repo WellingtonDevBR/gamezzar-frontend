@@ -19,8 +19,7 @@ import { TraderProfile } from "./pages/TraderProfile";
 import { Activity } from "./pages/Activity";
 import { FAQ } from "./pages/FAQ";
 import { Blog } from "./pages/Blog";
-
-
+import { Games } from "./pages/Games";
 
 export function Router() {
   return (
@@ -29,6 +28,7 @@ export function Router() {
         <Route path="/" element={<Home />} />
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="/chat" element={<Chat />} />
+        <Route path="/games" element={<Games />} />
         <Route path="/game/:id" element={<Game />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />

@@ -28,6 +28,7 @@ import { useTabContext } from "../../context/DashboardContext";
 const NAV_ITEMS = [
   { title: "Home", path: "/" },
   { title: "Explorer", path: "/explorer" },
+  { title: "Games", path: "/Games" },
   // { title: "Activity", path: "/activity" },
   { title: "Community", path: "#" },
   // { title: "Contact", path: "/contact" },
