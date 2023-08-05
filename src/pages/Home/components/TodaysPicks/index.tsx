@@ -50,7 +50,10 @@ export function TodaysDeals({ usersCollection }: TodaysDetalsProps) {
         <Heading as="h1" mb={5}>
           <Text fontSize="3xl">Today's Picks</Text>
         </Heading>
-        <SimpleGrid columns={{ base: 1, sm: 2, md: 4, lg: 5 }} spacing="20px">
+        <SimpleGrid
+          columns={{ base: 1, sm: 2, md: 4, lg: 4, xl: 5 }}
+          spacing="20px"
+        >
           {visibleCards.map((card: any, index: any) => (
             <Card
               key={card.item.game_id}

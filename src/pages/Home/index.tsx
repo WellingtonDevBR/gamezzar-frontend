@@ -13,6 +13,9 @@ export function Home() {
   const [games, setGames] = useState<any[]>([]);
   const [topVendors, setTopVendors] = useState<any[]>([]);
   const [userCollections, setUserCollections] = useState<any[]>([]);
+  const [userPopularCollections, setUserPopularCollections] = useState<any[]>(
+    []
+  );
   const [offset, setOffset] = useState(0);
   const token = Cookies.get("token");
   const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
@@ -27,11 +30,15 @@ export function Home() {
         const usersCollectionResponse = await axios.get(
           `/api/user-collection/?offset=${offset}`
         );
-        console.log("test", usersCollectionResponse);
         setUserCollections(usersCollectionResponse.data);
 
         const topVendorsResponse = await axios.get("/api/user/top-vendors");
         setTopVendors(topVendorsResponse.data);
+
+        const popularUserCollections = await axios.get(
+          "/api/user-collection/popular"
+        );
+        setUserPopularCollections(popularUserCollections.data);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
@@ -45,7 +52,7 @@ export function Home() {
       <TopTrending games={games} />
       <TopSellers users={topVendors} />
       <TodaysDeals usersCollection={userCollections} />
-      <PopularCollection />
+      <PopularCollection userPopularCollections={userPopularCollections} />
       <CardOptionList />
     </Container>
   );
