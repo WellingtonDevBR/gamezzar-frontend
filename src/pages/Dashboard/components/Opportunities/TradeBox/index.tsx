@@ -15,22 +15,28 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { getAxiosInstance } from "../../../../../services/axios";
+import Cookies from "js-cookie";
 
 // MessageBox Component
 export function TradeBox({ isOpen, onClose, proposal }) {
   const toast = useToast();
-
+  const token = Cookies.get("token");
   const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
   const sendProposal = async () => {
     // Replace with your actual endpoint and request data
-    const url = "/your-api-endpoint";
     const data = {
-      // Your proposal data
+      bidder_id: proposal.bidder.user_id,
+      receiver_id: proposal.receiver.user_id,
+      bidder_game_id: proposal.bidder.game_id,
+      receiver_game_id: proposal.receiver.game_id,
+      status: "pending",
     };
+
     try {
-      const response = await axios.post(url, data);
-      if (response.status === 200) {
+      const response = await axios.post("/api/propose", data);
+      if (response.status === 201) {
         toast({
           title: "Proposal sent.",
           description: "Your proposal has been sent successfully",
@@ -51,43 +57,42 @@ export function TradeBox({ isOpen, onClose, proposal }) {
     }
   };
 
-  
   return (
     <Center>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent maxW="50%" bg="blackAlpha.600">
+        <ModalContent maxW="60%" bg="blackAlpha.600">
           <ModalHeader color="white" borderBottom="">
             Send Proposal
             <Divider />
           </ModalHeader>
           <ModalBody>
             <Flex>
-              <Tooltip label={proposal.game_one_title} placement="top">
+              <Tooltip label={proposal.bidder.game_title} placement="top">
                 <Image
                   boxSize="170px"
                   src={`${import.meta.env.VITE_S3_URL}/games/${
-                    proposal.game_one_image
+                    proposal.bidder.game_image
                   }`}
-                  alt={proposal.game_one_title}
+                  alt={proposal.bidder.game_title}
                   mr={3}
                 />
               </Tooltip>
-              <Tooltip label={proposal.game_two_title} placement="top">
+              <Tooltip label={proposal.receiver.game_title} placement="top">
                 <Image
                   boxSize="170px"
                   src={`${import.meta.env.VITE_S3_URL}/games/${
-                    proposal.game_two_image
+                    proposal.receiver.game_image
                   }`}
-                  alt={proposal.game_two_title}
+                  alt={proposal.receiver.game_title}
                 />
               </Tooltip>
               <Text ml={4} color="white" fontSize="2xl">
                 Your proposal notifies{" "}
                 <Text as="span" fontWeight="bold" color="#5142FC">
-                  {`${proposal.user_two_first_name
+                  {`${proposal.receiver.first_name
                     .toString()
-                    .toUpperCase()} ${proposal.user_two_last_name
+                    .toUpperCase()} ${proposal.receiver.last_name
                     .toString()
                     .toUpperCase()}`}
                 </Text>{" "}

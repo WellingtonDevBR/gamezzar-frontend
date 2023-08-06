@@ -28,24 +28,27 @@ export function Opportunities({ wishlist }) {
   const [isMessageBoxOpen, setIsMessageBoxOpen] = useState(false);
   const [currentGame, setCurrentGame] = useState(null);
 
-  const handleMessageClick = (game) => {
-    console.log(game);
+  const handleMessageClick = (trade) => {
     const proposal = {
-      interested_game_id: game.game_two_game_id,
-      interested_user_id: game.user_two_user_id,
-      owner_game_id: game.game_one_game_id,
-      owner_user_id: game.user_one_user_id,
-      sender: {
-        user_id: game.user_two_user_id, // Replace with the actual receiver ID
-        first_name: game.user_two_first_name,
-        last_name: game.user_two_last_name,
-        avatar: game.user_two_avatar,
+      bidder: {
+        user_id: trade.bidder.user_id,
+        first_name: trade.bidder.first_name,
+        last_name: trade.bidder.last_name,
+        avatar: trade.bidder.avatar,
+        address: trade?.bidder?.address,
+        game_id: trade.bidder.game_id,
+        game_title: trade.bidder.game_title,
+        game_image: trade.bidder.game_image,
       },
       receiver: {
-        user_id: game.user_one_user_id, // Replace with the actual sender ID
-        first_name: game.user_one_first_name, // Replace with the actual sender first name
-        last_name: game.user_one_last_name, // Replace with the actual sender last name
-        avatar: game.user_one_avatar,
+        user_id: trade.receiver.user_id,
+        first_name: trade.receiver.first_name,
+        last_name: trade.receiver.last_name,
+        avatar: trade.receiver.avatar,
+        address: trade?.receiver?.address,
+        game_id: trade.receiver.game_id,
+        game_title: trade.receiver.game_title,
+        game_image: trade.receiver.game_image,
       },
     };
     setCurrentGame(proposal);
@@ -73,7 +76,11 @@ export function Opportunities({ wishlist }) {
         <InputListContainer>
           <HeaderSectionContainer>
             <Text>My Wishlist</Text>
-            <Select placeholder="Select your option" fontWeight="bold" size="lg">
+            <Select
+              placeholder="Select your option"
+              fontWeight="bold"
+              size="lg"
+            >
               <option value="steam">Steam</option>
               <option value="psn">PSN</option>
               <option value="xbox">Xbox</option>
@@ -94,35 +101,35 @@ export function Opportunities({ wishlist }) {
           <Checkbox defaultIsChecked>Only people I follow</Checkbox>
         </InputBoxContainer>
       </Flex>
-      {wishlist.map((game, index) => {
+      {wishlist.map((trade, index) => {
         return (
           <FeedbackContainer key={index}>
             <TradedGamesContainer>
               <TradesImagesContainer>
                 <img
                   src={`${import.meta.env.VITE_S3_URL}/games/${
-                    game.game_one_image
+                    trade.bidder.game_image
                   }`}
-                  alt={`${game.game_one_title}`}
+                  alt={`${trade.bidder.game_title}`}
                 />
                 <img
                   src={`${import.meta.env.VITE_S3_URL}/games/${
-                    game.game_two_image
+                    trade.receiver.game_image
                   }`}
-                  alt={`${game.game_two_title}`}
+                  alt={`${trade.receiver.title}`}
                 />
               </TradesImagesContainer>
               <TradesProfileContainer>
                 <div>
                   <Avatar
                     src={`${import.meta.env.VITE_S3_URL}/avatar/${
-                      game.user_two_avatar
+                      trade.receiver.avatar
                     }`}
-                    alt={game.user_two_first_name}
+                    alt={trade.receiver.avatar}
                   />
                   <div>
                     <p>
-                      {game.user_two_first_name} {game.user_two_last_name}{" "}
+                      {trade.receiver.first_name} {trade.receiver.last_name}{" "}
                       <span>36</span>
                     </p>
                     <span>Sydney / SP</span>
@@ -134,7 +141,7 @@ export function Opportunities({ wishlist }) {
                     color="white"
                     borderRadius="5px"
                     _hover={{ filter: "brightness(85%)" }}
-                    onClick={() => handleMessageClick(game)}
+                    onClick={() => handleMessageClick(trade)}
                   >
                     Message
                   </Button>
@@ -143,7 +150,7 @@ export function Opportunities({ wishlist }) {
                     color="white"
                     borderRadius="5px"
                     _hover={{ filter: "brightness(85%)" }}
-                    onClick={() => handleTradeClick(game)}
+                    onClick={() => handleTradeClick(trade)}
                   >
                     Trade
                   </Button>
@@ -159,6 +166,7 @@ export function Opportunities({ wishlist }) {
             </TradedGamesContainer>
             {isMessageBoxOpen && (
               <MessageBox
+                isOpen={isMessageBoxOpen}
                 onClose={() => setIsMessageBoxOpen(false)}
                 proposal={currentGame}
                 isSender={true} // modify this prop depending on the logic of who is the sender

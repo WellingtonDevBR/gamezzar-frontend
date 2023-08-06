@@ -4,16 +4,6 @@ import Cookies from "js-cookie";
 import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import { Box, Button, Image, Text, VStack, Avatar } from "@chakra-ui/react";
 
-// Styling
-import {
-  Container,
-  LeftSideMenuContainer,
-  ImageContainer,
-  NavigationContainer,
-  SpanOptionButton,
-  RightSideContainer,
-} from "./styles";
-
 // Components
 import { Opportunities } from "./components/Opportunities";
 import { Proposal } from "./components/Proposals";
@@ -93,7 +83,6 @@ export function Dashboard() {
   // Fetch User Followees
   async function getFollowees() {
     const response = await axios.get("/api/user/follow/");
-    console.log(response.data);
     setFollowees(response.data);
   }
 
@@ -143,22 +132,27 @@ export function Dashboard() {
 
         return {
           // User Account
-          game_one_game_id: wishlistGame.details.game_id,
-          game_one_title: wishlistGame.details.title,
-          game_one_image: wishlistGame.details.image,
-          user_one_user_id: wishlistGame.user.user_id,
-          user_one_first_name: wishlistGame.user.first_name,
-          user_one_last_name: wishlistGame.user.last_name,
-          user_one_avatar: wishlistGame.user.avatar,
-          // Another Acount User
-          game_two_game_id: userGame.user.wishlist.details.game_id,
-          game_two_title: userGame.user.wishlist.details.title,
-          game_two_image: userGame.user.wishlist.details.image,
-          user_two_user_id: userGame?.user?.user_id,
-          user_two_first_name: userGame?.user?.first_name,
-          user_two_last_name: userGame?.user?.last_name,
-          user_two_avatar: userGame?.user?.avatar,
-          user_two_address: userGame?.user?.address?.address,
+          bidder: {
+            game_id: wishlistGame.game_id,
+            game_title: wishlistGame.details.title,
+            game_image: wishlistGame.details.image,
+            user_id: wishlistGame.user.user_id,
+            first_name: wishlistGame.user.first_name,
+            last_name: wishlistGame.user.last_name,
+            avatar: wishlistGame.user.avatar,
+            address: wishlistGame.user.address?.address,
+          },
+          // Receiver Account
+          receiver: {
+            game_id: userGame.user.wishlist.details.game_id,
+            game_title: userGame.user.wishlist.details.title,
+            game_image: userGame.user.wishlist.details.image,
+            user_id: userGame?.user?.user_id,
+            first_name: userGame?.user?.first_name,
+            last_name: userGame?.user?.last_name,
+            avatar: userGame?.user?.avatar,
+            address: userGame?.user?.address?.address,
+          },
         };
       })
       .filter((game) => game !== null); // Filter out the null values
@@ -309,7 +303,13 @@ export function Dashboard() {
                 <TradeHistory transactions={transactions} userId={userId} />
               );
             case "Following":
-              return <Following followees={followees} token={token} setFollowees={setFollowees} />;
+              return (
+                <Following
+                  followees={followees}
+                  token={token}
+                  setFollowees={setFollowees}
+                />
+              );
             case "Preferences":
               return <Preferences />;
             case "Profile":

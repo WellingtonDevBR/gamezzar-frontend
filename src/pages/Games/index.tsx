@@ -42,8 +42,7 @@ export function Games() {
         setEndOfList(true);
         return;
       }
-      console.log(response.data);
-
+      
       setGames((prevGames) => {
         const newGames = response.data.filter(
           (newGame) =>

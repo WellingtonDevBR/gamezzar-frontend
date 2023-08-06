@@ -11,6 +11,7 @@ import { HStack, Tooltip } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 export function PopularCollection({ userPopularCollections }) {
+  if (userPopularCollections.length <= 1) return;
   return (
     <Box mt="4" width="1030px">
       <Heading fontSize="3xl" mb="3">
@@ -19,22 +20,21 @@ export function PopularCollection({ userPopularCollections }) {
       <Flex direction={{ base: "column", lg: "row" }} justify="space-between">
         {userPopularCollections.map((userCollection) => {
           const { UserName, Avatar, games } = userCollection;
-
           return (
             <CollectionCard
               headerImg={Avatar}
-              title0={games[0].Title}
-              title1={games[1].Title}
-              title2={games[2].Title}
-              title3={games[3].Title}
-              mainImg={games[0].Image}
-              smallImg1={games[1].Image}
-              smallImg2={games[2].Image}
-              largeImg={games[3].Image}
-              gameid0={games[0].GameId}
-              gameid1={games[1].GameId}
-              gameid2={games[2].GameId}
-              gameid3={games[3].GameId}
+              title0={games[0]?.Title}
+              title1={games[1]?.Title}
+              title2={games[2]?.Title}
+              title3={games[3]?.Title}
+              mainImg={games[0]?.Image}
+              smallImg1={games[1]?.Image}
+              smallImg2={games[2]?.Image}
+              largeImg={games[3]?.Image}
+              gameid0={games[0]?.GameId}
+              gameid1={games[1]?.GameId}
+              gameid2={games[2]?.GameId}
+              gameid3={games[3]?.GameId}
               title={UserName}
               number={games.feedbacks}
               name={UserName}

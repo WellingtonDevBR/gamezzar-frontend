@@ -245,7 +245,7 @@ export function Game() {
             style={{ border: "none" }}
             width="320"
             height="240"
-            src={game.official_video_link}
+            src={`https://www.youtube.com/embed/${game.official_video_link}`}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

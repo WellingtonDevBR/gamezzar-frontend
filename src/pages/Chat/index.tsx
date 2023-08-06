@@ -129,9 +129,13 @@ export function Chat() {
     setEmptySubmit(false);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     axios.post("/api/message", {
-      interested_user_id: conversation.user.user_id,
-      owner_user_id: user.user_id,
-      owner_game_id: conversation.game_id,
+      bidder: {
+        user_id: conversation.user.user_id,
+      },
+      receiver: {
+        user_id: user.user_id,
+        game_id: conversation.game_id,
+      },
       message: textarea,
       is_sender: true,
       chat_id: chat[0]?.chat_id,
@@ -139,12 +143,11 @@ export function Chat() {
     setTextarea("");
 
     const socketParams = {
-      interested_user_id: conversation.user.user_id,
-      owner_user_id: user.user_id,
-      owner_game_id: conversation.game_id,
+      bidder_id: conversation.user.user_id,
+      receiver_id: user.user_id,
+      receiver_game_id: conversation.game_id,
       message: textarea,
       is_sender: true,
-      receiver_id: conversation.user.user_id, // Add the receiver's user ID here
     };
 
     socketRef.current.emit("sendMessage", socketParams);
@@ -188,7 +191,9 @@ export function Chat() {
                 <img
                   src={
                     user?.user_id
-                      ? `${import.meta.env.VITE_S3_URL}/avatar/${conversation?.user?.avatar}`
+                      ? `${import.meta.env.VITE_S3_URL}/avatar/${
+                          conversation?.user?.avatar
+                        }`
                       : "https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
                   }
                   alt="avatar"
