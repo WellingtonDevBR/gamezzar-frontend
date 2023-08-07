@@ -30,7 +30,7 @@ const NAV_ITEMS = [
   { title: "Explorer", path: "/explorer" },
   { title: "Games", path: "/Games" },
   // { title: "Activity", path: "/activity" },
-  { title: "Community", path: "#" },
+  // { title: "News", path: "/Blog" },
   // { title: "Contact", path: "/contact" },
 ];
 

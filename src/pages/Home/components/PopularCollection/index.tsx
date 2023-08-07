@@ -68,7 +68,6 @@ function CollectionCard({
   mr,
   w,
 }) {
-  console.log("test", mainImg);
   return (
     <Box w={w} mr={mr} p="4" bg="gray.700" borderRadius="xl" boxShadow="xl">
       <VStack align="stretch" spacing="4">
