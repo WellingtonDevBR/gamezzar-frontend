@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import _, { groupBy } from "lodash";
 import {
-  CloseButton,
-  Container,
-  ModalOverlay,
   Section,
   UserGameContainer,
   VersionRegionContainer,
@@ -11,13 +8,22 @@ import {
   ProposeContainer,
   MainContainer,
   DispositionSpan,
-  Header,
 } from "./styles";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  useTheme,
+  Spinner,
+  useToast,
+} from "@chakra-ui/react";
 
 import bookletImg from "../../assets/booklet.svg";
 import discImg from "../../assets/disc.svg";
 import coverImg from "../../assets/cover.svg";
-import { Star } from "phosphor-react";
 import {
   COVER_CONDITION,
   DISC_CONDITION,
@@ -28,6 +34,7 @@ import { getCityAndState } from "../../helper/cityState";
 import { getAxiosInstance } from "../../services/axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { StarsMapping } from "../../helper/startsMapping";
 
 interface Game {
   game_id: number;
@@ -87,6 +94,8 @@ export function ProposeModal({
   const [selectedGameId, setSelectedGameId] = useState("");
   const token = Cookies.get("token");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
   const gamesByPlatform: _.Dictionary<UserCollectionItem[]> = _.groupBy(
     loggedUserCollection,
@@ -101,148 +110,178 @@ export function ProposeModal({
   };
 
   const handleProposeClick = async () => {
-    const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    const response = await axios.post("/api/propose/", {
-      bidder_game_id: selectedGameId,
-      receiver_game_id: game.game_id,
-      receiver_id: game.user.user_id,
-      status: "pending",
-    });
-    if (response.status == 201) {
-      navigate("/dashboard");
-      setModalOpen(false);
-      window.location.reload();
+    setLoading(true);
+    try {
+      const axios = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      const response = await axios.post("/api/propose/", {
+        bidder_game_id: selectedGameId,
+        receiver_game_id: game.game_id,
+        receiver_id: game.user.user_id,
+        status: "pending",
+      });
+
+      if (response.status == 201) {
+        navigate("/dashboard");
+        // Use toast to show a success message
+        toast({
+          title: "Trade request sent successfully!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setModalOpen(false);
+        window.location.reload();
+      }
+    } catch (error) {
+      // Handle error as needed
+    } finally {
+      setLoading(false); // Set loading to false to hide spinner
     }
   };
 
-  console.log(game)
   return (
-    <>
-      {isModalOpen && (
-        <>
-          <ModalOverlay onClick={closeModal} />
-          <Container>
-            <Header>
-              <p>Game Detail</p>
-            </Header>
-            <CloseButton onClick={closeModal}>X</CloseButton>
-            <Section>
-              <img
-                src={`${import.meta.env.VITE_S3_URL}/games/${game.item.image}`}
-                alt={game.item.title}
-              />
-              <UserGameContainer>
-                <h1>{game.item.title}</h1>
-                <VersionRegionContainer>
+    <Modal isOpen={isModalOpen} onClose={closeModal}>
+      <ModalOverlay />
+      <ModalContent
+        background="linear-gradient(
+          24deg,
+          rgba(12, 7, 27, 1) 0%,
+          rgba(21, 6, 69, 1) 19%,
+          rgba(3, 1, 9, 1) 54%,
+          rgba(6, 3, 47, 1) 100%
+        );"
+        color="white"
+        mx="auto"
+        my="auto"
+        width="90vw"
+        maxW="1000px"
+        borderRadius="8px"
+      >
+        <ModalHeader
+          p="1em"
+          background="#7042f"
+          borderBottom="1px solid #5142fc"
+        >
+          Game Detail
+        </ModalHeader>
+        <ModalCloseButton color="white" />
+        <ModalBody px="20px" py="2.5em">
+          <Section>
+            <img
+              src={`${import.meta.env.VITE_S3_URL}/games/${game.item.image}`}
+              alt={game.item.title}
+            />
+            <UserGameContainer>
+              <h1>{game.item.title}</h1>
+              <VersionRegionContainer>
+                <div>
+                  <b>Version</b>
+                  <span>
+                    {game.item.edition.name ? game.item.edition.name : "Normal"}
+                  </span>
+                </div>
+                <div>
+                  <b>Region</b>
+                  <span>
+                    {game.item.region.name ? game.item.region.name : "Oceania"}
+                  </span>
+                </div>
+              </VersionRegionContainer>
+              <UserFeedBackContainer>
+                <section>
+                  <img
+                    src={`${import.meta.env.VITE_S3_URL}/avatar/${
+                      game.user.avatar
+                    }`}
+                    alt="User Image"
+                  />
                   <div>
-                    <b>Version</b>
-                    <span>{game.item.edition.name}</span>
+                    <h1>
+                      {`${game.user.first_name} ${game.user.last_name}`}{" "}
+                      <span>1</span>
+                    </h1>
+                    <p>
+                      {game.user.address.address
+                        ? getCityAndState(game.user.address.address)
+                        : "Address Not Set"}
+                    </p>
                   </div>
-                  <div>
-                    <b>Region</b>
-                    <span>{game.item.region.name}</span>
-                  </div>
-                </VersionRegionContainer>
-                <UserFeedBackContainer>
-                  <section>
-                    <img
-                      src={`${import.meta.env.VITE_S3_URL}/avatar/${
-                        game.user.avatar
-                      }`}
-                      alt="User Image"
-                    />
-                    <div>
-                      <h1>
-                        {`${game.user.first_name} ${game.user.last_name}`}{" "}
-                        <span>1</span>
-                      </h1>
-                      <p>
-                        {game.user.address.address
-                          ? getCityAndState(game.user.address.address)
-                          : "Address Not Set"}
-                      </p>
-                    </div>
-                  </section>
-                  <section>
-                    <b>
-                      <h2>Overall Feedback 10</h2>
-                    </b>
-                  </section>
-                </UserFeedBackContainer>
-              </UserGameContainer>
-            </Section>
-            <ProposeContainer>
-              <p>Trade Offer</p>
-              <select onChange={handleSelectChange}>
-                <option value="">Select a Game</option>
-                {Object.entries(gamesByPlatform).map(([platform, games]) => (
-                  <optgroup key={platform} label={platform}>
-                    {games?.map((game) => (
-                      <option key={game.item.game_id} value={game.item.game_id}>
-                        {game.item.title}
-                      </option>
-                    ))}
-                  </optgroup>
-                ))}
-              </select>
-              <button type="button" onClick={handleProposeClick}>
-                Submit
-              </button>
-            </ProposeContainer>
-            <MainContainer>
-              <section>
-                <div>
-                  <img src={discImg} alt="disc" />
-                  <h1>Disc</h1>
-                </div>
-                <div>{StarsMapping(game.disc_condition)}</div>
-                <p>{DISC_CONDITION[game.disc_condition]}</p>
-              </section>
-              <section>
-                <div>
-                  <img src={coverImg} alt="cover" />
-                  <h1>Cover</h1>
-                </div>
-                <div>
-                  <div>{StarsMapping(game.cover_condition)}</div>
-                </div>
-                <p>{MANUAL_CONDITION[game.cover_condition]}</p>
-              </section>
-              <section>
-                <div>
-                  <img src={bookletImg} alt="manual" />
-                  <h1>Manual</h1>
-                </div>
-                <div>
-                  <div>
-                    {StarsMapping(game.manual_condition)}
-                  </div>
-                </div>
-                <p>{COVER_CONDITION[game.manual_condition]}</p>
-              </section>
-            </MainContainer>
-            <DispositionSpan disposition={game.disposition}>
-              {DISPOSITION[game.disposition]}
-            </DispositionSpan>
-          </Container>
-        </>
-      )}
-    </>
+                </section>
+                <section>
+                  <b>
+                    <h2>Overall Feedback 10</h2>
+                  </b>
+                </section>
+              </UserFeedBackContainer>
+            </UserGameContainer>
+          </Section>
+          <ProposeContainer>
+            <p>Trade Offer</p>
+            <select onChange={handleSelectChange}>
+              <option value="">Select a Game</option>
+              {Object.entries(gamesByPlatform).map(([platform, games]) => (
+                <optgroup key={platform} label={platform}>
+                  {games?.map((game) => (
+                    <option key={game.item.game_id} value={game.item.game_id}>
+                      {game.item.title}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+            <button
+              type="button"
+              onClick={handleProposeClick}
+              disabled={loading}
+            >
+              {loading ? <Spinner /> : "Submit"}
+            </button>
+          </ProposeContainer>
+          <MainContainer>
+            <section>
+              <div>
+                <img src={discImg} alt="disc" />
+                <h1>Disc</h1>
+              </div>
+              <div>{StarsMapping(game.disc_condition)}</div>
+              <p>{DISC_CONDITION[game.disc_condition]}</p>
+            </section>
+            <section>
+              <div>
+                <img src={coverImg} alt="cover" />
+                <h1>Cover</h1>
+              </div>
+              <div>
+                <div>{StarsMapping(game.cover_condition)}</div>
+              </div>
+              <p>{MANUAL_CONDITION[game.cover_condition]}</p>
+            </section>
+            <section>
+              <div>
+                <img src={bookletImg} alt="manual" />
+                <h1>Manual</h1>
+              </div>
+              <div>
+                <div>{StarsMapping(game.manual_condition)}</div>
+              </div>
+              <p>{COVER_CONDITION[game.manual_condition]}</p>
+            </section>
+          </MainContainer>
+          <DispositionSpan disposition={game.disposition}>
+            {DISPOSITION[game.disposition]}
+          </DispositionSpan>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   );
 }
-
-function StarsMapping(score: number) {
-  return (
-    <div>
-      {Array.from({ length: 7 }, (_, i) => (
-        <Star
-          key={i}
-          color={i < score ? "yellow" : "grey"} // replace 'grey' with your unfilled star color
-          weight="fill"
-          size={22}
-        />
-      ))}
-    </div>
-  );
-}
+const colorMapping = [
+  "#ff6f6f", // red
+  "#ffce8a", // light yellow
+  "#ffc300", // medium yellow
+  "#9ec6ff", // light blue
+  "#b1b1ff", // blue
+  "#b2efb2", // light green
+  "#8cff8c", // green
+];

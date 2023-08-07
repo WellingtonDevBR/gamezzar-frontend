@@ -3,7 +3,7 @@ import { DefaultLayout } from "./layout/DefaultLayout";
 import { PageNotFound } from "./components/PageNotFound";
 
 import { Game } from "./pages/Game";
-import { Login } from "./pages/Login";
+import { SignIn } from "./pages/Login";
 import { SignUp } from "./pages/SignUp";
 import { AddGame } from "./pages/AddGame";
 import { Contact } from "./pages/Contact";
@@ -31,7 +31,7 @@ export function Router() {
         <Route path="/games" element={<Games />} />
         <Route path="/game/:id" element={<Game />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/game/add/:id" element={<AddGame />} />
         <Route path="*" element={<PageNotFound />} />

@@ -2,7 +2,17 @@
 import { useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate, useLocation, Navigate } from "react-router-dom";
-import { Box, Button, Image, Text, VStack, Avatar } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Image,
+  Text,
+  VStack,
+  Avatar,
+  HStack,
+  Flex,
+  Heading,
+} from "@chakra-ui/react";
 
 // Components
 import { Opportunities } from "./components/Opportunities";
@@ -18,7 +28,6 @@ import { Wishlist } from "./components/Wishlist";
 // Services
 import { getAxiosInstance } from "../../services/axios";
 import { useTabContext } from "../../context/DashboardContext";
-import { HStack } from "@chakra-ui/react";
 
 export function Dashboard() {
   // State Initialization
@@ -169,7 +178,22 @@ export function Dashboard() {
       mt="50px"
       justifyContent="center"
     >
-      <HStack alignItems="right">
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        bg="gray"
+        w="100%"
+        h="150px"
+      >
+        <VStack>
+          <Heading as="h1" size="lg">
+            Dashboard
+          </Heading>
+          <Text>Dashboard / {activeTab}</Text>
+        </VStack>
+      </Flex>
+
+      <HStack alignItems="right" mt={10}>
         <VStack w="200px" h="100%" spacing="20px">
           <Box d="flex" flexDirection="column">
             <Avatar

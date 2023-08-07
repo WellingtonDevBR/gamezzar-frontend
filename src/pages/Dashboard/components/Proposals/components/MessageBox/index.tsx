@@ -71,7 +71,6 @@ export function MessageBox({
   } = useDisclosure();
 
   const handleSendMessage = async () => {
-    console.log("Starting send message process"); // Logging start
     startSubmitting();
 
     try {
@@ -88,8 +87,6 @@ export function MessageBox({
         status: "talking",
       });
 
-      console.log("Message sent successfully"); // Logging success
-
       toast({
         title: "Message sent.",
         description: "Your message has been sent successfully",
@@ -101,7 +98,6 @@ export function MessageBox({
       endSubmitting();
       onClose();
     } catch (error) {
-      console.log("Error sending message", error); // Logging error
       endSubmitting();
     }
   };

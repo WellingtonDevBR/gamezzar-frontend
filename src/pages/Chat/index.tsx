@@ -18,6 +18,16 @@ import io from "socket.io-client";
 import { Socket } from "socket.io-client";
 import { smoothScroll } from "../../helper/smoothScroll";
 
+import {
+  Box,
+  Button,
+  Text,
+  VStack,
+  HStack,
+  Flex,
+  Heading,
+} from "@chakra-ui/react";
+
 export function Chat() {
   // Establishing State Variables
   const [chat, setChat] = useState<any[]>([]);
@@ -170,109 +180,118 @@ export function Chat() {
   }, [messages]);
 
   return (
-    <Container>
-      <Header>
-        <p>Want to receive notifications of new messages?</p>
-        {!notificationEnabled ? (
-          <NotificationButton onClick={() => enableNotifications()}>
-            Enable Notifications
-          </NotificationButton>
-        ) : (
-          <NotificationButton disabled style={{ background: "gray" }}>
-            Notifications enabled
-          </NotificationButton>
-        )}
-      </Header>
-      <Main>
-        <UsersChattingSection>
-          {chat.map((conversation) => {
-            return (
-              <UserInfoContainer onClick={() => getChatMessage(conversation)}>
-                <img
-                  src={
-                    user?.user_id
-                      ? `${import.meta.env.VITE_S3_URL}/avatar/${
-                          conversation?.user?.avatar
-                        }`
-                      : "https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
-                  }
-                  alt="avatar"
-                />
-                <div>
-                  <h2>
-                    {conversation.user?.first_name}{" "}
-                    {conversation.user?.last_name}
-                  </h2>
-                  <p>{conversation.user?.last_name}</p>
-                </div>
-              </UserInfoContainer>
-            );
-          })}
-        </UsersChattingSection>
-        <ChattingSection>
-          {activeChat && (
-            <>
-              <UserInfoContainer>
-                <img
-                  src={`${import.meta.env.VITE_S3_URL}/avatar/${
-                    currentChat?.user?.avatar
-                  }`}
-                  alt=""
-                />
-                <div>
-                  <h2>
-                    {currentChat.user?.first_name} {currentChat.user?.last_name}
-                  </h2>
-                  <p>{currentChat.user?.last_name}</p>
-                </div>
-              </UserInfoContainer>
-              <MessageContextComponent
-                id="messageContainer"
-                ref={messageContainerRef}
-              >
-                {messages.map((message: any) => {
-                  return (
-                    <MessageContentBox
-                      isuser={message?.sender_id === user.user_id}
-                    >
-                      <p>{message.content}</p>
-                      <span>
-                        {new Date(message.created_at).toLocaleTimeString()}
-                      </span>
-                    </MessageContentBox>
-                  );
-                })}
-              </MessageContextComponent>
-              <SendMessageContainer>
-                {
-                  <>
-                    <textarea
-                      className={emptySubmit ? "empty" : ""}
-                      placeholder="Type your message"
-                      value={textarea}
-                      onChange={(e: any) => {
-                        setTextarea(e.target.value);
-                        setEmptySubmit(false);
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => sendMessage(currentChat)}
-                      style={{
-                        backgroundColor: sendButtonEnabled ? "" : "#c6c6c6",
-                        cursor: sendButtonEnabled ? "" : "not-allowed",
-                      }}
-                      disabled={!sendButtonEnabled}
-                    >
-                      Send
-                    </button>
-                  </>
-                }
-              </SendMessageContainer>
-            </>
+    <>
+      <VStack m="25px auto" w={1000} h={150} justify="center" bg="gray">
+        <Heading as="h1" size="lg">
+          Dashboard
+        </Heading>
+        <Text>Dashboard / Chat</Text>
+      </VStack>
+      <Container>
+        <Header>
+          <p>Want to receive notifications of new messages?</p>
+          {!notificationEnabled ? (
+            <NotificationButton onClick={() => enableNotifications()}>
+              Enable Notifications
+            </NotificationButton>
+          ) : (
+            <NotificationButton disabled style={{ background: "gray" }}>
+              Notifications enabled
+            </NotificationButton>
           )}
-        </ChattingSection>
-      </Main>
-    </Container>
+        </Header>
+        <Main>
+          <UsersChattingSection>
+            {chat.map((conversation) => {
+              return (
+                <UserInfoContainer onClick={() => getChatMessage(conversation)}>
+                  <img
+                    src={
+                      user?.user_id
+                        ? `${import.meta.env.VITE_S3_URL}/avatar/${
+                            conversation?.user?.avatar
+                          }`
+                        : "https://gamezzar-images.s3.us-east-2.amazonaws.com/avatar/avatar1.svg"
+                    }
+                    alt="avatar"
+                  />
+                  <div>
+                    <h2>
+                      {conversation.user?.first_name}{" "}
+                      {conversation.user?.last_name}
+                    </h2>
+                    <p>{conversation.user?.last_name}</p>
+                  </div>
+                </UserInfoContainer>
+              );
+            })}
+          </UsersChattingSection>
+          <ChattingSection>
+            {activeChat && (
+              <>
+                <UserInfoContainer>
+                  <img
+                    src={`${import.meta.env.VITE_S3_URL}/avatar/${
+                      currentChat?.user?.avatar
+                    }`}
+                    alt=""
+                  />
+                  <div>
+                    <h2>
+                      {currentChat.user?.first_name}{" "}
+                      {currentChat.user?.last_name}
+                    </h2>
+                    <p>{currentChat.user?.last_name}</p>
+                  </div>
+                </UserInfoContainer>
+                <MessageContextComponent
+                  id="messageContainer"
+                  ref={messageContainerRef}
+                >
+                  {messages.map((message: any) => {
+                    return (
+                      <MessageContentBox
+                        isuser={message?.sender_id === user.user_id}
+                      >
+                        <p>{message.content}</p>
+                        <span>
+                          {new Date(message.created_at).toLocaleTimeString()}
+                        </span>
+                      </MessageContentBox>
+                    );
+                  })}
+                </MessageContextComponent>
+                <SendMessageContainer>
+                  {
+                    <>
+                      <textarea
+                        className={emptySubmit ? "empty" : ""}
+                        placeholder="Type your message"
+                        value={textarea}
+                        onChange={(e: any) => {
+                          setTextarea(e.target.value);
+                          setEmptySubmit(false);
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => sendMessage(currentChat)}
+                        style={{
+                          backgroundColor: sendButtonEnabled ? "" : "#c6c6c6",
+                          cursor: sendButtonEnabled ? "" : "not-allowed",
+                        }}
+                        disabled={!sendButtonEnabled}
+                      >
+                        Send
+                      </button>
+                    </>
+                  }
+                </SendMessageContainer>
+              </>
+            )}
+          </ChattingSection>
+        </Main>
+      </Container>
+    </>
   );
 }
