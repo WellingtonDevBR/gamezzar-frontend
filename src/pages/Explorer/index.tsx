@@ -102,6 +102,8 @@ export function Explorer() {
           bg="gray"
           w="100%"
           h="150px"
+          mt={10}
+          mb={10}
         >
           <VStack>
             <Heading as="h1" size="lg">

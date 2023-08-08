@@ -22,6 +22,7 @@ import {
   SignalImage,
   LoadingSpinner, // Assuming this component exists in your project
 } from "./styles";
+import { Tooltip } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { StyledChartComponent } from "../../helper/chart";
 import { getAxiosInstance } from "../../services/axios";
@@ -37,6 +38,12 @@ import {
 } from "../../helper/constants";
 import { getCityAndState } from "../../helper/cityState";
 import { StyledNavLink } from "../../components/Header/styles";
+import {
+  DISC_CONDITION,
+  COVER_CONDITION,
+  MANUAL_CONDITION,
+  GAME_REVIEW,
+} from "../../helper/constants";
 
 interface GameProps {
   description: string;
@@ -74,6 +81,7 @@ export function Game() {
   const [loading, setLoading] = useState(true);
   const [game, setGame] = useState<GameProps>(initialGame);
   const [gameOwners, setGameOwners] = useState<any[]>([]);
+  const [gameWishers, setGameWishers] = useState<any[]>([]);
   const [address, setAddress] = useState("");
   const [distance, setDistance] = useState("");
   const [wishGame, setWishGame] = useState(null);
@@ -90,6 +98,11 @@ export function Game() {
     const axiosInstance = getAxiosInstance(import.meta.env.VITE_BASE_URL);
     const token = Cookies.get("token");
     axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    const gamersWishlist = await axiosInstance.get(
+      `/api/game/${id}/wishlist-users`
+    );
+    setGameWishers(gamersWishlist.data);
 
     try {
       const gameResponse = await axiosInstance.get(`/api/game/${id}`);
@@ -337,79 +350,111 @@ export function Game() {
                               src={`${import.meta.env.VITE_S3_URL}/avatar/${
                                 owner.user.avatar
                               }`}
-                              alt="test"
+                              alt="avatar"
                             />
                             <div>
                               <p>{owner.user.user_name}</p>
                               <span>
-                                {owner.user?.address?.address ? getCityAndState(owner.user?.address?.address) : "Address Unset"}
+                                {owner.user?.address?.address
+                                  ? getCityAndState(
+                                      owner.user?.address?.address
+                                    )
+                                  : "Address Unset"}
                               </span>
                             </div>
                           </th>
                           <th>
                             <span>
-                              <SignalImage
-                                code={
-                                  satisfactionMapping(owner.satisfaction) - 1
-                                }
-                                src={`${
-                                  import.meta.env.VITE_S3_URL
-                                }/gauge/signal${
-                                  satisfactionMapping(owner.satisfaction) - 1
-                                }.svg`}
-                                alt="test"
-                              />
+                              <Tooltip
+                                label={GAME_REVIEW[owner.satisfaction - 1]}
+                                aria-label="A tooltip"
+                              >
+                                <SignalImage
+                                  code={
+                                    satisfactionMapping(owner.satisfaction) - 1
+                                  }
+                                  src={`${
+                                    import.meta.env.VITE_S3_URL
+                                  }/gauge/signal${
+                                    satisfactionMapping(owner.satisfaction) - 1
+                                  }.svg`}
+                                  alt="test"
+                                />
+                              </Tooltip>
                             </span>
                           </th>
                           <th>
                             <span>
-                              <SignalImage
-                                code={
-                                  discConditionMapping(owner.disc_condition) - 1
-                                }
-                                src={`${
-                                  import.meta.env.VITE_S3_URL
-                                }/gauge/signal${
-                                  discConditionMapping(owner.disc_condition) - 1
-                                }.svg`}
-                                alt="test"
-                              />
+                              <Tooltip
+                                label={DISC_CONDITION[owner.disc_condition - 1]}
+                                aria-label="A tooltip"
+                              >
+                                <SignalImage
+                                  code={
+                                    discConditionMapping(owner.disc_condition) -
+                                    1
+                                  }
+                                  src={`${
+                                    import.meta.env.VITE_S3_URL
+                                  }/gauge/signal${
+                                    discConditionMapping(owner.disc_condition) -
+                                    1
+                                  }.svg`}
+                                  alt="test"
+                                />
+                              </Tooltip>
                             </span>
                           </th>
                           <th>
                             <span>
-                              <SignalImage
-                                code={
-                                  coverConditionMapping(owner.cover_condition) -
-                                  1
+                              <Tooltip
+                                label={
+                                  COVER_CONDITION[owner.cover_condition - 1]
                                 }
-                                src={`${
-                                  import.meta.env.VITE_S3_URL
-                                }/gauge/signal${
-                                  coverConditionMapping(owner.cover_condition) -
-                                  1
-                                }.svg`}
-                                alt="test"
-                              />
+                                aria-label="A tooltip"
+                              >
+                                <SignalImage
+                                  code={
+                                    coverConditionMapping(
+                                      owner.cover_condition
+                                    ) - 1
+                                  }
+                                  src={`${
+                                    import.meta.env.VITE_S3_URL
+                                  }/gauge/signal${
+                                    coverConditionMapping(
+                                      owner.cover_condition
+                                    ) - 1
+                                  }.svg`}
+                                  alt="test"
+                                />
+                              </Tooltip>
                             </span>
                           </th>
                           <th>
                             <span>
-                              <SignalImage
-                                code={
-                                  manualConditionMapping(
-                                    owner.manual_condition
-                                  ) - 1
+                              <Tooltip
+                                label={
+                                  MANUAL_CONDITION[owner.manual_condition - 1]
                                 }
-                                src={`${
-                                  import.meta.env.VITE_S3_URL
-                                }/gauge/signal${
-                                  manualConditionMapping(
-                                    owner.manual_condition
-                                  ) - 1
-                                }.svg`}
-                                alt="test"
-                              />
+                                aria-label="A tooltip"
+                              >
+                                <SignalImage
+                                  code={
+                                    manualConditionMapping(
+                                      owner.manual_condition
+                                    ) - 1
+                                  }
+                                  src={`${
+                                    import.meta.env.VITE_S3_URL
+                                  }/gauge/signal${
+                                    manualConditionMapping(
+                                      owner.manual_condition
+                                    ) - 1
+                                  }.svg`}
+                                  alt="test"
+                                />
+                              </Tooltip>
                             </span>
                           </th>
                           <th>
@@ -465,23 +510,35 @@ export function Game() {
                     </tr>
                   </TableHead>
                   <TableBody>
-                    {
-                      <tr>
-                        <th>
-                          <img src="http://placehold.it/200x200" alt="test" />
-                          <div>
-                            <p>Username</p>
-                            <span>São Paulo / SP</span>
-                          </div>
-                        </th>
-                        <th>
-                          <span>10</span>
-                        </th>
-                        <th>
-                          <span>10</span>
-                        </th>
-                      </tr>
-                    }
+                    {gameWishers?.map((wisher, index) => {
+                      return (
+                        <tr>
+                          <th>
+                            <img
+                              src={`${import.meta.env.VITE_S3_URL}/avatar/${
+                                wisher.user.avatar
+                              }`}
+                              alt={wisher.avatar}
+                            />
+                            <div>
+                              <p>{wisher.user.user_name}</p>
+                              <span>{wisher.user?.address?.address}</span>
+                            </div>
+                          </th>
+                          <th>
+                            <img
+                              style={{ marginLeft: 50 }}
+                              src={`${import.meta.env.VITE_S3_URL}/gauge/${
+                                wisher.user.wishlist.interest_level
+                              }`}
+                            />
+                          </th>
+                          <th>
+                            <span>10 KM</span>
+                          </th>
+                        </tr>
+                      );
+                    })}
                   </TableBody>
                 </Table>
               </TabPanel>

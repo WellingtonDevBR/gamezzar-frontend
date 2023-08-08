@@ -187,7 +187,7 @@ export function Dashboard() {
       >
         <VStack>
           <Heading as="h1" size="lg">
-            Dashboard
+            {activeTab}
           </Heading>
           <Text>Dashboard / {activeTab}</Text>
         </VStack>

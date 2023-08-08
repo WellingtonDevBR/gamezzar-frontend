@@ -63,7 +63,7 @@ export function Profile({ user }: any) {
   const [dob, setDob] = useState(formatDate(user?.dob) || "");
   const [isLoading, setIsLoading] = useState(false);
   const [imageSrc, setImageSrc] = useState(
-    user.avatar && `${import.meta.env.VITE_S3_URL}/avatar/${user.avatar}`
+    user?.avatar && `${import.meta.env.VITE_S3_URL}/avatar/${user.avatar}`
   );
   const [isSuccess, setIsSuccess] = useState(false);
   const [profileImage, setProfileImage] = useState<File | null>(null);
@@ -146,8 +146,6 @@ export function Profile({ user }: any) {
     data.dob = convertDate(data.dob);
     try {
       const response = await axios.put("/api/user/details/update", data);
-      // Handle your response here
-      console.log(response.data);
       setIsLoading(false);
       setIsSuccess(true);
     } catch (error) {

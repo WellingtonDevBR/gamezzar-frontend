@@ -87,5 +87,18 @@ export const DISPOSITION = [
   "I will consider offers with affection",
 ];
 
+export const GAME_REVIEW = [
+  "Unbearable",
+  "Sufferable",
+  "Horrible",
+  "Bad",
+  "Mediocre",
+  "Okay",
+  "Good",
+  "Great",
+  "Incredible",
+  "Work of Art",
+];
+
 
 export const regions = ["Oceania", "America", "Europe", "Asia"];

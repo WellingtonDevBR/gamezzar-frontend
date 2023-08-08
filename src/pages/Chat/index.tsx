@@ -144,6 +144,8 @@ export function Chat() {
       },
       receiver: {
         user_id: user.user_id,
+      },
+      receiver_game: {
         game_id: conversation.game_id,
       },
       message: textarea,

@@ -38,6 +38,12 @@ interface IProposal {
     avatar: string;
     game_id: string;
   };
+  bidder_game: {
+    game_id: string;
+  };
+  receiver_game: {
+    game_id: string;
+  };
 }
 
 interface MessageBoxProps {
@@ -82,8 +88,8 @@ export function MessageBox({
       await axios.post("/api/propose", {
         bidder_id: proposal.bidder.user_id,
         receiver_id: proposal.receiver.user_id,
-        bidder_game_id: proposal.bidder.game_id,
-        receiver_game_id: proposal.receiver.game_id,
+        bidder_game_id: proposal.bidder_game.game_id,
+        receiver_game_id: proposal.receiver_game.game_id,
         status: "talking",
       });
 
@@ -98,6 +104,7 @@ export function MessageBox({
       endSubmitting();
       onClose();
     } catch (error) {
+      console.log(error);
       endSubmitting();
     }
   };
