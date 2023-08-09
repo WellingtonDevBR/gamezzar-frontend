@@ -83,21 +83,23 @@ export function Game() {
   const [gameOwners, setGameOwners] = useState<any[]>([]);
   const [gameWishers, setGameWishers] = useState<any[]>([]);
   const [address, setAddress] = useState("");
-  const [distance, setDistance] = useState("");
+  const [distances, setDistances] = useState<String[]>([]);
   const [wishGame, setWishGame] = useState(null);
   const [hasProduct, setHasProduct] = useState(false);
   const [selectedTab, setSelectedTab] = useState("owners");
+  const [areDistancesLoaded, setAreDistancesLoaded] = useState(true); // Set true initially
+  const [areDistancesLoading, setAreDistancesLoading] = useState(false);
   const { id } = useParams<any>();
   const token = Cookies.get("token");
+  const axiosInstance = getAxiosInstance(import.meta.env.VITE_BASE_URL);
+  axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    const axiosInstance = getAxiosInstance(import.meta.env.VITE_BASE_URL);
     const token = Cookies.get("token");
-    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
     const gamersWishlist = await axiosInstance.get(
       `/api/game/${id}/wishlist-users`
@@ -109,7 +111,6 @@ export function Game() {
       const gameData = gameResponse.data.game;
       const owners = gameResponse.data.owners;
 
-      let userAddress = "";
       if (token) {
         setLoading(true);
         const response = await axiosInstance.get(`/api/wishlist/${id}`);
@@ -118,20 +119,11 @@ export function Game() {
         const userDetailsResponse = await axiosInstance.get(
           "/api/user/details"
         );
-        userAddress = userDetailsResponse.data.address.address;
+        setAddress(userDetailsResponse.data.address.address);
       }
 
-      setAddress(userAddress);
       setGame(gameData);
       setGameOwners(owners);
-
-      if (owners.length > 0 && userAddress !== "") {
-        await handleCompareLocations(
-          userAddress,
-          owners[0].user.address.address
-        );
-      }
-
       if (token) {
         try {
           const collectionResponse = await axiosInstance.get(
@@ -144,7 +136,6 @@ export function Game() {
           console.error(error);
         }
       }
-
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -152,21 +143,34 @@ export function Game() {
     }
   };
 
-  const handleCompareLocations = async (
-    originAddress: string,
-    destinationAddress: string
-  ) => {
-    const axiosInstance = getAxiosInstance(import.meta.env.VITE_BASE_URL);
-    const response = await axiosInstance.get(
-      `/api/user/compare-locations/${originAddress}/${destinationAddress}`
-    );
-    setDistance(response?.data?.distance?.text);
-  };
+  useEffect(() => {
+    async function getDistances() {
+      if (gameOwners.length > 0 && address) {
+        setAreDistancesLoaded(false); // Indicate that distances are being fetched
+        const newDistances = [];
+
+        for (const owner of gameOwners) {
+          if (owner.user.address.address !== "") {
+            const response = await axiosInstance.get(
+              `/api/user/compare-locations/${address}/${owner.user.address.address}`
+            );
+            newDistances.push(response?.data?.distance?.text);
+          }
+        }
+
+        setDistances(newDistances); // Update distances all at once
+        setAreDistancesLoaded(true); // Indicate that distances have been loaded
+      } else {
+        setDistances([]);
+        setAreDistancesLoaded(true);
+      }
+    }
+    getDistances();
+  }, [gameOwners, address]);
 
   const formattedDate = convertTimeFormat(game.release_date);
-
-  if (loading) {
-    return <LoadingSpinner />; // Display loading spinner while fetching data
+  if (loading || (gameOwners.length > 0 && !areDistancesLoaded)) {
+    return <LoadingSpinner />;
   }
 
   return (
@@ -390,16 +394,14 @@ export function Game() {
                                 aria-label="A tooltip"
                               >
                                 <SignalImage
-                                  code={
-                                    discConditionMapping(owner.disc_condition) -
-                                    1
-                                  }
+                                  code={discConditionMapping(
+                                    owner.disc_condition - 1
+                                  )}
                                   src={`${
                                     import.meta.env.VITE_S3_URL
-                                  }/gauge/signal${
-                                    discConditionMapping(owner.disc_condition) -
-                                    1
-                                  }.svg`}
+                                  }/gauge/signal${discConditionMapping(
+                                    owner.disc_condition - 1
+                                  )}.svg`}
                                   alt="test"
                                 />
                               </Tooltip>
@@ -414,18 +416,14 @@ export function Game() {
                                 aria-label="A tooltip"
                               >
                                 <SignalImage
-                                  code={
-                                    coverConditionMapping(
-                                      owner.cover_condition
-                                    ) - 1
-                                  }
+                                  code={coverConditionMapping(
+                                    owner.cover_condition - 1
+                                  )}
                                   src={`${
                                     import.meta.env.VITE_S3_URL
-                                  }/gauge/signal${
-                                    coverConditionMapping(
-                                      owner.cover_condition
-                                    ) - 1
-                                  }.svg`}
+                                  }/gauge/signal${coverConditionMapping(
+                                    owner.cover_condition - 1
+                                  )}.svg`}
                                   alt="test"
                                 />
                               </Tooltip>
@@ -440,18 +438,14 @@ export function Game() {
                                 aria-label="A tooltip"
                               >
                                 <SignalImage
-                                  code={
-                                    manualConditionMapping(
-                                      owner.manual_condition
-                                    ) - 1
-                                  }
+                                  code={manualConditionMapping(
+                                    owner.manual_condition - 1
+                                  )}
                                   src={`${
                                     import.meta.env.VITE_S3_URL
-                                  }/gauge/signal${
-                                    manualConditionMapping(
-                                      owner.manual_condition
-                                    ) - 1
-                                  }.svg`}
+                                  }/gauge/signal${manualConditionMapping(
+                                    owner.manual_condition - 1
+                                  )}.svg`}
                                   alt="test"
                                 />
                               </Tooltip>
@@ -467,8 +461,8 @@ export function Game() {
                                 <StyledNavLink to="/dashboard">
                                   Add Address
                                 </StyledNavLink>
-                              ) : distance ? (
-                                distance
+                              ) : distances.length > 0 ? (
+                                distances[index]
                               ) : (
                                 "Other's Address Unset"
                               )}
