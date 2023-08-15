@@ -85,7 +85,6 @@ export function Games() {
           bg="gray"
           w="100%"
           h="150px"
-          mt={10}
           mb={10}
         >
           <VStack>

@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 export function PopularCollection({ userPopularCollections }) {
   if (userPopularCollections.length <= 1) return;
   return (
-    <Box mt="4" width="1030px">
+    <Box width="1030px" mt={50}>
       <Heading fontSize="3xl" mb="3">
         Popular Collections
       </Heading>

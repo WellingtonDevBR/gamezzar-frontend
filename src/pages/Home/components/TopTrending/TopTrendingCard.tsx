@@ -28,7 +28,7 @@ export const TrendingCard: React.FC<TrendingCardProps> = ({ item }) => (
           boxSize="190px"
           alignItems="center"
           fontSize="sm"
-          whileHover={{ scale: 1.05 }}  // Add scale effect on hover
+          whileHover={{ scale: 1.05 }} // Add scale effect on hover
         >
           <Image
             src={item.imageUrl}

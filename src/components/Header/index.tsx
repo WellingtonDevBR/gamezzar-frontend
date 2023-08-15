@@ -132,6 +132,7 @@ export function Header() {
       bg="blackAlpha.400"
       color="white"
       borderBottom="1px solid #242323"
+      mb={50}
     >
       {/* Logo */}
       <Box>
