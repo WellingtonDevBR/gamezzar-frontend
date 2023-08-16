@@ -205,7 +205,7 @@ const SelectItems = ({
   defaultValue,
 }: Option & { defaultValue?: number }) => (
   <>
-    <label>{name}</label>
+    <label style={{ color: "white" }}>{name}</label>
     <SelectForm
       id={name}
       {...register(apiName || name)}
